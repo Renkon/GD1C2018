@@ -259,7 +259,6 @@ CREATE TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[roles] -- 23
 CREATE TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[regimenes] -- 24
 (
     id_regimen            INT IDENTITY (1, 1) PRIMARY KEY,
-    codigo_regimen        NUMERIC(18,0) NOT NULL UNIQUE,
     descripcion_regimen   NVARCHAR(255) NOT NULL,
     precio_base_regimen   NUMERIC(18,2) NOT NULL,
     estado_regimen        BIT NOT NULL DEFAULT 1
