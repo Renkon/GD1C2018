@@ -66,8 +66,7 @@ CREATE TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[consumos] -- 6
     id_consumible         INT NOT NULL,
     id_estadia            INT NOT NULL,
     id_habitacion         INT NOT NULL,
-    fecha_hora_consumo    DATETIME,
-    cantidad_consumo      NUMERIC(18,0) NOT NULL
+    fecha_hora_consumo    DATETIME
 );
 
 
@@ -108,8 +107,7 @@ CREATE TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[cierres_temporales_habitacion] -- 8
 -------------------------------------------------------------------------------------------------------------------------------------------
 CREATE TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[consumibles] -- 10
 (
-    id_consumible            INT IDENTITY (1, 1) PRIMARY KEY,
-    codigo_consumible        NUMERIC(18,0) NOT NULL,
+    id_consumible            INT IDENTITY (2324, 1) PRIMARY KEY,
     precio_consumible        NUMERIC(18,2) NOT NULL,
     descripcion_consumible   NVARCHAR(255) NOT NULL
 );
