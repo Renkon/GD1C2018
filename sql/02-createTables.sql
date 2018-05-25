@@ -43,8 +43,7 @@ CREATE TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[tipos_documento] -- 3
 -------------------------------------------------------------------------------------------------------------------------------------------
 CREATE TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[facturas] -- 4
 (
-    id_factura            INT IDENTITY(1, 1) PRIMARY KEY,
-    numero_factura        NUMERIC(18,0) NOT NULL UNIQUE,
+    id_factura            INT IDENTITY(2396745, 1) PRIMARY KEY,
     fecha_factura         DATETIME NOT NULL,
     id_estadia            INT NOT NULL,
     id_forma_de_pago      INT NOT NULL
