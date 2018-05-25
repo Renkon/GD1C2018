@@ -180,8 +180,7 @@ CREATE TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[reservasXhabitaciones] -- 15
 -------------------------------------------------------------------------------------------------------------------------------------------
 CREATE TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[tipos_habitacion] -- 16
 (
-    id_tipo_habitacion                    INT IDENTITY (1, 1) PRIMARY KEY,
-    codigo_tipo_habitacion                NUMERIC(18,0) NOT NULL UNIQUE,
+    id_tipo_habitacion                    INT IDENTITY (1001, 1) PRIMARY KEY,
     descripcion_tipo_habitacion           NVARCHAR(255),
     porcentual_tipo_habitacion            NUMERIC(18,2) NOT NULL,
     cantidad_huespedes_tipo_habitacion    NUMERIC(18,0) NOT NULL
