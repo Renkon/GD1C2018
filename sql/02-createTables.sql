@@ -98,7 +98,7 @@ CREATE TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[cierres_temporales_habitacion] -- 8
 (
     id_item_factura                INT IDENTITY (1, 1) PRIMARY KEY,
     id_factura                     INT NOT NULL,
-	id_consumo                     INT NULL,
+    id_consumo                     INT NULL,
     precio_unitario_item_factura   NUMERIC(18,2) NOT NULL,
     descripcion_item_factura       NVARCHAR(255) NOT NULL,
     cantidad_item_factura          NUMERIC(18,0) NOT NULL
