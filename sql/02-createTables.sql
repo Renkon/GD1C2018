@@ -45,6 +45,7 @@ CREATE TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[facturas] -- 4
 (
     id_factura            INT IDENTITY(2396745, 1) PRIMARY KEY,
     fecha_factura         DATETIME NOT NULL,
+    total_factura         NUMERIC(18,2),
     id_estadia            INT NOT NULL,
     id_forma_de_pago      INT NOT NULL
 );
