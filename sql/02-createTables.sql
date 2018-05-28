@@ -361,3 +361,5 @@ CREATE TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[migracion_errores](
 	[Cliente_Nacionalidad] [nvarchar](255) NULL
 );
 
+GO
+

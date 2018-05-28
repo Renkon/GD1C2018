@@ -20,7 +20,7 @@ BEGIN
 		 ) tipos 
 	ORDER BY codigo ASC;
 END
-
+GO
 
 -- Procedimiento que crea las reservas con IDENTITY (respetando los valores recibidos)
 -- Requiere editar el regimen a posteriori de la ejecución
@@ -34,7 +34,7 @@ BEGIN
 		 ) reservas
 	ORDER BY codigo
 END
-
+GO
 
 -- Procedimiento que crea los consumibles con IDENTITY (respetando los valores recibidos)
 CREATE PROCEDURE [EL_MONSTRUO_DEL_LAGO_MASER].[CREAR_CONSUMIBLES] AS
@@ -48,6 +48,7 @@ BEGIN
 	WHERE codigo IS NOT NULL
 	ORDER BY codigo
 END
+GO
 
 -- Procedimiento que crea las facturas con IDENTITY (respetando los valores recibidos)
 -- Requiere editar la estadía a posteriori de la ejecución
@@ -62,6 +63,7 @@ BEGIN
 	WHERE numero IS NOT NULL
 	ORDER BY numero
 END
+GO
 
 -- Procedure principal de la migración
 CREATE PROCEDURE [EL_MONSTRUO_DEL_LAGO_MASER].[MIGRAR_DATOS] AS
@@ -505,6 +507,5 @@ BEGIN
 		CLOSE maestra_cursor;
 		DEALLOCATE maestra_cursor;
 END
-
 GO
 

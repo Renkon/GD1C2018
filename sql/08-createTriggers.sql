@@ -8,3 +8,4 @@ BEGIN
 	VALUES (1, @id_hotel);
 END;
 
+GO

@@ -5,3 +5,5 @@ INSERT INTO [EL_MONSTRUO_DEL_LAGO_MASER].[tipos_documento] VALUES ('Cédula de i
 INSERT INTO [EL_MONSTRUO_DEL_LAGO_MASER].[tipos_documento] VALUES ('Pasaporte', 'PP');
 INSERT INTO [EL_MONSTRUO_DEL_LAGO_MASER].[tipos_documento] VALUES ('Desconocido', 'DD');
 
+GO
+

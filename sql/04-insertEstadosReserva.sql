@@ -6,3 +6,5 @@ INSERT INTO [EL_MONSTRUO_DEL_LAGO_MASER].[estados_reserva] VALUES ('Reserva canc
 INSERT INTO [EL_MONSTRUO_DEL_LAGO_MASER].[estados_reserva] VALUES ('Reserva con ingreso (efectivizada)');
 INSERT INTO [EL_MONSTRUO_DEL_LAGO_MASER].[estados_reserva] VALUES ('Reserva desconocida');
 
+GO
+

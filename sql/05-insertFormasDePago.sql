@@ -12,3 +12,5 @@ INSERT INTO [EL_MONSTRUO_DEL_LAGO_MASER].[formas_de_pago] VALUES ('Rapipago');
 INSERT INTO [EL_MONSTRUO_DEL_LAGO_MASER].[formas_de_pago] VALUES ('Cupón de premio');
 INSERT INTO [EL_MONSTRUO_DEL_LAGO_MASER].[formas_de_pago] VALUES ('Otro/desconocido');
 
+GO
+
