@@ -4,7 +4,7 @@ CREATE TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[clientes] -- 1
     id_cliente                      INT IDENTITY(1, 1) PRIMARY KEY,
     nombre_cliente                  NVARCHAR(255),
     apellido_cliente                NVARCHAR(255),
-    id_tipo_documento               INT NOT NULL,
+    id_tipo_documento               INT NOT NULL DEFAULT 6,
     numero_documento_cliente        NUMERIC(18,0) NOT NULL,
     correo_cliente                  NVARCHAR(255) NOT NULL UNIQUE,
     telefono_cliente                NVARCHAR(100),
@@ -99,7 +99,7 @@ CREATE TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[cierres_temporales_habitacion] -- 8
     id_factura                     INT NOT NULL,
     id_consumo                     INT NULL,
     precio_unitario_item_factura   NUMERIC(18,2) NOT NULL,
-    descripcion_item_factura       NVARCHAR(255) NOT NULL,
+    descripcion_item_factura       NVARCHAR(255) NOT NULL DEFAULT 'Desconocido',
     cantidad_item_factura          NUMERIC(18,0) NOT NULL
 );
 
@@ -277,21 +277,21 @@ CREATE TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[hotelesXregimenes] -- 25
 CREATE TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[hoteles] -- 26
 (
     id_hotel                        INT IDENTITY (1, 1) PRIMARY KEY,
-    nombre_hotel                    NVARCHAR(255) NOT NULL,
-    correo_hotel                    NVARCHAR(255) NOT NULL,
-    telefono_hotel                  NVARCHAR(100) NOT NULL,
+    nombre_hotel                    NVARCHAR(255) NOT NULL DEFAULT 'Hotel sin nombre',
+    correo_hotel                    NVARCHAR(255) NOT NULL DEFAULT 'hotel@emdlm.com',
+    telefono_hotel                  NVARCHAR(100) NOT NULL DEFAULT '0800-000-0000',
     ciudad_hotel                    NVARCHAR(255) NOT NULL,
     domicilio_calle_hotel           NVARCHAR(255) NOT NULL,
     domicilio_numero_hotel          NUMERIC(18,0) NOT NULL,
     cantidad_estrellas_hotel        NUMERIC(18,0) NOT NULL,
-    id_pais                         INT NOT NULL,
-    fecha_creacion_hotel            DATETIME NOT NULL,
+    id_pais                         INT NOT NULL DEFAULT 10,
+    fecha_creacion_hotel            DATETIME NOT NULL DEFAULT '2000-01-01',
     recarga_por_estrellas_hotel     NUMERIC(18,0) NOT NULL
 );
 
 
 -------------------------------------------------------------------------------------------------------------------------------------------
-CREATE TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[rolesXfuncionales] -- 27
+CREATE TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[rolesXfuncionalidades] -- 27
 (
     id_rol                INT NOT NULL,
     id_funcionalidad      INT NOT NULL
