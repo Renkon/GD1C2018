@@ -394,14 +394,17 @@ BEGIN
 				END
 
 				-- Populamos clientesXestadias
-				IF (NOT EXISTS(SELECT *
-							   FROM [EL_MONSTRUO_DEL_LAGO_MASER].[clientesXestadias]
-							   WHERE id_cliente = @id_cliente
-							   AND id_estadia = @id_estadia
-							  ))
+				IF (@id_estadia IS NOT NULL)
 				BEGIN
-					INSERT INTO [EL_MONSTRUO_DEL_LAGO_MASER].[clientesXestadias]
-					VALUES (@id_cliente, @id_estadia);
+					IF (NOT EXISTS(SELECT *
+								   FROM [EL_MONSTRUO_DEL_LAGO_MASER].[clientesXestadias]
+								   WHERE id_cliente = @id_cliente
+								   AND id_estadia = @id_estadia
+								  ))
+					BEGIN
+						INSERT INTO [EL_MONSTRUO_DEL_LAGO_MASER].[clientesXestadias]
+						VALUES (@id_cliente, @id_estadia);
+					END
 				END
 				---------------------- CLIENTES ------------------------------
 
@@ -502,4 +505,6 @@ BEGIN
 		CLOSE maestra_cursor;
 		DEALLOCATE maestra_cursor;
 END
+
+GO
 
