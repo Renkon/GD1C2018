@@ -1,6 +1,7 @@
 INSERT INTO [EL_MONSTRUO_DEL_LAGO_MASER].[funcionalidades] VALUES ('Dar de alta reserva');
 INSERT INTO [EL_MONSTRUO_DEL_LAGO_MASER].[funcionalidades] VALUES ('Modificar reserva');
 INSERT INTO [EL_MONSTRUO_DEL_LAGO_MASER].[funcionalidades] VALUES ('Cancelar reserva');
+INSERT INTO [EL_MONSTRUO_DEL_LAGO_MASER].[funcionalidades] VALUES ('Agregar rol');
 INSERT INTO [EL_MONSTRUO_DEL_LAGO_MASER].[funcionalidades] VALUES ('Editar rol');
 INSERT INTO [EL_MONSTRUO_DEL_LAGO_MASER].[funcionalidades] VALUES ('Borrar rol');
 INSERT INTO [EL_MONSTRUO_DEL_LAGO_MASER].[funcionalidades] VALUES ('Dar de alta usuario');
