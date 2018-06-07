@@ -8,7 +8,7 @@ namespace FrbaHotel.AbmRol
     {
         public IContainer components { get; set; }
 
-        protected void Dispose(bool disposing)
+        protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
             {

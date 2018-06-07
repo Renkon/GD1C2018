@@ -64,6 +64,12 @@
     <Compile Include="Forms\AbmRegimen\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\AbmRol\ViewerRolForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\AbmRol\ViewerRolForm.Designer.cs">
+      <DependentUpon>ViewerRolForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\AbmRol\RolForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -126,6 +132,9 @@
     <Compile Include="Utils\DatabaseUtils.cs" />
     <Compile Include="Utils\LogUtils.cs" />
     <Compile Include="Utils\PropertyUtils.cs" />
+    <EmbeddedResource Include="Forms\AbmRol\ViewerRolForm.resx">
+      <DependentUpon>ViewerRolForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\AbmRol\RolForm.resx">
       <DependentUpon>RolForm.cs</DependentUpon>
     </EmbeddedResource>

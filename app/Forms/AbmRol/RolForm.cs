@@ -1,5 +1,6 @@
 ﻿using FrbaHotel.Database;
 using FrbaHotel.Forms;
+using FrbaHotel.Forms.AbmRol;
 using FrbaHotel.Model;
 using FrbaHotel.Model.DAO;
 using System;
@@ -17,22 +18,45 @@ namespace FrbaHotel.AbmRol
     public partial class RolForm
     {
         private FuncionalidadDAO FuncionalidadDAO;
+        private Rol rol;
+        private FormType type;
+        private ViewerRolForm parent;
 
-        public RolForm(FormType type, Rol rol)
+        public RolForm(FormType type, Rol rol, ViewerRolForm parent)
         {
             this.components = new System.ComponentModel.Container();
+            this.type = type;
+            this.rol = rol;
+            this.parent = parent;
+
             InitializeComponent();
-            ApplyType(type, rol);
+            ApplyType();
+            LoadContent();
 
             FuncionalidadDAO = new FuncionalidadDAO();
 
             PopulateLists();
         }
 
-        public void PopulateLists()
+        private void PopulateLists()
         {
             List<Funcionalidad> Funcionalidades = FuncionalidadDAO.ObtenerFuncionalidades();
-            this.listBox2.Items.AddRange(Funcionalidades.ToArray());
+            List<int> IdsFuncionalidadesRol = rol != null ? 
+                new FuncionalidadDAO().ObtenerIdsFuncionalidadesDeRol(rol) : new List<int>();
+            this.listBox1.Items.AddRange(Funcionalidades
+                .Where(f => IdsFuncionalidadesRol.Contains(f.Id)).ToArray());
+            this.listBox2.Items.AddRange(Funcionalidades
+                .Where(f => !IdsFuncionalidadesRol.Contains(f.Id)).ToArray());
+        }
+
+        private void LoadContent()
+        {
+            if (rol != null)
+            {
+                this.textBox1.Text = rol.Nombre;
+                this.checkBox1.Checked = rol.Estado;
+                this.checkBox1.Enabled = !rol.Estado;
+            }
         }
 
         // Ejecuta el proceso que corresponda (según sea alta, modificación o borrado)
@@ -41,16 +65,53 @@ namespace FrbaHotel.AbmRol
             string Nombre = textBox1.Text;
             bool Enabled = checkBox1.Checked;
             List<Funcionalidad> Funcionalidades = this.listBox1.Items.Cast<Funcionalidad>().ToList();
+
+            switch (type)
+            {
+                case FormType.Add:
+                    if (!InputValido(Funcionalidades, Nombre))
+                        return;
+
+                    Rol NewRol = new Rol(null, Nombre, Enabled, Funcionalidades);
+                    if (new RolDAO().InsertarNuevoRol(NewRol)) // creó el rol?
+                        this.Close();
+                break;
+                case FormType.Modify:
+                if (!InputValido(Funcionalidades, Nombre))
+                    return;
+
+                    rol.Nombre = Nombre;
+                    rol.Funcionalidades = Funcionalidades;
+                    rol.Estado = Enabled;
+
+                    if (new RolDAO().ModificarRol(rol))
+                    {
+                        parent.Refresh();
+                        this.Close();
+                    }
+                break;
+                case FormType.Delete:
+                    if (new RolDAO().DeshabilitarRol(rol))
+                    {
+                        parent.Refresh();
+                        this.Close();
+                    }
+                break;
+            }
+        }
+
+        private bool InputValido(List<Funcionalidad> Funcionalidades, string Nombre)
+        {
+            string ErrMsg = "";
             if (Funcionalidades.Count < 1)
-            {
-                MessageBox.Show("Debes seleccionar al menos una funcionalidad!", "ERROR!");
-                return;
-            }
-            Rol NewRol = new Rol(null, Nombre, Enabled, Funcionalidades);
-            if (new RolDAO().InsertarNuevoRol(NewRol)) // creó el rol?
-            {
-                this.Close();
-            }
+                ErrMsg += "Debe seleccionar al menos una funcionalidad\n";
+            if (Nombre.Equals(""))
+                ErrMsg += "Debe ingresar el nombre del rol\n";
+
+            bool Valido = ErrMsg.Equals("");
+            if (!Valido)
+                MessageBox.Show(ErrMsg, "ERROR");
+            return Valido;
         }
 
         // Mover objeto a la lista izquierda
@@ -77,7 +138,6 @@ namespace FrbaHotel.AbmRol
             CleanSelection(listBox2, listBox1);
         }
 
-
         private void MoveFuncionalidades(ListBox list1, ListBox list2)
         {
             if (list1.SelectedIndex == -1)
@@ -99,7 +159,7 @@ namespace FrbaHotel.AbmRol
                 list2.SelectedIndex = -1;
         }
 
-        private void ApplyType(FormType type, Rol rol)
+        private void ApplyType()
         {
             switch (type)
             {
@@ -111,12 +171,14 @@ namespace FrbaHotel.AbmRol
                 case FormType.Modify:
                     this.button1.Text = "Modificar rol";
                     this.Text = "Modificar rol";
-                    this.checkBox1.Visible = rol.Estado;
                     break;
                 case FormType.Delete:
                     this.button1.Text = "Eliminar rol";
                     this.Text = "Eliminar rol";
                     this.checkBox1.Visible = false;
+                    this.textBox1.Enabled = false;
+                    this.button2.Enabled = false;
+                    this.button3.Enabled = false;
                     break;
             }
         }

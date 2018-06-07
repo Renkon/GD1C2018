@@ -1,6 +1,7 @@
 ﻿using FrbaHotel.AbmRol;
 using FrbaHotel.Database;
 using FrbaHotel.Forms;
+using FrbaHotel.Forms.AbmRol;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -27,17 +28,17 @@ namespace FrbaHotel
 
         private void nuevoRolToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            new RolForm(FormType.Add, null).ShowDialog();
+            new RolForm(FormType.Add, null, null).ShowDialog();
         }
 
         private void modificarRolToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            new RolForm(FormType.Modify, null).ShowDialog();
+            new ViewerRolForm(FormType.Modify).ShowDialog();
         }
 
         private void borrarRolToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            new RolForm(FormType.Delete, null).ShowDialog();
+            new ViewerRolForm(FormType.Delete).ShowDialog();
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using FrbaHotel.Database;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,6 +27,21 @@ namespace FrbaHotel.Model.DAO
             }
 
             return Funcionalidades;
+        }
+
+        public List<int> ObtenerIdsFuncionalidadesDeRol(Rol Rol)
+        {
+            List<int> Ids = new List<int>();
+
+            SqlParameter param = new SqlParameter("@id_rol", Rol.Id);
+
+            foreach (var row in DatabaseConnection.GetInstance()
+                .ExecuteProcedure("OBTENER_FUNCIONALIDADES_DE_ROL", param))
+            {
+                Ids.Add(Convert.ToInt32(row["id_funcionalidad"]));
+            }
+
+            return Ids;
         }
     }
 }
