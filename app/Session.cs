@@ -11,10 +11,12 @@ namespace FrbaHotel
     public static class Session
     {
         public static Usuario User { set; get; }
+        public static Rol Rol { set; get; }
 
         public static void InitGuest()
         {
             User = new UsuarioDAO().ObtenerUsuarioDummy();
+            Rol = new RolDAO().ObtenerRolGuest();
         }
     }
 }

@@ -11,14 +11,48 @@ using System.Windows.Forms;
 
 namespace FrbaHotel.Model.DAO
 {
-    class RolDAO
+    public class RolDAO
     {
+        public List<Rol> ObtenerRoles()
+        {
+            List<Rol> Roles = new List<Rol>();
+
+            foreach (var row in DatabaseConnection.GetInstance().
+                ExecuteProcedure("OBTENER_ROLES"))
+            {
+                Rol r = new Rol(
+                    Convert.ToInt32(row["id_rol"]),
+                    Convert.ToString(row["nombre_rol"]),
+                    Convert.ToBoolean(row["estado_rol"]),
+                    null
+                );
+                Roles.Add(r);
+            }
+
+            return Roles;
+        }
+
+        public List<int> ObtenerIdsRolesUsuario(Usuario Usuario)
+        {
+            List<int> Ids = new List<int>();
+
+            SqlParameter param = new SqlParameter("@id_usuario", Usuario.Id);
+
+            foreach (var row in DatabaseConnection.GetInstance()
+                .ExecuteProcedure("OBTENER_ROLES_DE_UN_USUARIO", param))
+            {
+                Ids.Add(Convert.ToInt32(row["id_rol"]));
+            }
+
+            return Ids;
+        }
+
         public List<Rol> ObtenerRolesFiltrado(string Namepart, Funcionalidad Funcionalidad, bool SoloActivos)
         {
             List<Rol> Roles = new List<Rol>();
 
             foreach (var row in DatabaseConnection.GetInstance().
-                ExecuteProcedure("OBTENER_ROLES", GenerateParamsFilter(Namepart, Funcionalidad, SoloActivos)))
+                ExecuteProcedure("OBTENER_ROLES_FILTRADOS", GenerateParamsFilter(Namepart, Funcionalidad, SoloActivos)))
             {
                 Rol r = new Rol(
                     Convert.ToInt32(row["id_rol"]),
@@ -68,14 +102,23 @@ namespace FrbaHotel.Model.DAO
             }
         }
 
+        public Rol ObtenerRolGuest()
+        {
+            var DummyId = Convert.ToInt32(DatabaseConnection.GetInstance()
+                .ExecuteProcedureScalar("OBTENER_ROL_GUEST"));
+          
+            return new Rol(DummyId);
+        }
+
         public bool DeshabilitarRol(Rol RolADeshabilitar)
         {
             try
             {
+                SqlParameter paramUsrRol = new SqlParameter("@id_rol_user", Session.Rol.Id);
                 SqlParameter param = new SqlParameter("@id_rol", RolADeshabilitar.Id);
 
                 DatabaseConnection.GetInstance()
-                    .ExecuteProcedureNonQuery("DESHABILITAR_ROL", param);
+                    .ExecuteProcedureNonQuery("DESHABILITAR_ROL", paramUsrRol, param);
                 LogUtils.LogInfo("Se deshabilitó el rol " + RolADeshabilitar.Nombre);
                 MessageBox.Show("Se eliminó satisfactoriamente el rol " + RolADeshabilitar.Nombre, "INFO");
                 return true;
@@ -105,6 +148,8 @@ namespace FrbaHotel.Model.DAO
 
             DataTable Funcionalidades = DatabaseUtils
                 .ConvertToDataTable<Funcionalidad>(Rol.Funcionalidades, "Id");
+
+            Params.Add(new SqlParameter("@id_rol_user", Session.Rol.Id));
 
             if (Rol.Id != null)
                 Params.Add(new SqlParameter("@id_rol", Rol.Id));

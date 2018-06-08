@@ -86,14 +86,14 @@ namespace FrbaHotel.AbmRol
 
                     if (new RolDAO().ModificarRol(rol))
                     {
-                        parent.Refresh();
+                        parent.RefreshGrid();
                         this.Close();
                     }
                 break;
                 case FormType.Delete:
                     if (new RolDAO().DeshabilitarRol(rol))
                     {
-                        parent.Refresh();
+                        parent.RefreshGrid();
                         this.Close();
                     }
                 break;
@@ -146,6 +146,13 @@ namespace FrbaHotel.AbmRol
                 return; // Nada seleccionado
             }
             List<Funcionalidad> fs = list1.SelectedItems.Cast<Funcionalidad>().ToList();
+
+            // Deniego la posibilidad de que se pueda mover un rol relac. a usuarios.
+            if (fs.Select(f => f.Id).Intersect(new int[]{7, 8, 9}).Any())
+            {
+                MessageBox.Show("Los roles de usuario no se pueden modificar!", "ERROR");
+                return;
+            }
             foreach (var f in fs)
             {
                 list1.Items.Remove(f);

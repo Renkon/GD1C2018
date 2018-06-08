@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace FrbaHotel.Model.DAO
 {
-    class UsuarioDAO
+    public class UsuarioDAO
     {
         public Usuario ObtenerUsuarioDummy()
         {

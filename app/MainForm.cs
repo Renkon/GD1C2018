@@ -2,6 +2,7 @@
 using FrbaHotel.Database;
 using FrbaHotel.Forms;
 using FrbaHotel.Forms.AbmRol;
+using FrbaHotel.Login;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -39,6 +40,21 @@ namespace FrbaHotel
         private void borrarRolToolStripMenuItem_Click(object sender, EventArgs e)
         {
             new ViewerRolForm(FormType.Delete).ShowDialog();
+        }
+
+        private void nuevoUsuarioToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            new UsuarioForm(FormType.Add, null, null).ShowDialog();
+        }
+
+        private void modificarUsuarioToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //new ViewerUsuarioForm(FormType.Modify).ShowDialog();
+        }
+
+        private void borrarUsuarioToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //new ViewerUsuarioForm(FormType.Delete).ShowDialog();
         }
     }
 }

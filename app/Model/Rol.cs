@@ -16,6 +16,11 @@ namespace FrbaHotel.Model
         public bool Estado { get; set; }
         public List<Funcionalidad> Funcionalidades { get; set; }
 
+        public Rol(int Id)
+        {
+            this.Id = Id;
+        }
+
         public Rol(int? Id, string Nombre, bool Estado, List<Funcionalidad> Funcionalidades)
         {
             this.Id = Id;
@@ -24,5 +29,9 @@ namespace FrbaHotel.Model
             this.Funcionalidades = Funcionalidades;
         }
 
+        public override String ToString()
+        {
+            return Nombre;
+        }
     }
 }

@@ -28,10 +28,10 @@ namespace FrbaHotel.Forms.AbmRol
 
             ApplyType();
             LoadComboBox();
-            Refresh();
+            RefreshGrid();
         }
 
-        public void Refresh()
+        public void RefreshGrid()
         {
             PopulateDataGrid(SoloActivos, ButtonText);
         }

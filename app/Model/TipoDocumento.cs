@@ -18,5 +18,10 @@ namespace FrbaHotel.Model
             this.Nombre = Nombre;
             this.Sigla = Sigla;
         }
+
+        public override string ToString()
+        {
+            return Sigla;
+        }
     }
 }

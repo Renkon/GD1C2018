@@ -101,16 +101,21 @@
     <Compile Include="Forms\ListadoEstadistico\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\Login\Form1.cs">
+    <Compile Include="Forms\AbmUsuario\UsuarioForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\Login\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="Forms\AbmUsuario\UsuarioForm.Designer.cs">
+      <DependentUpon>UsuarioForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Model\DAO\FuncionalidadDAO.cs" />
+    <Compile Include="Model\DAO\HotelDAO.cs" />
+    <Compile Include="Model\DAO\PaisDAO.cs" />
     <Compile Include="Model\DAO\RolDAO.cs" />
+    <Compile Include="Model\DAO\TipoDocumentoDAO.cs" />
     <Compile Include="Model\DAO\UsuarioDAO.cs" />
     <Compile Include="Model\Funcionalidad.cs" />
+    <Compile Include="Model\Hotel.cs" />
+    <Compile Include="Model\Pais.cs" />
     <Compile Include="Model\Rol.cs" />
     <Compile Include="Model\TipoDocumento.cs" />
     <Compile Include="Model\Usuario.cs" />
@@ -137,6 +142,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\AbmRol\RolForm.resx">
       <DependentUpon>RolForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\AbmUsuario\UsuarioForm.resx">
+      <DependentUpon>UsuarioForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
@@ -165,6 +173,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Forms\Login\" />
     <Folder Include="Resources\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

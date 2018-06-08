@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace FrbaHotel.Model.DAO
 {
-    class FuncionalidadDAO
+    public class FuncionalidadDAO
     {
         public List<Funcionalidad> ObtenerFuncionalidades()
         {

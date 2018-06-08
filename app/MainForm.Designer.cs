@@ -155,21 +155,21 @@ namespace FrbaHotel
             // nuevoRolToolStripMenuItem
             // 
             this.nuevoRolToolStripMenuItem.Name = "nuevoRolToolStripMenuItem";
-            this.nuevoRolToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.nuevoRolToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
             this.nuevoRolToolStripMenuItem.Text = "Nuevo rol";
             this.nuevoRolToolStripMenuItem.Click += new System.EventHandler(this.nuevoRolToolStripMenuItem_Click);
             // 
             // modificarRolToolStripMenuItem
             // 
             this.modificarRolToolStripMenuItem.Name = "modificarRolToolStripMenuItem";
-            this.modificarRolToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.modificarRolToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
             this.modificarRolToolStripMenuItem.Text = "Modificar rol";
             this.modificarRolToolStripMenuItem.Click += new System.EventHandler(this.modificarRolToolStripMenuItem_Click);
             // 
             // borrarRolToolStripMenuItem
             // 
             this.borrarRolToolStripMenuItem.Name = "borrarRolToolStripMenuItem";
-            this.borrarRolToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.borrarRolToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
             this.borrarRolToolStripMenuItem.Text = "Borrar rol";
             this.borrarRolToolStripMenuItem.Click += new System.EventHandler(this.borrarRolToolStripMenuItem_Click);
             // 
@@ -188,18 +188,21 @@ namespace FrbaHotel
             this.nuevoUsuarioToolStripMenuItem.Name = "nuevoUsuarioToolStripMenuItem";
             this.nuevoUsuarioToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
             this.nuevoUsuarioToolStripMenuItem.Text = "Nuevo usuario";
+            this.nuevoUsuarioToolStripMenuItem.Click += new System.EventHandler(this.nuevoUsuarioToolStripMenuItem_Click);
             // 
             // modificarUsuarioToolStripMenuItem
             // 
             this.modificarUsuarioToolStripMenuItem.Name = "modificarUsuarioToolStripMenuItem";
             this.modificarUsuarioToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
             this.modificarUsuarioToolStripMenuItem.Text = "Modificar usuario";
+            this.modificarUsuarioToolStripMenuItem.Click += new System.EventHandler(this.modificarUsuarioToolStripMenuItem_Click);
             // 
             // borrarUsuarioToolStripMenuItem
             // 
             this.borrarUsuarioToolStripMenuItem.Name = "borrarUsuarioToolStripMenuItem";
             this.borrarUsuarioToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
             this.borrarUsuarioToolStripMenuItem.Text = "Borrar usuario";
+            this.borrarUsuarioToolStripMenuItem.Click += new System.EventHandler(this.borrarUsuarioToolStripMenuItem_Click);
             // 
             // clientesToolStripMenuItem
             // 
