@@ -291,7 +291,7 @@ BEGIN
         SELECT id_hotel
         FROM @hoteles
 
-    EXEC [EL_MONSTRUO_DEL_LAGO_MASER].[VALIDAR_ROL_USUARIO] @id_rol_user, 4
+    EXEC [EL_MONSTRUO_DEL_LAGO_MASER].[VALIDAR_ROL_USUARIO] @id_rol_user, 7
 
 	BEGIN TRY
 		BEGIN TRANSACTION
@@ -378,5 +378,113 @@ BEGIN
 		AND (@id_hotel = -1 OR id_hotel = @id_hotel)
         AND (@soloActivos = 0 OR estado_usuario = 1)
 END
+
+GO
+
+-- Deshabilita un usuario en particular
+CREATE PROCEDURE [EL_MONSTRUO_DEL_LAGO_MASER].[DESHABILITAR_USUARIO]
+        (@id_rol_user INT, @id_usuario INT)
+AS
+BEGIN
+
+    EXEC [EL_MONSTRUO_DEL_LAGO_MASER].[VALIDAR_ROL_USUARIO] @id_rol_user, 9
+
+    UPDATE [EL_MONSTRUO_DEL_LAGO_MASER].[usuarios]
+    SET estado_usuario = 0
+    WHERE id_usuario = @id_usuario
+END
+
+GO
+
+-- Modifica un usuario en particular
+CREATE PROCEDURE [EL_MONSTRUO_DEL_LAGO_MASER].[MODIFICAR_USUARIO](@id_rol_user INT, @id_usuario INT, @usuario_cuenta NVARCHAR(255), @contraseña_cuenta CHAR(64), @roles listaDeRoles READONLY,
+	@hoteles listaDeHoteles READONLY, @nombre_usuario NVARCHAR(255), @apellido_usuario NVARCHAR(255), @id_tipo_documento INT, @numero_documento_usuario NUMERIC(18,0), @correo_usuario NVARCHAR(255), 
+	@telefono_usuario NVARCHAR(100), @direccion_usuario NVARCHAR(255), @fecha_nacimiento_usuario DATETIME, @estado BIT)
+AS
+BEGIN
+    DECLARE @id_rol                 INT
+    DECLARE @id_hotel               INT
+
+    DECLARE cursor_roles CURSOR FOR
+                SELECT id_rol
+                FROM @roles
+
+    DECLARE cursor_hoteles CURSOR FOR
+        SELECT id_hotel
+        FROM @hoteles
+
+    EXEC [EL_MONSTRUO_DEL_LAGO_MASER].[VALIDAR_ROL_USUARIO] @id_rol_user, 8
+
+        BEGIN TRY
+				BEGIN TRANSACTION
+				UPDATE [EL_MONSTRUO_DEL_LAGO_MASER].[usuarios]
+				SET nombre_usuario = @nombre_usuario,
+					apellido_usuario = @apellido_usuario,
+					id_tipo_documento = @id_tipo_documento,
+					numero_documento_usuario = @numero_documento_usuario,
+					correo_usuario = @correo_usuario,
+					telefono_usuario = @telefono_usuario,
+					direccion_usuario = @direccion_usuario,
+					fecha_nacimiento_usuario = @fecha_nacimiento_usuario,
+					estado_usuario = @estado
+				WHERE id_usuario = @id_usuario
+
+				UPDATE [EL_MONSTRUO_DEL_LAGO_MASER].[cuentas]
+				SET usuario_cuenta = LOWER(@usuario_cuenta),
+					contraseña_cuenta = CASE @contraseña_cuenta
+					WHEN '' THEN contraseña_cuenta
+					ELSE LOWER(@contraseña_cuenta)
+					END
+				WHERE id_usuario = @id_usuario
+
+				-- Limpiamos relaciones muchos a muchos
+				DELETE FROM [EL_MONSTRUO_DEL_LAGO_MASER].[usuariosXhoteles]
+				WHERE id_usuario = @id_usuario
+
+				DELETE FROM [EL_MONSTRUO_DEL_LAGO_MASER].[usuariosXroles]
+				WHERE id_usuario = @id_usuario
+
+                -- Vamos insertando los roles del usuario
+                OPEN cursor_roles
+                FETCH cursor_roles INTO @id_rol
+                WHILE(@@FETCH_STATUS = 0) BEGIN
+                        INSERT INTO [EL_MONSTRUO_DEL_LAGO_MASER].[usuariosXroles]
+                                (id_usuario, id_rol)
+                        VALUES (@id_usuario, @id_rol)
+                        FETCH cursor_roles INTO @id_rol
+                END
+                CLOSE cursor_roles
+                DEALLOCATE cursor_roles
+                -- Vamos insertando los hoteles del usuario
+                OPEN cursor_hoteles
+                FETCH cursor_hoteles INTO @id_hotel
+                WHILE(@@FETCH_STATUS = 0) BEGIN
+                        INSERT INTO [EL_MONSTRUO_DEL_LAGO_MASER].[usuariosXhoteles]
+                                (id_usuario, id_hotel)
+                        VALUES (@id_usuario, @id_hotel)
+                FETCH cursor_hoteles INTO @id_hotel
+                END
+
+                COMMIT TRANSACTION
+                CLOSE cursor_hoteles
+                DEALLOCATE cursor_hoteles
+        END TRY
+        BEGIN CATCH
+                ROLLBACK TRANSACTION
+
+                IF CURSOR_STATUS('global', 'cursor_roles') = 1 BEGIN
+                        CLOSE cursor_roles
+                END
+                DEALLOCATE cursor_roles;
+
+                IF CURSOR_STATUS('global', 'cursor_hoteles') = 1 BEGIN
+                        CLOSE cursor_hoteles
+                END
+                DEALLOCATE cursor_hoteles;
+
+                THROW
+        END CATCH
+END
+
 
 GO
