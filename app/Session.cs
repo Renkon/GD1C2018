@@ -12,6 +12,7 @@ namespace FrbaHotel
     {
         public static Usuario User { set; get; }
         public static Rol Rol { set; get; }
+        public static Hotel Hotel { set; get; }
 
         public static void InitGuest()
         {

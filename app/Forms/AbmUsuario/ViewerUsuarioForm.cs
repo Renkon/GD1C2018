@@ -1,4 +1,5 @@
-﻿using FrbaHotel.Model;
+﻿using FrbaHotel.Login;
+using FrbaHotel.Model;
 using FrbaHotel.Model.DAO;
 using System;
 using System.Collections.Generic;
@@ -95,6 +96,11 @@ namespace FrbaHotel.Forms.AbmUsuario
             }
         }
 
+        public void RefreshGrid()
+        {
+            PopulateDataGrid();
+        }
+
         private void ApplyType()
         {
             switch (type)
@@ -118,6 +124,17 @@ namespace FrbaHotel.Forms.AbmUsuario
             {
                 MessageBox.Show("El documento debe estar compuesto sólo por números!", "ERROR");
                 textBox4.Focus();
+            }
+        }
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            var senderGrid = (DataGridView)sender;
+
+            if (senderGrid.Columns[e.ColumnIndex] is DataGridViewButtonColumn &&
+                e.RowIndex >= 0) // Clickeó el botón?
+            {
+                new UsuarioForm(type, (Tuple<Usuario,Cuenta>)dataGridView1.SelectedRows[0].Tag, this).ShowDialog();
             }
         }
     }

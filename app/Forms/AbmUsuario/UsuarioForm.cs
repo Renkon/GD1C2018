@@ -1,5 +1,6 @@
 ﻿using FrbaHotel;
 using FrbaHotel.Forms;
+using FrbaHotel.Forms.AbmUsuario;
 using FrbaHotel.Model;
 using FrbaHotel.Model.DAO;
 using System;
@@ -19,17 +20,20 @@ namespace FrbaHotel.Login
     public partial class UsuarioForm : Form
     {
         private FormType type;
-        private Usuario usuario;
+        private Tuple<Usuario, Cuenta> usuario;
+        private ViewerUsuarioForm parent;
 
-        public UsuarioForm(FormType type, Usuario usuario, Form parent)
+        public UsuarioForm(FormType type, Tuple<Usuario, Cuenta> usuario, ViewerUsuarioForm parent)
         {
             this.type = type;
             this.usuario = usuario;
+            this.parent = parent;
 
             InitializeComponent();
 
+            ApplyType();
             PopulateLists();
-            ApplyType(type);
+            LoadContent();
         }
 
         // Se ejecuta cuando esta validando el textbox
@@ -42,6 +46,26 @@ namespace FrbaHotel.Login
             }
         }
 
+        private void LoadContent()
+        {
+            if (usuario != null)
+            {
+                Cuenta c = usuario.Item2;
+                Usuario u = usuario.Item1;
+                this.textBox1.Text = c.Usuario;
+                this.textBox3.Text = u.Nombre;
+                this.textBox4.Text = u.Apellido;
+                this.comboBox1.SelectedItem = u.TipoDocumento;
+                this.textBox5.Text = Convert.ToString(u.Documento);
+                this.textBox6.Text = u.Correo;
+                this.textBox7.Text = u.Teléfono;
+                this.textBox8.Text = u.Dirección;
+                this.textBox9.Text = u.FechaNacimiento.ToString("dd/MM/yyyy");
+                this.checkBox1.Checked = u.Estado;
+                this.checkBox1.Enabled = !u.Estado;
+            }
+        }
+
         private void PopulateLists()
         {
             List<TipoDocumento> TiposDocumento = new TipoDocumentoDAO().ObtenerTiposDocumento();
@@ -49,7 +73,7 @@ namespace FrbaHotel.Login
 
             List<Rol> Roles = new RolDAO().ObtenerRoles();
             List<int> IdsRolesUsuario = usuario != null ?
-                new RolDAO().ObtenerIdsRolesUsuario(usuario) : new List<int>();
+                new RolDAO().ObtenerIdsRolesUsuario(usuario.Item1) : new List<int>();
             this.listBox1.Items.AddRange(Roles
                 .Where(u => IdsRolesUsuario.Contains(u.Id.Value)).ToArray());
             this.listBox2.Items.AddRange(Roles
@@ -57,7 +81,7 @@ namespace FrbaHotel.Login
 
             List<Hotel> Hoteles = new HotelDAO().ObtenerHoteles();
             List<int> IdsHotelesUsuario = usuario != null ?
-                new HotelDAO().ObtenerIdsHotelesUsuario(usuario) : new List<int>();
+                new HotelDAO().ObtenerIdsHotelesUsuario(usuario.Item1) : new List<int>();
             this.listBox4.Items.AddRange(Hoteles
                 .Where(u => IdsHotelesUsuario.Contains(u.Id.Value)).ToArray());
             this.listBox3.Items.AddRange(Hoteles
@@ -82,7 +106,7 @@ namespace FrbaHotel.Login
             monthCalendar1.Visible = false;
         }
 
-        private void ApplyType(FormType type)
+        private void ApplyType()
         {
             switch (type)
             {
@@ -94,7 +118,7 @@ namespace FrbaHotel.Login
                 case FormType.Modify:
                     button6.Text = "Editar usuario";
                     this.Text = "Modificar usuario";
-                    checkBox1.Checked = usuario.Estado;
+                    checkBox1.Checked = usuario.Item1.Estado;
                 break;
                 case FormType.Delete:
                     button6.Text = "Bloquear usuario";
@@ -163,6 +187,7 @@ namespace FrbaHotel.Login
             string Teléfono = textBox7.Text;
             string Dirección = textBox8.Text;
             string FechaNacimiento = textBox9.Text;
+            bool Estado = checkBox1.Checked;
 
             switch (type)
             {
@@ -172,17 +197,45 @@ namespace FrbaHotel.Login
                         return;
 
                     Usuario NewUser = new Usuario(null, Nombre, Apellido, Roles, Hoteles, TipoDocumento, Convert.ToInt64(NumeroDocumento), Correo,
-                        Teléfono, Dirección,  DateTime.ParseExact(textBox9.Text, "dd/MM/yyyy", CultureInfo.InvariantCulture), true);
+                        Teléfono, Dirección, DateTime.ParseExact(FechaNacimiento, "dd/MM/yyyy", CultureInfo.InvariantCulture), true);
                     Cuenta NewCuenta = new Cuenta(Cuenta, Password, 0);
 
                     if (new UsuarioDAO().InsertarNuevoUsuario(NewUser, NewCuenta))
                         this.Close();
                 break;
                 case FormType.Modify:
+                    if (!InputValido(Cuenta, Password, Roles, Hoteles, Nombre, Apellido, TipoDocumento,
+                        NumeroDocumento, Correo, Teléfono, Dirección, FechaNacimiento))
+                        return;
 
+                    Cuenta c = usuario.Item2;
+                    Usuario u = usuario.Item1;
+                    c.Usuario = Cuenta;
+                    c.Contraseña = Password;
+                    u.Roles = Roles;
+                    u.Hoteles = Hoteles;
+                    u.Nombre = Nombre;
+                    u.Apellido = Apellido;
+                    u.TipoDocumento = TipoDocumento;
+                    u.Documento = Convert.ToInt64(NumeroDocumento);
+                    u.Correo = Correo;
+                    u.Teléfono = Teléfono;
+                    u.Dirección = Dirección;
+                    u.FechaNacimiento = DateTime.ParseExact(FechaNacimiento, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                    u.Estado = Estado;
+
+                    if (new UsuarioDAO().ModificarUsuario(u, c))
+                    {
+                        parent.RefreshGrid();
+                        this.Close();
+                    }
                 break;
                 case FormType.Delete:
-
+                    if (new UsuarioDAO().DeshabilitarUsuario(usuario.Item1, usuario.Item2))
+                    {
+                        parent.RefreshGrid();
+                        this.Close();
+                    }
                 break;
             }
         }
@@ -198,7 +251,10 @@ namespace FrbaHotel.Login
             if (Cuenta.Equals(""))
                 ErrMsg += "Debe ingresar el nombre de su cuenta de usuario\n";
             if (Password.Length < 6)
-                ErrMsg += "Su contraseña debe tener al menos seis caracteres de longitud\n";
+            {
+                if (!(type == FormType.Modify && Password.Equals("")))
+                    ErrMsg += "Su contraseña debe tener al menos seis caracteres de longitud\n";
+            }
             if (Roles.Count < 1)
                 ErrMsg += "Debe seleccionar al menos un rol\n";
             if (Hoteles.Count < 1)
