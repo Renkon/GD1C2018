@@ -51,41 +51,57 @@ CREATE PROCEDURE [EL_MONSTRUO_DEL_LAGO_MASER].[INSERTAR_NUEVO_ROL](@id_rol_user 
 AS
 BEGIN
 
-		EXEC [EL_MONSTRUO_DEL_LAGO_MASER].[VALIDAR_ROL_USUARIO] @id_rol_user, 4
-		
-        DECLARE @id_funcionalidad       INT
-        DECLARE @id_rol                 INT
-        DECLARE cursor_funcionalidades CURSOR FOR
-                SELECT id_funcionalidad
-                FROM @funcionalidades
+    EXEC [EL_MONSTRUO_DEL_LAGO_MASER].[VALIDAR_ROL_USUARIO] @id_rol_user, 4
 
-        INSERT INTO [EL_MONSTRUO_DEL_LAGO_MASER].[roles]
-                (nombre_rol)
-        VALUES(@nombre_rol)
+	BEGIN TRY
+		DECLARE @id_funcionalidad       INT
+		DECLARE @id_rol                 INT
+		DECLARE cursor_funcionalidades CURSOR FOR
+				SELECT id_funcionalidad
+				FROM @funcionalidades
 
-        -- Seteamos el ID del ROL CREADO
-        SET @id_rol = SCOPE_IDENTITY();
+		BEGIN TRANSACTION
 
-        -- Vamos insertando en la muchos a muchos para agregarle funcionalidades
-        OPEN cursor_funcionalidades
-        FETCH cursor_funcionalidades INTO @id_funcionalidad
-                WHILE(@@FETCH_STATUS = 0)
-                BEGIN
-                        INSERT INTO [EL_MONSTRUO_DEL_LAGO_MASER].[rolesXfuncionalidades]
-                                (id_rol,id_funcionalidad)
-                        VALUES (@id_rol,@id_funcionalidad)
-                FETCH cursor_funcionalidades INTO @id_funcionalidad
-                END
+		INSERT INTO [EL_MONSTRUO_DEL_LAGO_MASER].[roles]
+			(nombre_rol)
+		VALUES(@nombre_rol)
 
-        CLOSE cursor_funcionalidades
-        DEALLOCATE cursor_funcionalidades
+		-- Seteamos el ID del ROL CREADO
+		SET @id_rol = SCOPE_IDENTITY();
+
+		-- Vamos insertando en la muchos a muchos para agregarle funcionalidades
+		OPEN cursor_funcionalidades
+		FETCH cursor_funcionalidades INTO @id_funcionalidad
+		WHILE(@@FETCH_STATUS = 0)
+		BEGIN
+			INSERT INTO [EL_MONSTRUO_DEL_LAGO_MASER].[rolesXfuncionalidades]
+				(id_rol,id_funcionalidad)
+			VALUES (@id_rol,@id_funcionalidad)
+		FETCH cursor_funcionalidades INTO @id_funcionalidad
+		END
+
+		COMMIT TRANSACTION
+
+		CLOSE cursor_funcionalidades
+		DEALLOCATE cursor_funcionalidades
+	END TRY
+	BEGIN CATCH
+		ROLLBACK TRANSACTION
+
+		IF CURSOR_STATUS('global', 'cursor_funcionalidades') = 1 BEGIN
+			CLOSE cursor_funcionalidades
+		END
+		DEALLOCATE cursor_funcionalidades;
+
+		THROW
+	END CATCH
 END
 
 GO
 
 -- Se ejecuta para traer los roles
 CREATE PROCEDURE [EL_MONSTRUO_DEL_LAGO_MASER].[OBTENER_ROLES_FILTRADOS]
-(@nombre VARCHAR(255), @funcionalidad INT, @soloActivos BIT)
+(@nombre NVARCHAR(255), @funcionalidad INT, @soloActivos BIT)
 AS
 BEGIN
         SELECT DISTINCT r.id_rol, nombre_rol, estado_rol
@@ -135,36 +151,50 @@ CREATE PROCEDURE [EL_MONSTRUO_DEL_LAGO_MASER].[MODIFICAR_ROL]
 AS
 BEGIN
 
-	EXEC [EL_MONSTRUO_DEL_LAGO_MASER].[VALIDAR_ROL_USUARIO] @id_rol_user, 5
-	
+    EXEC [EL_MONSTRUO_DEL_LAGO_MASER].[VALIDAR_ROL_USUARIO] @id_rol_user, 5
+
     DECLARE @id_funcionalidad    INT
 
     DECLARE cursor_funcionalidades CURSOR FOR
         SELECT id_funcionalidad
         FROM @funcionalidades
+	
+	BEGIN TRY
+		BEGIN TRANSACTION
+		--Updateamos el rol
+		UPDATE [EL_MONSTRUO_DEL_LAGO_MASER].[roles]
+			SET nombre_rol = @nombre_rol, estado_rol = @estado
+			WHERE id_rol = @id_rol
 
-    --Updateamos el rol
-    UPDATE [EL_MONSTRUO_DEL_LAGO_MASER].[roles]
-        SET nombre_rol = @nombre_rol, estado_rol = @estado
-        WHERE id_rol = @id_rol
+		--Borramos todas las funcoinalidades de ese rol
+		DELETE FROM [EL_MONSTRUO_DEL_LAGO_MASER].[rolesXfuncionalidades]
+		WHERE id_rol = @id_rol
 
-    --Borramos todas las funcoinalidades de ese rol
-    DELETE FROM [EL_MONSTRUO_DEL_LAGO_MASER].[rolesXfuncionalidades]
-    WHERE id_rol = @id_rol
+		-- Insertamos todas las funcoinalidades que nos mandan en la lista
+		OPEN cursor_funcionalidades
+		FETCH cursor_funcionalidades INTO @id_funcionalidad
+			WHILE(@@FETCH_STATUS = 0)
+			BEGIN
+				INSERT INTO [EL_MONSTRUO_DEL_LAGO_MASER].[rolesXfuncionalidades]
+					(id_rol,id_funcionalidad)
+				VALUES (@id_rol, @id_funcionalidad)
+							FETCH cursor_funcionalidades INTO @id_funcionalidad
+			END
 
-    -- Insertamos todas las funcoinalidades que nos mandan en la lista
-    OPEN cursor_funcionalidades
-    FETCH cursor_funcionalidades INTO @id_funcionalidad
-        WHILE(@@FETCH_STATUS = 0)
-        BEGIN
-            INSERT INTO [EL_MONSTRUO_DEL_LAGO_MASER].[rolesXfuncionalidades]
-                (id_rol,id_funcionalidad)
-            VALUES (@id_rol, @id_funcionalidad)
-                        FETCH cursor_funcionalidades INTO @id_funcionalidad
-        END
+		COMMIT TRANSACTION
+		CLOSE cursor_funcionalidades
+		DEALLOCATE cursor_funcionalidades
+	END TRY
+	BEGIN CATCH
+		ROLLBACK TRANSACTION
 
-    CLOSE cursor_funcionalidades
-    DEALLOCATE cursor_funcionalidades
+		IF CURSOR_STATUS('global', 'cursor_funcionalidades') = 1 BEGIN
+			CLOSE cursor_funcionalidades
+		END
+		DEALLOCATE cursor_funcionalidades;
+
+		THROW
+	END CATCH
 END
 
 GO
@@ -229,6 +259,124 @@ AS
 BEGIN
     SELECT id_tipo_documento, nombre_tipo_documento, sigla_tipo_documento
     FROM [EL_MONSTRUO_DEL_LAGO_MASER].[tipos_documento]
+END
+
+GO
+
+
+CREATE TYPE listaDeRoles AS TABLE
+(id_rol INT)
+
+GO
+
+CREATE TYPE listaDeHoteles AS TABLE
+(id_hotel INT)
+
+GO
+
+-- Se ejecuta para crear un usuario nuevo
+CREATE PROCEDURE [EL_MONSTRUO_DEL_LAGO_MASER].[INSERTAR_USUARIO](@id_rol_user INT, @usuario_cuenta NVARCHAR(255), @contraseña_cuenta CHAR(64), @roles listaDeRoles READONLY, 
+@hoteles listaDeHoteles READONLY, @nombre_usuario NVARCHAR(255), @apellido_usuario NVARCHAR(255), @id_tipo_documento INT, @numero_documento_usuario NUMERIC(18,0), @correo_usuario NVARCHAR(255), @telefono_usuario NVARCHAR(100), @direccion_usuario NVARCHAR(255), @fecha_nacimiento_usuario DATETIME)
+AS
+BEGIN
+    DECLARE @id_usuario             INT
+    DECLARE @id_rol                 INT
+    DECLARE @id_hotel				INT
+    
+    DECLARE cursor_roles CURSOR FOR
+		SELECT id_rol
+		FROM @roles
+
+    DECLARE cursor_hoteles CURSOR FOR
+        SELECT id_hotel
+        FROM @hoteles
+
+    EXEC [EL_MONSTRUO_DEL_LAGO_MASER].[VALIDAR_ROL_USUARIO] @id_rol_user, 4
+
+	BEGIN TRY
+		BEGIN TRANSACTION
+        INSERT INTO [EL_MONSTRUO_DEL_LAGO_MASER].[usuarios]
+            (nombre_usuario, apellido_usuario, id_tipo_documento, numero_documento_usuario, correo_usuario, telefono_usuario, direccion_usuario,fecha_nacimiento_usuario)
+		VALUES(@nombre_usuario, @apellido_usuario, @id_tipo_documento, @numero_documento_usuario, @correo_usuario, @telefono_usuario, @direccion_usuario, @fecha_nacimiento_usuario)
+
+        -- Seteamos el ID del USUARIO CREADO
+                SET @id_usuario = SCOPE_IDENTITY();
+
+        INSERT INTO [EL_MONSTRUO_DEL_LAGO_MASER].[cuentas]
+                        (id_usuario, usuario_cuenta, contraseña_cuenta)
+        VALUES(@id_usuario, LOWER(@usuario_cuenta), LOWER(@contraseña_cuenta))
+
+
+		-- Vamos insertando los roles del usuario
+		OPEN cursor_roles
+		FETCH cursor_roles INTO @id_rol
+		WHILE(@@FETCH_STATUS = 0) BEGIN
+			INSERT INTO [EL_MONSTRUO_DEL_LAGO_MASER].[usuariosXroles]
+				(id_usuario, id_rol)
+			VALUES (@id_usuario, @id_rol)
+			FETCH cursor_roles INTO @id_rol
+		END
+		CLOSE cursor_roles
+		DEALLOCATE cursor_roles
+
+		-- Vamos insertando los hoteles del usuario
+		OPEN cursor_hoteles
+		FETCH cursor_hoteles INTO @id_hotel
+		WHILE(@@FETCH_STATUS = 0) BEGIN
+			INSERT INTO [EL_MONSTRUO_DEL_LAGO_MASER].[usuariosXhoteles]
+				(id_usuario, id_hotel)
+			VALUES (@id_usuario, @id_hotel)
+		FETCH cursor_hoteles INTO @id_hotel
+		END
+
+		COMMIT TRANSACTION
+		CLOSE cursor_hoteles
+		DEALLOCATE cursor_hoteles
+	END TRY
+	BEGIN CATCH
+		ROLLBACK TRANSACTION
+
+		IF CURSOR_STATUS('global', 'cursor_roles') = 1 BEGIN
+			CLOSE cursor_roles
+		END
+		DEALLOCATE cursor_roles;
+
+		IF CURSOR_STATUS('global', 'cursor_hoteles') = 1 BEGIN
+			CLOSE cursor_hoteles
+		END
+		DEALLOCATE cursor_hoteles;
+
+		THROW
+	END CATCH
+END
+
+GO
+
+-- Obtiene los usuarios filtrados
+CREATE PROCEDURE [EL_MONSTRUO_DEL_LAGO_MASER].[OBTENER_USUARIOS_FILTRADOS]
+	(@usuario_cuenta NVARCHAR(255), @id_rol INT, @nombre_usuario NVARCHAR(255), @apellido_usuario NVARCHAR(255),
+	@id_tipo_documento INT, @numero_documento_usuario NUMERIC(18,0), @correo_usuario NVARCHAR(255), @id_hotel INT, @soloActivos BIT)
+AS
+BEGIN
+        SELECT DISTINCT u.id_usuario, usuario_cuenta, nombre_usuario, 
+			apellido_usuario, id_tipo_documento, numero_documento_usuario, correo_usuario, telefono_usuario, 
+			direccion_usuario, fecha_nacimiento_usuario, estado_usuario 
+        FROM [EL_MONSTRUO_DEL_LAGO_MASER].[usuarios] u
+		JOIN [EL_MONSTRUO_DEL_LAGO_MASER].[cuentas] c
+		ON u.id_usuario = c.id_usuario
+        JOIN [EL_MONSTRUO_DEL_LAGO_MASER].[usuariosXhoteles] uxh
+        ON u.id_usuario = uxh.id_usuario
+		JOIN [EL_MONSTRUO_DEL_LAGO_MASER].[usuariosXroles] uxr
+		ON u.id_usuario = uxr.id_usuario
+        WHERE LOWER(usuario_cuenta) LIKE '%' + LOWER(@usuario_cuenta) + '%'
+        AND (@id_rol = -1 OR id_rol = @id_rol)
+		AND LOWER(nombre_usuario) LIKE '%' + LOWER(@nombre_usuario) + '%'
+		AND LOWER(apellido_usuario) LIKE '%' + LOWER(@apellido_usuario) + '%'
+		AND (@id_tipo_documento = -1 OR id_tipo_documento = @id_tipo_documento)
+		AND (@numero_documento_usuario = 0 OR CAST(numero_documento_usuario AS VARCHAR) LIKE '%' + CAST(@numero_documento_usuario AS VARCHAR) + '%')
+		AND LOWER(correo_usuario) LIKE '%' + LOWER(@correo_usuario) + '%'
+		AND (@id_hotel = -1 OR id_hotel = @id_hotel)
+        AND (@soloActivos = 0 OR estado_usuario = 1)
 END
 
 GO
