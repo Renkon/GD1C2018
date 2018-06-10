@@ -44,7 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Database\DatabaseConfig.cs" />
+    <Compile Include="Config.cs" />
     <Compile Include="Database\DatabaseConnection.cs" />
     <Compile Include="Forms\AbmCliente\Form1.cs">
       <SubType>Form</SubType>
@@ -75,6 +75,12 @@
     </Compile>
     <Compile Include="Forms\AbmRol\RolForm.Designer.cs">
       <DependentUpon>RolForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\AbmUsuario\ViewerUsuarioForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\AbmUsuario\ViewerUsuarioForm.Designer.cs">
+      <DependentUpon>ViewerUsuarioForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\CancelarReserva\Form1.cs">
       <SubType>Form</SubType>
@@ -107,6 +113,7 @@
     <Compile Include="Forms\AbmUsuario\UsuarioForm.Designer.cs">
       <DependentUpon>UsuarioForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Model\Cuenta.cs" />
     <Compile Include="Model\DAO\FuncionalidadDAO.cs" />
     <Compile Include="Model\DAO\HotelDAO.cs" />
     <Compile Include="Model\DAO\PaisDAO.cs" />
@@ -145,6 +152,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\AbmUsuario\UsuarioForm.resx">
       <DependentUpon>UsuarioForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\AbmUsuario\ViewerUsuarioForm.resx">
+      <DependentUpon>ViewerUsuarioForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>

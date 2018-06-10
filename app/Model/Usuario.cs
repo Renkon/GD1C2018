@@ -18,6 +18,8 @@ namespace FrbaHotel.Model
         public string Dirección { get; set; }
         public DateTime FechaNacimiento { get; set; }
         public bool Estado { get; set; }
+        public List<Rol> Roles { get; set; }
+        public List<Hotel> Hoteles { get; set; }
 
         // Usado para dummy user
         public Usuario(int? Id)
@@ -26,13 +28,15 @@ namespace FrbaHotel.Model
         }
 
         // Usado normalmente
-        public Usuario(int? Id, string Nombre, string Apellido, TipoDocumento TipoDocumento,
-            long Documento, string Correo, string Teléfono, string Dirección,
+        public Usuario(int? Id, string Nombre, string Apellido, List<Rol> Roles, List<Hotel> Hoteles,
+            TipoDocumento TipoDocumento, long Documento, string Correo, string Teléfono, string Dirección,
             DateTime FechaNacimiento, bool Estado)
         {
             this.Id = Id;
             this.Nombre = Nombre;
             this.Apellido = Apellido;
+            this.Roles = Roles;
+            this.Hoteles = Hoteles;
             this.TipoDocumento = TipoDocumento;
             this.Documento = Documento;
             this.Correo = Correo;

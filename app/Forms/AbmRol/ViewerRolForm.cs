@@ -33,7 +33,7 @@ namespace FrbaHotel.Forms.AbmRol
 
         public void RefreshGrid()
         {
-            PopulateDataGrid(SoloActivos, ButtonText);
+            PopulateDataGrid();
         }
 
         private void LoadComboBox()
@@ -46,7 +46,7 @@ namespace FrbaHotel.Forms.AbmRol
             comboBox1.SelectedItem = dummy;
         }
 
-        private void PopulateDataGrid(bool SoloActivos, string ButtonText)
+        private void PopulateDataGrid()
         {
             List<Rol> Roles = new RolDAO().ObtenerRolesFiltrado(textBox1.Text, (Funcionalidad) comboBox1.SelectedItem, SoloActivos);
 
@@ -80,7 +80,7 @@ namespace FrbaHotel.Forms.AbmRol
         // Ejecutado al aplicar el filtro
         private void button2_Click(object sender, EventArgs e)
         {
-            PopulateDataGrid(SoloActivos, ButtonText);
+            PopulateDataGrid();
         }
 
         private void button1_Click(object sender, EventArgs e)

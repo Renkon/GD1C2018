@@ -25,6 +25,12 @@ namespace FrbaHotel.Model
             this.Id = Id;
         }
 
+        public Hotel(int Id, string Nombre)
+        {
+            this.Id = Id;
+            this.Nombre = Nombre;
+        }
+
         public Hotel(int Id, string Nombre, string Correo, string Teléfono, string Ciudad, string Domicilio_Calle,
             int Domicilio_Número, int Cantidad_Estrellas, Pais País, DateTime Fecha_Creación, int Recarga_Por_Estrellas)
         {

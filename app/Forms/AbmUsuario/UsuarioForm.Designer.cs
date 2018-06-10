@@ -295,7 +295,10 @@
             // 
             // monthCalendar1
             // 
+            var currDate = Config.GetInstance().GetCurrentDate();
             this.monthCalendar1.Location = new System.Drawing.Point(364, 3);
+            this.monthCalendar1.MaxDate = currDate;
+            this.monthCalendar1.TodayDate = currDate;
             this.monthCalendar1.MaxSelectionCount = 1;
             this.monthCalendar1.Name = "monthCalendar1";
             this.monthCalendar1.TabIndex = 18;
@@ -459,6 +462,7 @@
             this.button6.Size = new System.Drawing.Size(100, 23);
             this.button6.TabIndex = 4;
             this.button6.UseVisualStyleBackColor = true;
+            this.button6.Click += new System.EventHandler(this.button6_Click);
             // 
             // UsuarioForm
             // 

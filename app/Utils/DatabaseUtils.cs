@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -31,5 +32,15 @@ namespace FrbaHotel.Utils
             return new DataView(table).ToTable(false, columns);
         }
 
+        // tomado prestado de https://stackoverflow.com/a/17001289/2980812
+        public static string SHA256of(string str)
+        {
+            using (SHA256 hash = SHA256Managed.Create())
+            {
+                return String.Concat(hash
+                  .ComputeHash(Encoding.UTF8.GetBytes(str))
+                  .Select(item => item.ToString("x2")));
+            }
+        }
     }
 }

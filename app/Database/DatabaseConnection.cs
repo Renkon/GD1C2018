@@ -20,7 +20,7 @@ namespace FrbaHotel.Database
         {
             try
             {
-                Connection = new SqlConnection(DatabaseConfig.GetInstance().GetConnectionString());
+                Connection = new SqlConnection(Config.GetInstance().GetConnectionString());
             }
             catch (Exception Ex)
             {
