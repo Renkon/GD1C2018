@@ -7,7 +7,7 @@ BEGIN
 				   FROM [EL_MONSTRUO_DEL_LAGO_MASER].[rolesXfuncionalidades]
 				   WHERE id_rol = @id_rol AND id_funcionalidad = @id_funcionalidad))
 	BEGIN
-		RAISERROR('Su rol activo no tiene los permisos correspondientes', 15, 1)
+		RAISERROR('Su rol activo no tiene los permisos correspondientes', 20, 1) WITH LOG
 	END
 END
 
