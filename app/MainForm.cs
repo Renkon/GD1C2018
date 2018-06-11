@@ -3,6 +3,7 @@ using FrbaHotel.Database;
 using FrbaHotel.Forms;
 using FrbaHotel.Forms.AbmRol;
 using FrbaHotel.Forms.AbmUsuario;
+using FrbaHotel.Forms.Login;
 using FrbaHotel.Login;
 using System;
 using System.Collections.Generic;
@@ -56,6 +57,17 @@ namespace FrbaHotel
         private void borrarUsuarioToolStripMenuItem_Click(object sender, EventArgs e)
         {
             new ViewerUsuarioForm(FormType.Delete).ShowDialog();
+        }
+
+        private void iniciarSesiónToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            new LoginForm().ShowDialog();
+        }
+
+        private void cerrarSesiónToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Hasta luego " + Session.User.Nombre + " " + Session.User.Apellido, "INFO");
+            Session.Reset();
         }
     }
 }

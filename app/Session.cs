@@ -19,5 +19,20 @@ namespace FrbaHotel
             User = new UsuarioDAO().ObtenerUsuarioDummy();
             Rol = new RolDAO().ObtenerRolGuest();
         }
+
+        public static void Reset()
+        {
+            InitGuest();
+            Hotel = null;
+        }
+
+        public static void Set(Usuario U, Rol R, Hotel H)
+        {
+            User = U;
+            Rol = R;
+            Hotel = H;
+
+            // todo: mostrar solo ciertos menues segun los roles.
+        }
     }
 }

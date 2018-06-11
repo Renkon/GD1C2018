@@ -31,6 +31,9 @@ namespace FrbaHotel.Login
 
             InitializeComponent();
 
+            this.monthCalendar1.MaxDate = Config.GetInstance().GetCurrentDate();
+            this.monthCalendar1.TodayDate = Config.GetInstance().GetCurrentDate();
+
             ApplyType();
             PopulateLists();
             LoadContent();
@@ -132,6 +135,12 @@ namespace FrbaHotel.Login
                     textBox7.Enabled = false;
                     textBox8.Enabled = false;
                     checkBox1.Visible = false;
+                    button1.Enabled = false;
+                    button2.Enabled = false;
+                    button3.Enabled = false;
+                    button4.Enabled = false;
+                    button5.Enabled = false;
+                    comboBox1.Enabled = false;
                 break;
             }
         }
@@ -208,6 +217,14 @@ namespace FrbaHotel.Login
                         NumeroDocumento, Correo, Teléfono, Dirección, FechaNacimiento))
                         return;
 
+                    // Validamos que el hotel de la sesión corresponda a uno del usuario.
+                    List<Hotel> HotelesUser = new HotelDAO().ObtenerHotelesDeUsuario(usuario.Item1);
+                    if (!HotelesUser.Contains(Session.Hotel))
+                    {
+                        MessageBox.Show("No puedes modificar este usuario. No está en tu hotel", "ERROR");
+                        return;
+                    }
+
                     Cuenta c = usuario.Item2;
                     Usuario u = usuario.Item1;
                     c.Usuario = Cuenta;
@@ -231,6 +248,14 @@ namespace FrbaHotel.Login
                     }
                 break;
                 case FormType.Delete:
+                    // Validamos que el hotel de la sesión corresponda a uno del usuario.
+                    List<Hotel> HotelesUser2 = new HotelDAO().ObtenerHotelesDeUsuario(usuario.Item1);
+                    if (!HotelesUser2.Contains(Session.Hotel))
+                    {
+                        MessageBox.Show("No puedes modificar este usuario. No está en tu hotel", "ERROR");
+                        return;
+                    }
+
                     if (new UsuarioDAO().DeshabilitarUsuario(usuario.Item1, usuario.Item2))
                     {
                         parent.RefreshGrid();

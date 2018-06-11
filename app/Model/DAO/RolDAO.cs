@@ -32,6 +32,25 @@ namespace FrbaHotel.Model.DAO
             return Roles;
         }
 
+        public List<Rol> ObtenerRolesDeUsuario(Usuario Usuario)
+        {
+            List<Rol> RolesUsuario = new List<Rol>();
+            List<Rol> RolesTemp = ObtenerRoles();
+            Dictionary<int, Rol> Roles = new Dictionary<int, Rol>();
+            
+            // Filleo el dictionary
+            foreach (var rol in RolesTemp)
+                Roles.Add(rol.Id.Value, rol);
+
+            List<int> Ids = ObtenerIdsRolesUsuario(Usuario);
+
+            // Filleo la lista final
+            foreach (var Id in Ids)
+                RolesUsuario.Add(Roles[Id]);
+
+            return RolesUsuario;
+        }
+
         public List<int> ObtenerIdsRolesUsuario(Usuario Usuario)
         {
             List<int> Ids = new List<int>();

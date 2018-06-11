@@ -51,5 +51,19 @@ namespace FrbaHotel.Model
         {
             return Nombre;
         }
+
+        public override bool Equals(object obj)
+        {
+            var hot = obj as Hotel;
+            if (hot == null)
+                return false;
+
+            return this.Id.Value == hot.Id.Value;
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
     }
 }

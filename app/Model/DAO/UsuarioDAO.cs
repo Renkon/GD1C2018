@@ -21,6 +21,52 @@ namespace FrbaHotel.Model.DAO
             return new Usuario(DummyId);
         }
 
+        public Usuario ObtenerUsuarioLogin(string Usuario, string Password)
+        {
+            Usuario u = null;
+            Dictionary<int, TipoDocumento> TiposDoc = new Dictionary<int, TipoDocumento>();
+            List<TipoDocumento> tempDocs = new TipoDocumentoDAO().ObtenerTiposDocumento();
+            foreach (var TipoDoc in tempDocs)
+                TiposDoc.Add(TipoDoc.Id.Value, TipoDoc);
+
+            foreach (var row in DatabaseConnection.GetInstance().
+                ExecuteProcedure("LOGIN_USUARIO",
+                    new SqlParameter("@usuario_cuenta", Usuario),
+                    new SqlParameter("@contraseña_cuenta", DatabaseUtils.SHA256of(Password))))
+            {
+                int Id = Convert.ToInt32(row["id_usuario"]);
+                // Si es -3, el usuario no existe
+                // Si es -2, está deshabilitado
+                // Si es -1, password inválida
+                // Si no, es un usuario válido
+                if (Id < 0)
+                {
+                    u = new Usuario(Id);
+                }
+                else
+                {
+                    u = new Usuario(
+                        Id,
+                        Convert.ToString(row["nombre_usuario"]),
+                        Convert.ToString(row["apellido_usuario"]),
+                        null,
+                        null,
+                        TiposDoc[Convert.ToInt32(row["id_tipo_documento"])],
+                        Convert.ToInt64(row["numero_documento_usuario"]),
+                        Convert.ToString(row["correo_usuario"]),
+                        Convert.ToString(row["telefono_usuario"]),
+                        Convert.ToString(row["direccion_usuario"]),
+                        Convert.ToDateTime(row["fecha_nacimiento_usuario"]),
+                        Convert.ToBoolean(row["estado_usuario"])
+                    );
+                    u.Roles = new RolDAO().ObtenerRolesDeUsuario(u);
+                    u.Hoteles = new HotelDAO().ObtenerHotelesDeUsuario(u);
+                }
+            }
+
+            return u;
+        }
+
         public List<Tuple<Usuario, Cuenta>> ObtenerUsuariosFiltrado(string Usuario, Rol Rol, string Nombre,
             string Apellido, TipoDocumento TipoDocumento, long Documento, string Correo, Hotel Hotel, bool SoloActivos)
         {

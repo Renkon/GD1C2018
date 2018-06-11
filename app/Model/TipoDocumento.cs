@@ -34,5 +34,10 @@ namespace FrbaHotel.Model
                     this.Nombre.Equals(doc.Nombre) &&
                     this.Sigla.Equals(doc.Sigla);
         }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
     }
 }

@@ -90,9 +90,9 @@
             // 
             this.textBox2.Location = new System.Drawing.Point(122, 61);
             this.textBox2.Name = "textBox2";
-            this.textBox2.PasswordChar = '*';
             this.textBox2.Size = new System.Drawing.Size(606, 20);
             this.textBox2.TabIndex = 3;
+            this.textBox2.UseSystemPasswordChar = true;
             // 
             // textBox1
             // 
@@ -295,10 +295,7 @@
             // 
             // monthCalendar1
             // 
-            var currDate = Config.GetInstance().GetCurrentDate();
             this.monthCalendar1.Location = new System.Drawing.Point(364, 3);
-            this.monthCalendar1.MaxDate = currDate;
-            this.monthCalendar1.TodayDate = currDate;
             this.monthCalendar1.MaxSelectionCount = 1;
             this.monthCalendar1.Name = "monthCalendar1";
             this.monthCalendar1.TabIndex = 18;
