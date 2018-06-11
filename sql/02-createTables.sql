@@ -47,7 +47,8 @@ CREATE TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[facturas] -- 4
     fecha_factura         DATETIME NOT NULL,
     total_factura         NUMERIC(18,2),
     id_estadia            INT NOT NULL,
-    id_forma_de_pago      INT NOT NULL
+    id_forma_de_pago      INT NOT NULL,
+    detalle_pago          NVARCHAR(1000)
 );
 
 
