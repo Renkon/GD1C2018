@@ -55,7 +55,7 @@ GO
 CREATE PROCEDURE [EL_MONSTRUO_DEL_LAGO_MASER].[CREAR_FACTURAS] AS
 BEGIN
 	INSERT INTO [EL_MONSTRUO_DEL_LAGO_MASER].[facturas]
-	SELECT fecha, total, -1, 13
+	SELECT fecha, total, -1, 13, ''
 	FROM (
 			SELECT DISTINCT Factura_Nro numero, Factura_Fecha fecha, Factura_Total total
 			FROM [gd_esquema].[Maestra]
