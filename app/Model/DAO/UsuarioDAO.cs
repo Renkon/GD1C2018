@@ -94,6 +94,60 @@ namespace FrbaHotel.Model.DAO
             }
         }
 
+        public bool ModificarUsuario(Usuario Usuario, Cuenta Cuenta)
+        {
+            try
+            {
+                DatabaseConnection.GetInstance()
+                    .ExecuteProcedureNonQuery("MODIFICAR_USUARIO", GenerateParamsDML(Usuario, Cuenta));
+                LogUtils.LogInfo("Se modificó usuario " + Cuenta.Usuario);
+                MessageBox.Show("Se modificó satisfactoriamente el usuario " + Cuenta.Usuario, "INFO");
+                return true;
+            }
+            catch (SqlException Sex)
+            {
+                LogUtils.LogError(Sex);
+                if (Sex.Number == 2627)
+                {
+                    // Solo hay dos posibilidades de fallo por unique key, por tabla usuario o cuenta
+                    if (Sex.Message.Contains("UNIQUE") && Sex.Message.Contains("EL_MONSTRUO_DEL_LAGO_MASER.usuario"))
+                        MessageBox.Show("No se pudo agregar el usuario. Ese documento ya está en uso", "ERROR");
+                    else if (Sex.Message.Contains("UNIQUE") && Sex.Message.Contains("EL_MONSTRUO_DEL_LAGO_MASER.cuenta"))
+                        MessageBox.Show("No se pudo agregar el usuario. Ese nombre de usuario ya está en uso", "ERROR");
+                    else throw;
+                }
+                else throw;
+                return false;
+            }
+            catch (Exception Ex)
+            {
+                LogUtils.LogError(Ex);
+                MessageBox.Show("Hubo un error al intentar modificar un usuario. Revise el log", "ERROR");
+                return false;
+            }
+        }
+
+        public bool DeshabilitarUsuario(Usuario UsuarioADeshabilitar, Cuenta CuentaRelacionada)
+        {
+            try
+            {
+                SqlParameter paramUsrRol = new SqlParameter("@id_rol_user", Session.Rol.Id);
+                SqlParameter param = new SqlParameter("@id_usuario", UsuarioADeshabilitar.Id);
+
+                DatabaseConnection.GetInstance()
+                    .ExecuteProcedureNonQuery("DESHABILITAR_USUARIO", paramUsrRol, param);
+                LogUtils.LogInfo("Se deshabilitó el usuario " + CuentaRelacionada.Usuario);
+                MessageBox.Show("Se eliminó satisfactoriamente el usuario " + CuentaRelacionada.Usuario, "INFO");
+                return true;
+            }
+            catch (Exception Ex)
+            {
+                LogUtils.LogError(Ex);
+                MessageBox.Show("Hubo un error al intentar agregar deshabilitar un usuario. Revise el log", "ERROR");
+                return false;
+            }
+        }
+
         private SqlParameter[] GenerateParamsFilter(string Usuario, Rol Rol, string Nombre, 
             string Apellido, TipoDocumento TipoDocumento, long Documento, string Correo, Hotel Hotel, bool SoloActivos)
         {

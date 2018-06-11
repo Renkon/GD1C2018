@@ -46,7 +46,7 @@ namespace FrbaHotel.Model.DAO
             foreach (var row in DatabaseConnection.GetInstance()
                 .ExecuteProcedure("OBTENER_HOTELES_DE_UN_USUARIO", param))
             {
-                Ids.Add(Convert.ToInt32(row["id_rol"]));
+                Ids.Add(Convert.ToInt32(row["id_hotel"]));
             }
 
             return Ids;

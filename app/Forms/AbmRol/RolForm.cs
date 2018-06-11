@@ -17,7 +17,6 @@ namespace FrbaHotel.AbmRol
 {
     public partial class RolForm
     {
-        private FuncionalidadDAO FuncionalidadDAO;
         private Rol rol;
         private FormType type;
         private ViewerRolForm parent;
@@ -33,14 +32,12 @@ namespace FrbaHotel.AbmRol
             ApplyType();
             LoadContent();
 
-            FuncionalidadDAO = new FuncionalidadDAO();
-
             PopulateLists();
         }
 
         private void PopulateLists()
         {
-            List<Funcionalidad> Funcionalidades = FuncionalidadDAO.ObtenerFuncionalidades();
+            List<Funcionalidad> Funcionalidades = new FuncionalidadDAO().ObtenerFuncionalidades();
             List<int> IdsFuncionalidadesRol = rol != null ? 
                 new FuncionalidadDAO().ObtenerIdsFuncionalidadesDeRol(rol) : new List<int>();
             this.listBox1.Items.AddRange(Funcionalidades

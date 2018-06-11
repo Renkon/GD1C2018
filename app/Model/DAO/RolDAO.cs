@@ -97,7 +97,7 @@ namespace FrbaHotel.Model.DAO
             catch (Exception Ex)
             {
                 LogUtils.LogError(Ex);
-                MessageBox.Show("Hubo un error al intentar agregar un rol. Revise el log", "ERROR");
+                MessageBox.Show("Hubo un error al intentar modificar un rol. Revise el log", "ERROR");
                 return false;
             }
         }
@@ -126,7 +126,7 @@ namespace FrbaHotel.Model.DAO
             catch (Exception Ex)
             {
                 LogUtils.LogError(Ex);
-                MessageBox.Show("Hubo un error al intentar agregar un rol. Revise el log", "ERROR");
+                MessageBox.Show("Hubo un error al intentar eliminar un rol. Revise el log", "ERROR");
                 return false;
             }
         }

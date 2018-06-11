@@ -23,5 +23,16 @@ namespace FrbaHotel.Model
         {
             return Sigla;
         }
+
+        public override bool Equals(object obj)
+        {
+            var doc = obj as TipoDocumento;
+            if (doc == null)
+                return false;
+
+            return this.Id.Value == doc.Id.Value &&
+                    this.Nombre.Equals(doc.Nombre) &&
+                    this.Sigla.Equals(doc.Sigla);
+        }
     }
 }
