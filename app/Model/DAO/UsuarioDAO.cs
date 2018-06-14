@@ -17,7 +17,7 @@ namespace FrbaHotel.Model.DAO
         {
             var DummyId = Convert.ToInt32(DatabaseConnection.GetInstance()
                 .ExecuteProcedureScalar("OBTENER_USUARIO_DUMMY"));
-          
+
             return new Usuario(DummyId);
         }
 
@@ -189,7 +189,11 @@ namespace FrbaHotel.Model.DAO
             catch (Exception Ex)
             {
                 LogUtils.LogError(Ex);
+<<<<<<< HEAD
+                MessageBox.Show("Hubo un error al intentar deshabilitar un usuario. Revise el log", "ERROR");
+=======
                 MessageBox.Show("Hubo un error al intentar agregar deshabilitar un usuario. Revise el log", "ERROR");
+>>>>>>> 14f9c716a57e47a597a427b60a7e7d200e192d0b
                 return false;
             }
         }

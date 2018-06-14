@@ -16,5 +16,24 @@ namespace FrbaHotel.Model
             this.Id = Id;
             this.Nombre = Nombre;
         }
+<<<<<<< HEAD
+
+        public override string ToString()
+        {
+            return Nombre;
+        }
+
+        public override bool Equals(object obj)
+        {
+            var pais = obj as Pais;
+            if (pais == null)
+                return false;
+
+            return this.Id == pais.Id &&
+                    this.Nombre.Equals(pais.Nombre);
+        }
+
+=======
+>>>>>>> 14f9c716a57e47a597a427b60a7e7d200e192d0b
     }
 }

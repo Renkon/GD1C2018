@@ -221,18 +221,21 @@ namespace FrbaHotel
             this.nuevoClienteToolStripMenuItem.Name = "nuevoClienteToolStripMenuItem";
             this.nuevoClienteToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
             this.nuevoClienteToolStripMenuItem.Text = "Nuevo cliente";
+            this.nuevoClienteToolStripMenuItem.Click += new System.EventHandler(this.nuevoClienteToolStripMenuItem_Click);
             // 
             // modificarClienteToolStripMenuItem
             // 
             this.modificarClienteToolStripMenuItem.Name = "modificarClienteToolStripMenuItem";
             this.modificarClienteToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
             this.modificarClienteToolStripMenuItem.Text = "Modificar cliente";
+            this.modificarClienteToolStripMenuItem.Click += new System.EventHandler(this.modificarClienteToolStripMenuItem_Click);
             // 
             // borrarClienteToolStripMenuItem
             // 
             this.borrarClienteToolStripMenuItem.Name = "borrarClienteToolStripMenuItem";
             this.borrarClienteToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
             this.borrarClienteToolStripMenuItem.Text = "Borrar cliente";
+            this.borrarClienteToolStripMenuItem.Click += new System.EventHandler(this.borrarClienteToolStripMenuItem_Click);
             // 
             // hotelesToolStripMenuItem
             // 

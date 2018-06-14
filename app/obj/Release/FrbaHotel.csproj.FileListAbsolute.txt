@@ -1,7 +1,0 @@
-C:\Users\Administrador\Desktop\gdd\Aplicacion Desktop\FrbaHotel\bin\Release\FrbaHotel.exe.config
-C:\Users\Administrador\Desktop\gdd\Aplicacion Desktop\FrbaHotel\bin\Release\FrbaHotel.exe
-C:\Users\Administrador\Desktop\gdd\Aplicacion Desktop\FrbaHotel\bin\Release\FrbaHotel.pdb
-C:\Users\Administrador\Desktop\gdd\Aplicacion Desktop\FrbaHotel\obj\Release\FrbaHotel.Properties.Resources.resources
-C:\Users\Administrador\Desktop\gdd\Aplicacion Desktop\FrbaHotel\obj\Release\FrbaHotel.csproj.GenerateResource.Cache
-C:\Users\Administrador\Desktop\gdd\Aplicacion Desktop\FrbaHotel\obj\Release\FrbaHotel.exe
-C:\Users\Administrador\Desktop\gdd\Aplicacion Desktop\FrbaHotel\obj\Release\FrbaHotel.pdb

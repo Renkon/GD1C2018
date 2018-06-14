@@ -1,6 +1,11 @@
-﻿using FrbaHotel.AbmRol;
+﻿using FrbaHotel.AbmCliente;
+using FrbaHotel.AbmRol;
 using FrbaHotel.Database;
 using FrbaHotel.Forms;
+<<<<<<< HEAD
+using FrbaHotel.Forms.AbmCliente;
+=======
+>>>>>>> 14f9c716a57e47a597a427b60a7e7d200e192d0b
 using FrbaHotel.Forms.AbmRol;
 using FrbaHotel.Forms.AbmUsuario;
 using FrbaHotel.Forms.Login;
@@ -68,6 +73,24 @@ namespace FrbaHotel
         {
             MessageBox.Show("Hasta luego " + Session.User.Nombre + " " + Session.User.Apellido, "INFO");
             Session.Reset();
+<<<<<<< HEAD
+        }
+
+        private void nuevoClienteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            new ClienteForm(FormType.Add, null, null).ShowDialog();
+        }
+
+        private void modificarClienteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            new ViewerClienteForm(FormType.Modify).ShowDialog();
+        }
+
+        private void borrarClienteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            new ViewerClienteForm(FormType.Delete).ShowDialog();
+=======
+>>>>>>> 14f9c716a57e47a597a427b60a7e7d200e192d0b
         }
     }
 }

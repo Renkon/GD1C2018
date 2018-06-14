@@ -18,5 +18,26 @@ namespace FrbaHotel.Model.DAO
 
             return NombrePais;
         }
+<<<<<<< HEAD
+
+        public List<Pais> ObtenerPaises()
+        {
+            List<Pais> Paises = new List<Pais>();
+
+            foreach (var row in DatabaseConnection.GetInstance()
+                .ExecuteProcedure("OBTENER_PAISES"))
+            {
+                Pais p = new Pais(
+                    Convert.ToInt32(row["id_pais"]),
+                    Convert.ToString(row["nombre_pais"])
+                );
+
+                Paises.Add(p);
+            }
+
+            return Paises;
+        }
+=======
+>>>>>>> 14f9c716a57e47a597a427b60a7e7d200e192d0b
     }
 }

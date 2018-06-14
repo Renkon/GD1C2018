@@ -46,10 +46,12 @@ namespace FrbaHotel.Database
                 {
                     while (DataReader.Read())
                     {
+                        
                         Rows.Add(Enumerable.Range(0, DataReader.FieldCount)
                             .ToDictionary(DataReader.GetName, DataReader.GetValue));
                     }
                 }
+                
                 return Rows;
             }
             finally
