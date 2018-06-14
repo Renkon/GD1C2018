@@ -137,13 +137,9 @@
     <Compile Include="Forms\AbmUsuario\UsuarioForm.Designer.cs">
       <DependentUpon>UsuarioForm.cs</DependentUpon>
     </Compile>
-<<<<<<< HEAD
     <Compile Include="Model\Cliente.cs" />
     <Compile Include="Model\Cuenta.cs" />
     <Compile Include="Model\DAO\ClienteDAO.cs" />
-=======
-    <Compile Include="Model\Cuenta.cs" />
->>>>>>> 14f9c716a57e47a597a427b60a7e7d200e192d0b
     <Compile Include="Model\DAO\FuncionalidadDAO.cs" />
     <Compile Include="Model\DAO\HotelDAO.cs" />
     <Compile Include="Model\DAO\PaisDAO.cs" />
@@ -174,15 +170,12 @@
     <Compile Include="Utils\DatabaseUtils.cs" />
     <Compile Include="Utils\LogUtils.cs" />
     <Compile Include="Utils\PropertyUtils.cs" />
-<<<<<<< HEAD
     <EmbeddedResource Include="Forms\AbmCliente\ClienteForm.resx">
       <DependentUpon>ClienteForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\AbmCliente\ViewerClienteForm.resx">
       <DependentUpon>ViewerClienteForm.cs</DependentUpon>
     </EmbeddedResource>
-=======
->>>>>>> 14f9c716a57e47a597a427b60a7e7d200e192d0b
     <EmbeddedResource Include="Forms\AbmRol\ViewerRolForm.resx">
       <DependentUpon>ViewerRolForm.cs</DependentUpon>
     </EmbeddedResource>

@@ -16,7 +16,6 @@ namespace FrbaHotel.Model
             this.Id = Id;
             this.Nombre = Nombre;
         }
-<<<<<<< HEAD
 
         public override string ToString()
         {
@@ -33,7 +32,5 @@ namespace FrbaHotel.Model
                     this.Nombre.Equals(pais.Nombre);
         }
 
-=======
->>>>>>> 14f9c716a57e47a597a427b60a7e7d200e192d0b
     }
 }

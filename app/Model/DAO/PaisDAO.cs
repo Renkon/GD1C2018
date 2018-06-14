@@ -18,7 +18,6 @@ namespace FrbaHotel.Model.DAO
 
             return NombrePais;
         }
-<<<<<<< HEAD
 
         public List<Pais> ObtenerPaises()
         {
@@ -37,7 +36,5 @@ namespace FrbaHotel.Model.DAO
 
             return Paises;
         }
-=======
->>>>>>> 14f9c716a57e47a597a427b60a7e7d200e192d0b
     }
 }
