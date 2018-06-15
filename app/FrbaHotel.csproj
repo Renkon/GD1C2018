@@ -64,6 +64,12 @@
     <Compile Include="Forms\AbmHabitacion\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\AbmHotel\HotelForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\AbmHotel\HotelForm.Designer.cs">
+      <DependentUpon>HotelForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\AbmRegimen\Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -143,12 +149,14 @@
     <Compile Include="Model\DAO\FuncionalidadDAO.cs" />
     <Compile Include="Model\DAO\HotelDAO.cs" />
     <Compile Include="Model\DAO\PaisDAO.cs" />
+    <Compile Include="Model\DAO\RegimenDAO.cs" />
     <Compile Include="Model\DAO\RolDAO.cs" />
     <Compile Include="Model\DAO\TipoDocumentoDAO.cs" />
     <Compile Include="Model\DAO\UsuarioDAO.cs" />
     <Compile Include="Model\Funcionalidad.cs" />
     <Compile Include="Model\Hotel.cs" />
     <Compile Include="Model\Pais.cs" />
+    <Compile Include="Model\Regimen.cs" />
     <Compile Include="Model\Rol.cs" />
     <Compile Include="Model\TipoDocumento.cs" />
     <Compile Include="Model\Usuario.cs" />
@@ -175,6 +183,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\AbmCliente\ViewerClienteForm.resx">
       <DependentUpon>ViewerClienteForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\AbmHotel\HotelForm.resx">
+      <DependentUpon>HotelForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\AbmRol\ViewerRolForm.resx">
       <DependentUpon>ViewerRolForm.cs</DependentUpon>

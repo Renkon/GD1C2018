@@ -1,10 +1,13 @@
 ﻿using FrbaHotel.Database;
+using FrbaHotel.Utils;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace FrbaHotel.Model.DAO
 {
@@ -29,7 +32,8 @@ namespace FrbaHotel.Model.DAO
                     new Pais(Convert.ToInt32(row["id_pais"]), 
                         new PaisDAO().ObtenerNombrePais(Convert.ToInt32(row["id_pais"]))),
                     Convert.ToDateTime(row["fecha_creacion_hotel"]),
-                    Convert.ToInt32(row["recarga_por_estrellas_hotel"])
+                    Convert.ToInt32(row["recarga_por_estrellas_hotel"]),
+                    null
                 );
                 Hoteles.Add(h);
             }
@@ -69,6 +73,51 @@ namespace FrbaHotel.Model.DAO
             }
 
             return Ids;
+        }
+
+        public bool InsertarNuevoHotel(Hotel NuevoHotel)
+        {
+            try
+            {
+                DatabaseConnection.GetInstance()
+                    .ExecuteProcedureNonQuery("AGREGAR_NUEVO_HOTEL", GenerateParamsDML(NuevoHotel));
+                LogUtils.LogInfo("Se creó hotel " + NuevoHotel.Nombre);
+                MessageBox.Show("Se agregó satisfactoriamente el hotel " + NuevoHotel.Nombre, "INFO");
+                return true;
+            }
+            catch (Exception Ex)
+            {
+                LogUtils.LogError(Ex);
+                MessageBox.Show("Hubo un error al intentar agregar un hotel. Revise el log", "ERROR");
+                return false;
+            }
+        }
+
+        private SqlParameter[] GenerateParamsDML(Hotel Hotel)
+        {
+            List<SqlParameter> Params = new List<SqlParameter>();
+
+            DataTable Regimenes = DatabaseUtils
+                .ConvertToDataTable<Regimen>(Hotel.Regimenes, "Id");
+
+            Params.Add(new SqlParameter("@id_rol_user", Session.Rol.Id));
+
+            if (Hotel.Id != null)
+                Params.Add(new SqlParameter("@id_hotel", Hotel.Id));
+
+            Params.Add(new SqlParameter("@nombre_hotel", Hotel.Nombre));
+            Params.Add(new SqlParameter("@correo_hotel", Hotel.Correo));
+            Params.Add(new SqlParameter("@telefono_hotel", Hotel.Teléfono));
+            Params.Add(new SqlParameter("@ciudad_hotel", Hotel.Ciudad));
+            Params.Add(new SqlParameter("@domicilio_calle_hotel", Hotel.Domicilio_Calle));
+            Params.Add(new SqlParameter("@domicilio_numero_hotel", Hotel.Domicilio_Número));
+            Params.Add(new SqlParameter("@cantidad_estrellas_hotel", Hotel.Cantidad_Estrellas));
+            Params.Add(new SqlParameter("@id_pais", Hotel.País.Id));
+            Params.Add(new SqlParameter("@fecha_creacion_hotel", Hotel.Fecha_Creación));
+            Params.Add(new SqlParameter("@recarga_por_estrellas_hotel", Hotel.Recarga_Por_Estrellas));
+            Params.Add(new SqlParameter("@regimenes", Regimenes));
+
+            return Params.ToArray();
         }
     }
 }

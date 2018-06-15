@@ -105,14 +105,14 @@ namespace FrbaHotel
             // iniciarSesiónToolStripMenuItem
             // 
             this.iniciarSesiónToolStripMenuItem.Name = "iniciarSesiónToolStripMenuItem";
-            this.iniciarSesiónToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.iniciarSesiónToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
             this.iniciarSesiónToolStripMenuItem.Text = "Iniciar sesión";
             this.iniciarSesiónToolStripMenuItem.Click += new System.EventHandler(this.iniciarSesiónToolStripMenuItem_Click);
             // 
             // cerrarSesiónToolStripMenuItem
             // 
             this.cerrarSesiónToolStripMenuItem.Name = "cerrarSesiónToolStripMenuItem";
-            this.cerrarSesiónToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.cerrarSesiónToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
             this.cerrarSesiónToolStripMenuItem.Text = "Cerrar sesión";
             this.cerrarSesiónToolStripMenuItem.Click += new System.EventHandler(this.cerrarSesiónToolStripMenuItem_Click);
             // 
@@ -252,6 +252,7 @@ namespace FrbaHotel
             this.nuevoHotelToolStripMenuItem.Name = "nuevoHotelToolStripMenuItem";
             this.nuevoHotelToolStripMenuItem.Size = new System.Drawing.Size(221, 22);
             this.nuevoHotelToolStripMenuItem.Text = "Nuevo hotel";
+            this.nuevoHotelToolStripMenuItem.Click += new System.EventHandler(this.nuevoHotelToolStripMenuItem_Click);
             // 
             // modificarHotelToolStripMenuItem
             // 

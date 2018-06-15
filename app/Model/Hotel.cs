@@ -19,6 +19,7 @@ namespace FrbaHotel.Model
         public Pais País { get; set; }
         public DateTime Fecha_Creación { get; set; }
         public int Recarga_Por_Estrellas { get; set; }
+        public List<Regimen> Regimenes { get; set; }
 
         public Hotel(int Id)
         {
@@ -31,8 +32,9 @@ namespace FrbaHotel.Model
             this.Nombre = Nombre;
         }
 
-        public Hotel(int Id, string Nombre, string Correo, string Teléfono, string Ciudad, string Domicilio_Calle,
-            int Domicilio_Número, int Cantidad_Estrellas, Pais País, DateTime Fecha_Creación, int Recarga_Por_Estrellas)
+        public Hotel(int? Id, string Nombre, string Correo, string Teléfono, string Ciudad, string Domicilio_Calle,
+            int Domicilio_Número, int Cantidad_Estrellas, Pais País, DateTime Fecha_Creación, 
+            int Recarga_Por_Estrellas, List<Regimen> Regimenes)
         {
             this.Id = Id;
             this.Nombre = Nombre;
@@ -45,6 +47,7 @@ namespace FrbaHotel.Model
             this.País = País;
             this.Fecha_Creación = Fecha_Creación;
             this.Recarga_Por_Estrellas = Recarga_Por_Estrellas;
+            this.Regimenes = Regimenes;
         }
 
         public override string ToString()

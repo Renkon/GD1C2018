@@ -3,6 +3,7 @@ using FrbaHotel.AbmRol;
 using FrbaHotel.Database;
 using FrbaHotel.Forms;
 using FrbaHotel.Forms.AbmCliente;
+using FrbaHotel.Forms.AbmHotel;
 using FrbaHotel.Forms.AbmRol;
 using FrbaHotel.Forms.AbmUsuario;
 using FrbaHotel.Forms.Login;
@@ -85,6 +86,11 @@ namespace FrbaHotel
         private void borrarClienteToolStripMenuItem_Click(object sender, EventArgs e)
         {
             new ViewerClienteForm(FormType.Delete).ShowDialog();
+        }
+
+        private void nuevoHotelToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            new HotelForm(FormType.Add, null).ShowDialog();
         }
     }
 }
