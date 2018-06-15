@@ -32,5 +32,9 @@ namespace FrbaHotel.Model
                     this.Nombre.Equals(pais.Nombre);
         }
 
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
     }
 }

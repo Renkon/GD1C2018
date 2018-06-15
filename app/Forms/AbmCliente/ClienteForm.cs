@@ -33,6 +33,9 @@ namespace FrbaHotel.AbmCliente
             this.monthCalendarFechaNacimiento.MaxDate = Config.GetInstance().GetCurrentDate();
             this.monthCalendarFechaNacimiento.TodayDate = Config.GetInstance().GetCurrentDate();
 
+            if (cliente != null)
+                this.monthCalendarFechaNacimiento.SelectionStart = cliente.FechaNacimiento;
+
             ApplyType();
             PopulateLists();
             LoadContent();
@@ -74,18 +77,6 @@ namespace FrbaHotel.AbmCliente
             }
         }
 
-        private void textBoxTelefono_Validating(object sender, CancelEventArgs e)
-        {
-            if (Regex.IsMatch(textBoxTelefono.Text, "[^0-9]"))
-            {
-                MessageBox.Show("El telefono debe estar compuesto sólo por números!", "ERROR");
-                textBoxTelefono.Focus();
-            }
-        }
-
-
-
-
         private void LoadContent()
         {
             if (cliente != null)
@@ -98,9 +89,12 @@ namespace FrbaHotel.AbmCliente
                 this.textBoxTelefono.Text = cliente.Telefono;
                 this.textBoxDireccionCalle.Text = cliente.Calle;
                 this.textBoxDireccionNro.Text = Convert.ToString(cliente.Nro);
-                this.textBoxDireccionPiso.Text = Convert.ToString(cliente.Piso);
+                this.textBoxDireccionPiso.Text = cliente.Piso != 0 ? Convert.ToString(cliente.Piso) : "";
                 this.textBoxDireccionDepartamento.Text = cliente.Departamento;
+                this.textBoxCiudad.Text = cliente.Ciudad;
+                this.textBoxNacionalidad.Text = cliente.Nacionalidad;
                 this.textBoxFechaNacimiento.Text = cliente.FechaNacimiento.ToString("dd/MM/yyyy");
+                this.comboBoxPais.SelectedItem = cliente.Pais;
                 this.checkBoxEstado.Checked = cliente.Estado;
                 this.checkBoxEstado.Enabled = !cliente.Estado;
             }
@@ -129,18 +123,18 @@ namespace FrbaHotel.AbmCliente
             switch (type)
             {
                 case FormType.Add:
-                    buttonAccion.Text = "Registrar usuario";
-                    this.Text = "Alta de usuario";
+                    buttonAccion.Text = "Registrar cliente";
+                    this.Text = "Alta de cliente";
                     checkBoxEstado.Visible = false;
                     break;
                 case FormType.Modify:
-                    buttonAccion.Text = "Editar usuario";
-                    this.Text = "Modificar usuario";
+                    buttonAccion.Text = "Editar cliente";
+                    this.Text = "Modificar cliente";
                     checkBoxEstado.Checked = cliente.Estado;
                     break;
                 case FormType.Delete:
-                    buttonAccion.Text = "Bloquear usuario";
-                    this.Text = "Deshabilitar usuario";
+                    buttonAccion.Text = "Bloquear cliente";
+                    this.Text = "Deshabilitar cliente";
                     textBoxNombre.Enabled = false;
                     textBoxApellido.Enabled = false;
                     textBoxDni.Enabled = false;
@@ -175,7 +169,7 @@ namespace FrbaHotel.AbmCliente
             string Piso = textBoxDireccionPiso.Text;
             string Departamento = textBoxDireccionDepartamento.Text;
             string Ciudad = textBoxCiudad.Text;
-            int Pais = comboBoxPais.SelectedIndex + 1;
+            Pais Pais = (Pais) comboBoxPais.SelectedItem;
             string Nacionalidad = textBoxNacionalidad.Text;
             string FechaNacimiento = textBoxFechaNacimiento.Text;
             bool Estado = checkBoxEstado.Checked;
@@ -188,7 +182,7 @@ namespace FrbaHotel.AbmCliente
                         return;
 
                     Cliente NewUser = new Cliente(null, Nombre, Apellido, TipoDocumento, Convert.ToInt64(NumeroDocumento), Correo,
-                        Telefono, Calle, Convert.ToInt64(Nro), Convert.ToInt64(Piso), Departamento, Ciudad, Pais, Nacionalidad, DateTime.ParseExact(FechaNacimiento, "dd/MM/yyyy", CultureInfo.InvariantCulture), true);
+                        Telefono, Calle, Convert.ToInt32(Nro), Convert.ToInt32("0" + Piso), Departamento, Ciudad, Pais, Nacionalidad, DateTime.ParseExact(FechaNacimiento, "dd/MM/yyyy", CultureInfo.InvariantCulture), true);
 
                     if (new ClienteDAO().InsertarNuevoUsuario(NewUser))
                         this.Close();
@@ -205,8 +199,8 @@ namespace FrbaHotel.AbmCliente
                     cliente.Correo = Correo;
                     cliente.Telefono = Telefono;
                     cliente.Calle = Calle;
-                    cliente.Nro = Convert.ToInt64(Nro);
-                    cliente.Piso = Convert.ToInt64(Piso);
+                    cliente.Nro = Convert.ToInt32(Nro);
+                    cliente.Piso = Convert.ToInt32("0" + Piso);
                     cliente.Departamento = Departamento;
                     cliente.Ciudad = Ciudad;
                     cliente.Pais = Pais;
@@ -232,7 +226,7 @@ namespace FrbaHotel.AbmCliente
         }
 
         private bool InputValido(string Nombre, string Apellido, TipoDocumento TipoDocumento, string NumeroDocumento, string Correo,
-            string Telefono, string Calle, string Nro, string Piso, string Departamento, string Ciudad, int Pais, string Nacionalidad, string FechaNacimiento)
+            string Telefono, string Calle, string Nro, string Piso, string Departamento, string Ciudad, Pais Pais, string Nacionalidad, string FechaNacimiento)
         {
             // pattern q matchea un email 
             // source: https://stackoverflow.com/questions/1365407/c-sharp-code-to-validate-email-address
@@ -252,17 +246,13 @@ namespace FrbaHotel.AbmCliente
                 ErrMsg += "Debe ingresar un número de teléfono\n";
             if (Calle.Equals(""))
                 ErrMsg += "Debe ingresar una calle\n";
-             if (Nro.Equals(""))
+            if (Nro.Equals(""))
                 ErrMsg += "Debe ingresar un nro\n";
-             if (Piso.Equals(""))
-                ErrMsg += "Debe ingresar un piso\n";
-             if (Departamento.Equals(""))
-                ErrMsg += "Debe ingresar un departamento\n";
-             if (Ciudad.Equals(""))
+            if (Ciudad.Equals(""))
                 ErrMsg += "Debe ingresar una ciudad\n";
-             if (Pais < 0)
+            if (Pais == null || Pais.Id == -1)
                 ErrMsg += "Debe ingresar un pais\n";
-             if (Nacionalidad.Equals(""))
+            if (Nacionalidad.Equals(""))
                 ErrMsg += "Debe ingresar una nacionalidad\n";
             if (FechaNacimiento.Equals(""))
                 ErrMsg += "Debe seleccionar una fecha de nacimiento\n";

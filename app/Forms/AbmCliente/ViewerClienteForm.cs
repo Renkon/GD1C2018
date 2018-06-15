@@ -35,24 +35,9 @@ namespace FrbaHotel.Forms.AbmCliente
         private void LoadComboboxes()
         {
             List<TipoDocumento> TiposDocumento = new TipoDocumentoDAO().ObtenerTiposDocumento();
+            comboBoxDni.Items.Add(new TipoDocumento(-1, "", "- selecc -"));
             comboBoxDni.Items.AddRange(TiposDocumento.ToArray());
             comboBoxDni.SelectedIndex = 0;
-        }
-
-        private void buttonLimpiar_Click(object sender, EventArgs e)
-        {
-            textBoxNombres.Text = "";
-            textBoxApellidos.Text = "";
-            textBoxDni.Text = "";
-            textBoxCorreo.Text = "";
-            comboBoxDni.SelectedIndex = 0;
-
-            buttonBuscar_Click(null, null);
-        }
-
-        private void buttonBuscar_Click(object sender, EventArgs e)
-        {
-            PopulateDataGrid();
         }
 
         private void PopulateDataGrid()
@@ -112,6 +97,22 @@ namespace FrbaHotel.Forms.AbmCliente
             {
                 new ClienteForm(type, (Cliente)dataGridView1.SelectedRows[0].Tag, this).ShowDialog();
             }
+        }
+
+        private void buttonBuscar_Click(object sender, EventArgs e)
+        {
+            PopulateDataGrid();
+        }
+
+        private void buttonLimpiar_Click(object sender, EventArgs e)
+        {
+            textBoxNombres.Text = "";
+            textBoxApellidos.Text = "";
+            textBoxDni.Text = "";
+            textBoxCorreo.Text = "";
+            comboBoxDni.SelectedItem = 0;
+
+            buttonBuscar_Click(null, null);
         }
     }
 }

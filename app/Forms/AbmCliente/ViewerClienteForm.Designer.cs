@@ -58,6 +58,7 @@
             this.ColumnFechaNacimiento = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnEstado = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnBoton = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.label1 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
@@ -78,7 +79,7 @@
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Location = new System.Drawing.Point(13, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(759, 183);
+            this.groupBox1.Size = new System.Drawing.Size(759, 164);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Filtros de búsqueda";
@@ -91,6 +92,7 @@
             this.buttonBuscar.TabIndex = 15;
             this.buttonBuscar.Text = "Buscar";
             this.buttonBuscar.UseVisualStyleBackColor = true;
+            this.buttonBuscar.Click += new System.EventHandler(this.buttonBuscar_Click);
             // 
             // buttonLimpiar
             // 
@@ -100,6 +102,7 @@
             this.buttonLimpiar.TabIndex = 14;
             this.buttonLimpiar.Text = "Limpiar";
             this.buttonLimpiar.UseVisualStyleBackColor = true;
+            this.buttonLimpiar.Click += new System.EventHandler(this.buttonLimpiar_Click);
             // 
             // textBoxCorreo
             // 
@@ -314,11 +317,22 @@
             this.ColumnBoton.Name = "ColumnBoton";
             this.ColumnBoton.ReadOnly = true;
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(29, 179);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(725, 13);
+            this.label1.TabIndex = 3;
+            this.label1.Text = "ATENCIÓN! - La lista muestra las primeras cien ocurrencias con los filtros aplica" +
+    "dos. Si no encuentra lo que busca, debe ser más específico con su filtro.";
+            // 
             // ViewerClienteForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(784, 562);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.groupBox1);
             this.Name = "ViewerClienteForm";
@@ -328,6 +342,7 @@
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -363,5 +378,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnFechaNacimiento;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnEstado;
         private System.Windows.Forms.DataGridViewButtonColumn ColumnBoton;
+        private System.Windows.Forms.Label label1;
     }
 }

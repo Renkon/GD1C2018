@@ -21,24 +21,26 @@ namespace FrbaHotel.Model.DAO
             foreach (var TipoDoc in tempDocs)
                 TiposDoc.Add(TipoDoc.Id.Value, TipoDoc);
 
-            long nro = -1;
-            long piso = -1;
-            int pais = -1;
-            bool estado = true;
-
             foreach (var row in DatabaseConnection.GetInstance().
                 ExecuteProcedure("OBTENER_CLIENTES_FILTRADOS", GenerateParamsFilter(Nombre,
                     Apellido, TipoDocumento, Documento, Correo, SoloActivos)))
             {
-                if (!(row["domicilio_numero_cliente"].Equals("")))
-                    nro = Convert.ToInt64(row["domicilio_numero_cliente"]);
-                if (!(row["domicilio_piso_cliente"].Equals("")))
-                    piso = Convert.ToInt64(row["domicilio_piso_cliente"]);
+                int nro = 0;
+                int piso = 0;
+                Pais pais;
+
+                if (!(Convert.ToString(row["domicilio_numero_cliente"]).Equals("")))
+                    nro = Convert.ToInt32(row["domicilio_numero_cliente"]);
+
+                if (!(Convert.ToString(row["domicilio_piso_cliente"]).Equals("")))
+                    piso = Convert.ToInt32(row["domicilio_piso_cliente"]);
+
                 if (!(row["id_pais"].Equals(DBNull.Value)))
-                    pais = Convert.ToInt32(row["id_pais"]);
-                if (!(row["estado_cliente"].Equals(DBNull.Value)))
-                    estado = Convert.ToBoolean(row["estado_cliente"]);
-                    Cliente cliente = new Cliente(
+                    pais = new Pais(Convert.ToInt32(row["id_pais"]), new PaisDAO().ObtenerNombrePais(Convert.ToInt32(row["id_pais"])));
+                else
+                    pais = new Pais(-1, "");
+
+                Cliente cliente = new Cliente(
                     Convert.ToInt32(row["id_cliente"]),
                     Convert.ToString(row["nombre_cliente"]),
                     Convert.ToString(row["apellido_cliente"]),
@@ -54,7 +56,7 @@ namespace FrbaHotel.Model.DAO
                     pais,
                     Convert.ToString(row["nacionalidad_cliente"]),
                     Convert.ToDateTime(row["fecha_nacimiento_cliente"]),
-                    estado
+                    Convert.ToBoolean(row["estado_cliente"])
                 );
 
                 clientes.Add(cliente);
@@ -70,14 +72,13 @@ namespace FrbaHotel.Model.DAO
 
             Params.Add(new SqlParameter("@nombre", Nombre));
             Params.Add(new SqlParameter("@apellido", Apellido));
-            Params.Add(new SqlParameter("@id_documento", TipoDocumento.Id));
+            Params.Add(new SqlParameter("@id_documento", TipoDocumento != null ? TipoDocumento.Id : -1));
             Params.Add(new SqlParameter("@numero_documento", Documento));
             Params.Add(new SqlParameter("@correo", Correo));
-            Params.Add(new SqlParameter("@estado_cliente", SoloActivos));
+            Params.Add(new SqlParameter("@soloActivos", SoloActivos));
 
             return Params.ToArray();
         }
-
 
         internal bool InsertarNuevoUsuario(Cliente cliente)
         {
@@ -94,9 +95,9 @@ namespace FrbaHotel.Model.DAO
                 LogUtils.LogError(Sex);
                 if (Sex.Number == 2627)
                 {
-                    // Solo hay dos posibilidades de fallo por unique key, por tabla usuario o cuenta
-                    if (Sex.Message.Contains("UNIQUE") && Sex.Message.Contains("EL_MONSTRUO_DEL_LAGO_MASER.cliente"))
-                        MessageBox.Show("No se pudo agregar el cliente. Ese correo ya está en uso", "ERROR");
+                    // Solo hay dos posibilidades de fallo por unique key
+                    if (Sex.Message.Contains("UNIQUE"))
+                        MessageBox.Show("No se pudo agregar el cliente.\n El documento o el correo ya están en uso", "ERROR");
                 }
                 else
                     MessageBox.Show("Ha ocurrido un error al intentar insertar: " + Sex.Message);
@@ -110,17 +111,14 @@ namespace FrbaHotel.Model.DAO
             }
         }
 
-
-
-
         internal bool ModificarUsuario(Cliente Cliente)
         {
             try
             {
                 DatabaseConnection.GetInstance()
                     .ExecuteProcedureNonQuery("MODIFICAR_CLIENTE", GenerateParamsDML(Cliente));
-                LogUtils.LogInfo("Se modificó cliente " + Cliente.Id);
-                MessageBox.Show("Se modificó satisfactoriamente el cliente " + Cliente.Id, "INFO");
+                LogUtils.LogInfo("Se modificó cliente " + Cliente.Nombre + " " + Cliente.Apellido);
+                MessageBox.Show("Se modificó satisfactoriamente el cliente " + Cliente.Nombre + " " + Cliente.Apellido, "INFO");
                 return true;
             }
             catch (SqlException Sex)
@@ -128,10 +126,9 @@ namespace FrbaHotel.Model.DAO
                 LogUtils.LogError(Sex);
                 if (Sex.Number == 2627)
                 {
-                    // Solo hay dos posibilidades de fallo por unique key, por tabla usuario o cuenta
-                    if (Sex.Message.Contains("UNIQUE") && Sex.Message.Contains("EL_MONSTRUO_DEL_LAGO_MASER.usuario"))
-                        MessageBox.Show("No se pudo agregar el cliente. Ese correo ya está en uso", "ERROR");
-                    else throw;
+                    // Solo hay dos posibilidades de fallo por unique key
+                    if (Sex.Message.Contains("UNIQUE"))
+                        MessageBox.Show("No se pudo modificar el cliente. \nHay un usuario con ese documento y/o con ese correo.", "ERROR");
                 }
                 else throw;
                 return false;
@@ -164,7 +161,7 @@ namespace FrbaHotel.Model.DAO
             Params.Add(new SqlParameter("@domicilio_piso", Cliente.Piso));
             Params.Add(new SqlParameter("@domicilio_departamento", Cliente.Departamento));
             Params.Add(new SqlParameter("@ciudad", Cliente.Ciudad));
-            Params.Add(new SqlParameter("@pais", Cliente.Pais));
+            Params.Add(new SqlParameter("@pais", Cliente.Pais.Id));
             Params.Add(new SqlParameter("@nacionalidad", Cliente.Nacionalidad));
             Params.Add(new SqlParameter("@fecha_nacimiento", Cliente.FechaNacimiento));
 
@@ -173,7 +170,6 @@ namespace FrbaHotel.Model.DAO
 
             return Params.ToArray();
         }
-
 
         internal bool DeshabilitarUsuario(Cliente Cliente)
         {
