@@ -15,7 +15,8 @@ CREATE TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[clientes] -- 1
     ciudad_cliente                  NVARCHAR(255),
     id_pais                         INT,
     nacionalidad_cliente            NVARCHAR(20),
-    fecha_nacimiento_cliente        DATETIME
+    fecha_nacimiento_cliente        DATETIME,
+    estado_cliente                  BIT DEFAULT 1
     
     UNIQUE(id_tipo_documento, numero_documento_cliente)
 );

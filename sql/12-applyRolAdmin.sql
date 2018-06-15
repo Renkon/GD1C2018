@@ -1,0 +1,3 @@
+INSERT INTO [EL_MONSTRUO_DEL_LAGO_MASER].[usuarioXroles] VALUES (2, 2);
+
+GO
