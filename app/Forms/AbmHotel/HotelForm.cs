@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -17,15 +18,23 @@ namespace FrbaHotel.Forms.AbmHotel
     {
         private FormType type;
         private Hotel hotel;
+        private ViewerHotelForm parent;
 
-        public HotelForm(FormType type, Hotel hotel)
+        public HotelForm(FormType type, Hotel hotel, ViewerHotelForm parent)
         {
             this.type = type;
             this.hotel = hotel;
+            this.parent = parent;
 
             InitializeComponent();
+            ApplyType();
+
+            this.monthCalendar1.MaxDate = Config.GetInstance().GetCurrentDate();
+            this.monthCalendar1.TodayDate = Config.GetInstance().GetCurrentDate();
 
             PopulateLists();
+            LoadContent();
+            
         }
 
         private void textBox5_Validating(object sender, CancelEventArgs e)
@@ -37,12 +46,46 @@ namespace FrbaHotel.Forms.AbmHotel
             }
         }
 
+        private void LoadContent()
+        {
+            if (hotel != null)
+            {
+                textBox1.Text = hotel.Nombre;
+                textBox2.Text = hotel.Correo;
+                textBox3.Text = hotel.Teléfono;
+                textBox4.Text = hotel.Domicilio_Calle;
+                textBox5.Text = hotel.Domicilio_Número.ToString();
+                textBox6.Text = hotel.Ciudad.TrimEnd();
+                comboBox1.SelectedItem = hotel.País;
+                numericUpDown1.Value = hotel.Cantidad_Estrellas;
+                textBox7.Text = hotel.Recarga_Por_Estrellas.ToString();
+                textBox8.Text = hotel.Fecha_Creación.ToString("dd/MM/yyyy");
+
+                monthCalendar1.SelectionStart = hotel.Fecha_Creación;
+            }
+        }
+
         private void textBox7_Validating(object sender, CancelEventArgs e)
         {
             if (Regex.IsMatch(textBox7.Text, "[^0-9]"))
             {
                 MessageBox.Show("El recargo por estrellas debe estar compuesta sólo por números!", "ERROR");
                 textBox5.Focus();
+            }
+        }
+
+        private void ApplyType()
+        {
+            switch (type)
+            {
+                case FormType.Add:
+                    button1.Text = "Agregar hotel";
+                    this.Text = "Alta de Hotel";
+                break;
+                case FormType.Modify:
+                    button1.Text = "Modificar hotel";
+                    this.Text = "Modificación de hotel";
+                break;
             }
         }
 
@@ -100,26 +143,47 @@ namespace FrbaHotel.Forms.AbmHotel
             int Estrellas = Convert.ToInt32(numericUpDown1.Value);
             string Recarga = textBox7.Text;
             List<Regimen> Regimenes = this.listBox1.Items.Cast<Regimen>().ToList();
-            DateTime Creacion = Config.GetInstance().GetCurrentDate();
+            string Creacion = textBox8.Text;
 
             switch (type)
             {
                 case FormType.Add:
-                    if (!InputValido(Nombre, Correo, Teléfono, Calle, Numero, Ciudad, Pais, Recarga, Regimenes))
+                    if (!InputValido(Nombre, Correo, Teléfono, Calle, Numero, Ciudad, Pais, Estrellas, Recarga, Regimenes, Creacion))
                         return;
 
                     Hotel NewHotel = new Hotel(null, Nombre, Correo, Teléfono, Ciudad, Calle, Convert.ToInt32(Numero),
-                        Estrellas, Pais, Creacion, Convert.ToInt32(Recarga), Regimenes);
-
+                        Estrellas, Pais, DateTime.ParseExact(Creacion, "dd/MM/yyyy", CultureInfo.InvariantCulture), Convert.ToInt32(Recarga), Regimenes);
 
                     if (new HotelDAO().InsertarNuevoHotel(NewHotel)) // creó el hotel?
                         this.Close();
+                break;
+                case FormType.Modify:
+                    if (!InputValido(Nombre, Correo, Teléfono, Calle, Numero, Ciudad, Pais, Estrellas, Recarga, Regimenes, Creacion))
+                        return;
+
+                    hotel.Nombre = Nombre;
+                    hotel.Correo = Correo;
+                    hotel.Teléfono = Teléfono;
+                    hotel.Domicilio_Calle = Calle;
+                    hotel.Domicilio_Número = Convert.ToInt32(Numero);
+                    hotel.Ciudad = Ciudad;
+                    hotel.País = Pais;
+                    hotel.Cantidad_Estrellas = Estrellas;
+                    hotel.Recarga_Por_Estrellas = Convert.ToInt32(Recarga);
+                    hotel.Regimenes = Regimenes;
+                    hotel.Fecha_Creación = DateTime.ParseExact(Creacion, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+
+                    if (new HotelDAO().ModificarHotel(hotel)) // creó el hotel?
+                    {
+                        parent.RefreshGrid();
+                        this.Close();
+                    }
                 break;
             }
         }
 
         private bool InputValido(string Nombre, string Correo, string Teléfono, string Calle,
-            string Numero, string Ciudad, Pais Pais, string Recarga, List<Regimen> Regimenes)
+            string Numero, string Ciudad, Pais Pais, int Estrellas, string Recarga, List<Regimen> Regimenes, string Creacion)
         {
             // pattern q matchea un email 
             // source: https://stackoverflow.com/questions/1365407/c-sharp-code-to-validate-email-address
@@ -141,13 +205,33 @@ namespace FrbaHotel.Forms.AbmHotel
                 ErrMsg += "Debe ingresar la ciudad del hotel\n";
             if (Pais == null)
                 ErrMsg += "Debe ingresar el país del hotel\n";
+            if (Estrellas < 1 || Estrellas > 7)
+                ErrMsg += "Debe ingresar una cantidad de estrellas válida (1 <= estrellas <= 7)\n";
             if (Recarga.Equals(""))
                 ErrMsg += "Debe ingresar la recarga por estrella del hotel\n";
+            if (Creacion.Equals(""))
+                ErrMsg += "Debe ingresar una fecha de creación válida\n";
 
             bool Valido = ErrMsg.Equals("");
             if (!Valido)
                 MessageBox.Show(ErrMsg, "ERROR");
             return Valido;
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            monthCalendar1.Visible = true;
+        }
+
+        private void monthCalendar1_DateSelected(object sender, DateRangeEventArgs e)
+        {
+            textBox8.Text = monthCalendar1.SelectionStart.ToString("dd/MM/yyyy");
+            monthCalendar1.Visible = false;
+        }
+
+        private void monthCalendar1_Leave(object sender, EventArgs e)
+        {
+            monthCalendar1.Visible = false;
         }
     }
 }

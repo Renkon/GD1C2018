@@ -240,7 +240,7 @@ namespace FrbaHotel.AbmCliente
                 ErrMsg += "Debe definir el tipo de documento\n";
             if (NumeroDocumento.Equals(""))
                 ErrMsg += "Debe ingresar el número de documento\n";
-            if (Correo.Equals("") || !Regex.IsMatch(Correo, pattern))
+            if (Correo.Equals("") || !Regex.IsMatch(Correo.ToLower(), pattern))
                 ErrMsg += "Debe ingresar una dirección del correo electrónico válida\n";
             if (Telefono.Equals(""))
                 ErrMsg += "Debe ingresar un número de teléfono\n";

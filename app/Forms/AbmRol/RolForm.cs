@@ -145,9 +145,9 @@ namespace FrbaHotel.AbmRol
             List<Funcionalidad> fs = list1.SelectedItems.Cast<Funcionalidad>().ToList();
 
             // Deniego la posibilidad de que se pueda mover un rol relac. a usuarios.
-            if (fs.Select(f => f.Id).Intersect(new int[]{7, 8, 9}).Any())
+            if (fs.Select(f => f.Id).Intersect(new int[]{7, 8, 9, 13, 14, 15}).Any())
             {
-                MessageBox.Show("Los roles de usuario no se pueden modificar!", "ERROR");
+                MessageBox.Show("Los roles de usuario y de hoteles no se pueden modificar!", "ERROR");
                 return;
             }
             foreach (var f in fs)

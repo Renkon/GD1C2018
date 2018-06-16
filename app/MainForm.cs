@@ -90,7 +90,17 @@ namespace FrbaHotel
 
         private void nuevoHotelToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            new HotelForm(FormType.Add, null).ShowDialog();
+            new HotelForm(FormType.Add, null, null).ShowDialog();
+        }
+
+        private void modificarHotelToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            new ViewerHotelForm(FormType.Modify).ShowDialog();
+        }
+
+        private void cerrarTemporalmenteHotelToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            new ViewerHotelForm(FormType.Delete).ShowDialog();
         }
     }
 }

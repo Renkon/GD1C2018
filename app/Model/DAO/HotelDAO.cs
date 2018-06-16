@@ -60,6 +60,34 @@ namespace FrbaHotel.Model.DAO
             return HotelesUsuario;
         }
 
+        public List<Hotel> ObtenerHotelesFiltrados(string Nombre, int Estrellas, string Ciudad, Pais Pais)
+        {
+            List<Hotel> Hoteles = new List<Hotel>();
+
+            foreach (var row in DatabaseConnection.GetInstance().
+                ExecuteProcedure("OBTENER_HOTELES_FILTRADOS", GenerateParamsFilter(Nombre,
+                    Estrellas, Ciudad, Pais)))
+            {
+                Hotel h = new Hotel(
+                    Convert.ToInt32(row["id_hotel"]),
+                    Convert.ToString(row["nombre_hotel"]),
+                    Convert.ToString(row["correo_hotel"]),
+                    Convert.ToString(row["telefono_hotel"]),
+                    Convert.ToString(row["ciudad_hotel"]),
+                    Convert.ToString(row["domicilio_calle_hotel"]),
+                    Convert.ToInt32(row["domicilio_numero_hotel"]),
+                    Convert.ToInt32(row["cantidad_estrellas_hotel"]),
+                    new Pais(Convert.ToInt32(row["id_pais"]), new PaisDAO().ObtenerNombrePais(Convert.ToInt32(row["id_pais"]))),
+                    Convert.ToDateTime(row["fecha_creacion_hotel"]),
+                    Convert.ToInt32(row["recarga_por_estrellas_hotel"]),
+                    null
+                );
+
+                Hoteles.Add(h);
+            }
+            return Hoteles;
+        }
+
         public List<int> ObtenerIdsHotelesUsuario(Usuario Usuario)
         {
             List<int> Ids = new List<int>();
@@ -91,6 +119,37 @@ namespace FrbaHotel.Model.DAO
                 MessageBox.Show("Hubo un error al intentar agregar un hotel. Revise el log", "ERROR");
                 return false;
             }
+        }
+
+        public bool ModificarHotel(Hotel Hotel)
+        {
+            try
+            {
+                DatabaseConnection.GetInstance()
+                    .ExecuteProcedureNonQuery("MODIFICAR_HOTEL", GenerateParamsDML(Hotel));
+                LogUtils.LogInfo("Se modificó el hotel " + Hotel.Nombre);
+                MessageBox.Show("Se modificó satisfactoriamente el hotel " + Hotel.Nombre, "INFO");
+                return true;
+            }
+            catch (Exception Ex)
+            {
+                LogUtils.LogError(Ex);
+                MessageBox.Show("Hubo un error al intentar modificar un hotel. Revise el log", "ERROR");
+                return false;
+            }
+        }
+
+        private SqlParameter[] GenerateParamsFilter(string Nombre, int Estrellas, string Ciudad,
+            Pais Pais)
+        {
+            List<SqlParameter> Params = new List<SqlParameter>();
+
+            Params.Add(new SqlParameter("@nombre", Nombre));
+            Params.Add(new SqlParameter("@estrellas", Estrellas));
+            Params.Add(new SqlParameter("@ciudad", Ciudad));
+            Params.Add(new SqlParameter("@id_pais", Pais != null ? Pais.Id : -1));
+
+            return Params.ToArray();
         }
 
         private SqlParameter[] GenerateParamsDML(Hotel Hotel)

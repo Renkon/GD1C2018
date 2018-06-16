@@ -259,12 +259,14 @@ namespace FrbaHotel
             this.modificarHotelToolStripMenuItem.Name = "modificarHotelToolStripMenuItem";
             this.modificarHotelToolStripMenuItem.Size = new System.Drawing.Size(221, 22);
             this.modificarHotelToolStripMenuItem.Text = "Modificar hotel";
+            this.modificarHotelToolStripMenuItem.Click += new System.EventHandler(this.modificarHotelToolStripMenuItem_Click);
             // 
             // cerrarTemporalmenteHotelToolStripMenuItem
             // 
             this.cerrarTemporalmenteHotelToolStripMenuItem.Name = "cerrarTemporalmenteHotelToolStripMenuItem";
             this.cerrarTemporalmenteHotelToolStripMenuItem.Size = new System.Drawing.Size(221, 22);
             this.cerrarTemporalmenteHotelToolStripMenuItem.Text = "Cerrar temporalmente hotel";
+            this.cerrarTemporalmenteHotelToolStripMenuItem.Click += new System.EventHandler(this.cerrarTemporalmenteHotelToolStripMenuItem_Click);
             // 
             // habitacionesToolStripMenuItem
             // 
