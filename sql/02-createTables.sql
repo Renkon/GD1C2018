@@ -90,7 +90,7 @@ CREATE TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[cierres_temporales_habitacion] -- 8
     fecha_inicio_cierre_temporal_habitacion    DATETIME NOT NULL,
     fecha_fin_cierre_temporal_habitacion       DATETIME NOT NULL,
     id_habitacion                              INT NOT NULL,
-    motivo_cierre_temporal_habitacion          NVARCHAR(2500)
+    motivo_cierre_temporal_habitacion          NVARCHAR(2500) NOT NULL
 );
 
 
@@ -316,7 +316,7 @@ CREATE TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[cierres_temporales_hotel] -- 29
     fecha_inicio_cierre_temporal_hotel  DATETIME NOT NULL,
     fecha_fin_cierre_temporal_hotel     DATETIME NOT NULL,
     id_hotel                            INT NOT NULL,
-    motivo_cierre_temporal_hotel        NVARCHAR(2500)
+    motivo_cierre_temporal_hotel        NVARCHAR(2500) NOT NULL
 );
 
 
