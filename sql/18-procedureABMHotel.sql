@@ -104,7 +104,8 @@ BEGIN
 
 	IF (EXISTS(SELECT * FROM [EL_MONSTRUO_DEL_LAGO_MASER].[cierres_temporales_hotel]
 	           WHERE (@inicio <= fecha_fin_cierre_temporal_hotel)
-			   AND (fecha_inicio_cierre_temporal_hotel <= @fin)))
+			   AND (fecha_inicio_cierre_temporal_hotel <= @fin)
+                           AND id_hotel = @id_hotel))
 	BEGIN
 		RAISERROR('50001 - Ese hotel ya tiene un cierre temporal durante ese margen de fechas', 20, 1) WITH LOG 
 	END
