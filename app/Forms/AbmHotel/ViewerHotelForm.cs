@@ -57,9 +57,11 @@ namespace FrbaHotel.Forms.AbmHotel
             {
                 case FormType.Modify:
                     ButtonText = "Modificar";
+                    this.Text = "Modificación de hoteles";
                 break;
                 case FormType.Delete:
                     ButtonText = "Deshabilitar";
+                    this.Text = "Deshabilitación de hoteles";
                 break;
             }
         }

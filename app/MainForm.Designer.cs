@@ -57,10 +57,6 @@ namespace FrbaHotel
             this.nuevaHabitaciónToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.modificarHabitaciónToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.eliminarHabitaciónToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.regímenesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.nuevoRegimenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.modificarRegimenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.eliminarRegimenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.estadíaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.registrarEstadíaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.consumiblesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -82,7 +78,6 @@ namespace FrbaHotel
             this.clientesToolStripMenuItem,
             this.hotelesToolStripMenuItem,
             this.habitacionesToolStripMenuItem,
-            this.regímenesToolStripMenuItem,
             this.estadíaToolStripMenuItem,
             this.consumiblesToolStripMenuItem,
             this.facturaciónToolStripMenuItem,
@@ -283,46 +278,21 @@ namespace FrbaHotel
             this.nuevaHabitaciónToolStripMenuItem.Name = "nuevaHabitaciónToolStripMenuItem";
             this.nuevaHabitaciónToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
             this.nuevaHabitaciónToolStripMenuItem.Text = "Nueva habitación";
+            this.nuevaHabitaciónToolStripMenuItem.Click += new System.EventHandler(this.nuevaHabitaciónToolStripMenuItem_Click);
             // 
             // modificarHabitaciónToolStripMenuItem
             // 
             this.modificarHabitaciónToolStripMenuItem.Name = "modificarHabitaciónToolStripMenuItem";
             this.modificarHabitaciónToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
             this.modificarHabitaciónToolStripMenuItem.Text = "Modificar habitación";
+            this.modificarHabitaciónToolStripMenuItem.Click += new System.EventHandler(this.modificarHabitaciónToolStripMenuItem_Click);
             // 
             // eliminarHabitaciónToolStripMenuItem
             // 
             this.eliminarHabitaciónToolStripMenuItem.Name = "eliminarHabitaciónToolStripMenuItem";
-            this.eliminarHabitaciónToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
-            this.eliminarHabitaciónToolStripMenuItem.Text = "Eliminar habitación";
-            // 
-            // regímenesToolStripMenuItem
-            // 
-            this.regímenesToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.nuevoRegimenToolStripMenuItem,
-            this.modificarRegimenToolStripMenuItem,
-            this.eliminarRegimenToolStripMenuItem});
-            this.regímenesToolStripMenuItem.Name = "regímenesToolStripMenuItem";
-            this.regímenesToolStripMenuItem.Size = new System.Drawing.Size(77, 20);
-            this.regímenesToolStripMenuItem.Text = "Regímenes";
-            // 
-            // nuevoRegimenToolStripMenuItem
-            // 
-            this.nuevoRegimenToolStripMenuItem.Name = "nuevoRegimenToolStripMenuItem";
-            this.nuevoRegimenToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
-            this.nuevoRegimenToolStripMenuItem.Text = "Nuevo regimen";
-            // 
-            // modificarRegimenToolStripMenuItem
-            // 
-            this.modificarRegimenToolStripMenuItem.Name = "modificarRegimenToolStripMenuItem";
-            this.modificarRegimenToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
-            this.modificarRegimenToolStripMenuItem.Text = "Modificar regimen";
-            // 
-            // eliminarRegimenToolStripMenuItem
-            // 
-            this.eliminarRegimenToolStripMenuItem.Name = "eliminarRegimenToolStripMenuItem";
-            this.eliminarRegimenToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
-            this.eliminarRegimenToolStripMenuItem.Text = "Eliminar regimen";
+            this.eliminarHabitaciónToolStripMenuItem.Size = new System.Drawing.Size(250, 22);
+            this.eliminarHabitaciónToolStripMenuItem.Text = "Cerrar temporalmente habitación";
+            this.eliminarHabitaciónToolStripMenuItem.Click += new System.EventHandler(this.eliminarHabitaciónToolStripMenuItem_Click);
             // 
             // estadíaToolStripMenuItem
             // 
@@ -363,7 +333,7 @@ namespace FrbaHotel
             // facturarToolStripMenuItem
             // 
             this.facturarToolStripMenuItem.Name = "facturarToolStripMenuItem";
-            this.facturarToolStripMenuItem.Size = new System.Drawing.Size(117, 22);
+            this.facturarToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.facturarToolStripMenuItem.Text = "Facturar";
             // 
             // estadísticasToolStripMenuItem
@@ -425,10 +395,6 @@ namespace FrbaHotel
         private ToolStripMenuItem nuevaHabitaciónToolStripMenuItem;
         private ToolStripMenuItem modificarHabitaciónToolStripMenuItem;
         private ToolStripMenuItem eliminarHabitaciónToolStripMenuItem;
-        private ToolStripMenuItem regímenesToolStripMenuItem;
-        private ToolStripMenuItem nuevoRegimenToolStripMenuItem;
-        private ToolStripMenuItem modificarRegimenToolStripMenuItem;
-        private ToolStripMenuItem eliminarRegimenToolStripMenuItem;
         private ToolStripMenuItem estadíaToolStripMenuItem;
         private ToolStripMenuItem registrarEstadíaToolStripMenuItem;
         private ToolStripMenuItem consumiblesToolStripMenuItem;

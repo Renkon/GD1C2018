@@ -3,6 +3,7 @@ using FrbaHotel.AbmRol;
 using FrbaHotel.Database;
 using FrbaHotel.Forms;
 using FrbaHotel.Forms.AbmCliente;
+using FrbaHotel.Forms.AbmHabitacion;
 using FrbaHotel.Forms.AbmHotel;
 using FrbaHotel.Forms.AbmRol;
 using FrbaHotel.Forms.AbmUsuario;
@@ -101,6 +102,21 @@ namespace FrbaHotel
         private void cerrarTemporalmenteHotelToolStripMenuItem_Click(object sender, EventArgs e)
         {
             new ViewerHotelForm(FormType.Delete).ShowDialog();
+        }
+
+        private void nuevaHabitaciónToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            new HabitacionForm(FormType.Add, null, null).ShowDialog();
+        }
+
+        private void modificarHabitaciónToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            new ViewerHabitacionForm(FormType.Modify).ShowDialog();
+        }
+
+        private void eliminarHabitaciónToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            new ViewerHabitacionForm(FormType.Delete).ShowDialog();
         }
     }
 }

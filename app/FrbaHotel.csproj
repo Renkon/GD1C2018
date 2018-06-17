@@ -58,11 +58,23 @@
     <Compile Include="Forms\AbmCliente\ViewerClienteForm.Designer.cs">
       <DependentUpon>ViewerClienteForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\AbmHabitacion\Form1.cs">
+    <Compile Include="Forms\AbmHabitacion\CierreHabitacion.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\AbmHabitacion\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="Forms\AbmHabitacion\CierreHabitacion.Designer.cs">
+      <DependentUpon>CierreHabitacion.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\AbmHabitacion\HabitacionForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\AbmHabitacion\HabitacionForm.Designer.cs">
+      <DependentUpon>HabitacionForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\AbmHabitacion\ViewerHabitacionForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\AbmHabitacion\ViewerHabitacionForm.Designer.cs">
+      <DependentUpon>ViewerHabitacionForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\AbmHotel\CierreHotel.cs">
       <SubType>Form</SubType>
@@ -81,12 +93,6 @@
     </Compile>
     <Compile Include="Forms\AbmHotel\ViewerHotelForm.Designer.cs">
       <DependentUpon>ViewerHotelForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\AbmRegimen\Form1.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\AbmRegimen\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\AbmRol\ViewerRolForm.cs">
       <SubType>Form</SubType>
@@ -155,24 +161,30 @@
     <Compile Include="Forms\AbmUsuario\UsuarioForm.Designer.cs">
       <DependentUpon>UsuarioForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Model\CierreTemporalHabitacion.cs" />
     <Compile Include="Model\CierreTemporalHotel.cs" />
     <Compile Include="Model\Cliente.cs" />
     <Compile Include="Model\Cuenta.cs" />
+    <Compile Include="Model\DAO\CierreTemporalHabitacionDAO.cs" />
     <Compile Include="Model\DAO\CierreTemporalHotelDAO.cs" />
     <Compile Include="Model\DAO\ClienteDAO.cs" />
     <Compile Include="Model\DAO\FuncionalidadDAO.cs" />
+    <Compile Include="Model\DAO\HabitacionDAO.cs" />
     <Compile Include="Model\DAO\HotelDAO.cs" />
     <Compile Include="Model\DAO\PaisDAO.cs" />
     <Compile Include="Model\DAO\RegimenDAO.cs" />
     <Compile Include="Model\DAO\RolDAO.cs" />
     <Compile Include="Model\DAO\TipoDocumentoDAO.cs" />
+    <Compile Include="Model\DAO\TipoHabitacionDAO.cs" />
     <Compile Include="Model\DAO\UsuarioDAO.cs" />
     <Compile Include="Model\Funcionalidad.cs" />
+    <Compile Include="Model\Habitacion.cs" />
     <Compile Include="Model\Hotel.cs" />
     <Compile Include="Model\Pais.cs" />
     <Compile Include="Model\Regimen.cs" />
     <Compile Include="Model\Rol.cs" />
     <Compile Include="Model\TipoDocumento.cs" />
+    <Compile Include="Model\TipoHabitacion.cs" />
     <Compile Include="Model\Usuario.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -197,6 +209,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\AbmCliente\ViewerClienteForm.resx">
       <DependentUpon>ViewerClienteForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\AbmHabitacion\CierreHabitacion.resx">
+      <DependentUpon>CierreHabitacion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\AbmHabitacion\HabitacionForm.resx">
+      <DependentUpon>HabitacionForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\AbmHabitacion\ViewerHabitacionForm.resx">
+      <DependentUpon>ViewerHabitacionForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\AbmHotel\CierreHotel.resx">
       <DependentUpon>CierreHotel.cs</DependentUpon>
