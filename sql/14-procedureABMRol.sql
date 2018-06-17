@@ -28,12 +28,12 @@ END
 GO
 
 -- Se ejecuta para crear un rol nuevo
-CREATE TYPE listaDeFuncionalidades AS TABLE
+CREATE TYPE [EL_MONSTRUO_DEL_LAGO_MASER].[listaDeFuncionalidades] AS TABLE
 	(id_funcionalidad INT)
 
 GO
 
-CREATE PROCEDURE [EL_MONSTRUO_DEL_LAGO_MASER].[INSERTAR_NUEVO_ROL](@id_rol_user INT, @nombre_rol NVARCHAR(255), @funcionalidades listaDeFuncionalidades READONLY)
+CREATE PROCEDURE [EL_MONSTRUO_DEL_LAGO_MASER].[INSERTAR_NUEVO_ROL](@id_rol_user INT, @nombre_rol NVARCHAR(255), @funcionalidades EL_MONSTRUO_DEL_LAGO_MASER.listaDeFuncionalidades READONLY)
 AS
 BEGIN
 
@@ -133,7 +133,7 @@ GO
 
 -- Modifica un rol por su ID
 CREATE PROCEDURE [EL_MONSTRUO_DEL_LAGO_MASER].[MODIFICAR_ROL]
-        (@id_rol_user INT, @id_rol INT, @nombre_rol NVARCHAR(255), @funcionalidades listaDeFuncionalidades READONLY, @estado BIT)
+        (@id_rol_user INT, @id_rol INT, @nombre_rol NVARCHAR(255), @funcionalidades EL_MONSTRUO_DEL_LAGO_MASER.listaDeFuncionalidades READONLY, @estado BIT)
 AS
 BEGIN
 

@@ -9,7 +9,7 @@ END
 GO
 
 -- Tipo necesario para los regimenes
-CREATE TYPE listaDeRegimenes AS TABLE
+CREATE TYPE [EL_MONSTRUO_DEL_LAGO_MASER].[listaDeRegimenes] AS TABLE
     (id_regimen INT)
 
 GO
@@ -17,7 +17,7 @@ GO
 -- Agrega un nuevo hotel
 CREATE PROCEDURE [EL_MONSTRUO_DEL_LAGO_MASER].[AGREGAR_NUEVO_HOTEL](@id_rol_user INT, @nombre_hotel NVARCHAR(255), @correo_hotel NVARCHAR(255),
  @telefono_hotel NVARCHAR(100), @ciudad_hotel NVARCHAR(255), @domicilio_calle_hotel NVARCHAR(255), @domicilio_numero_hotel NUMERIC(18,0),
- @cantidad_estrellas_hotel NUMERIC(18,0), @id_pais INT, @fecha_creacion_hotel DATETIME, @recarga_por_estrellas_hotel NUMERIC(18,0), @regimenes listaDeRegimenes READONLY)
+ @cantidad_estrellas_hotel NUMERIC(18,0), @id_pais INT, @fecha_creacion_hotel DATETIME, @recarga_por_estrellas_hotel NUMERIC(18,0), @regimenes EL_MONSTRUO_DEL_LAGO_MASER.listaDeRegimenes READONLY)
 AS
 BEGIN
     DECLARE @id_reg   INT 
@@ -118,7 +118,7 @@ GO
 -- Este procedure modifica un hotel
 CREATE PROCEDURE [EL_MONSTRUO_DEL_LAGO_MASER].[MODIFICAR_HOTEL] (@id_rol_user INT, @id_hotel INT, @nombre_hotel NVARCHAR(255), @correo_hotel NVARCHAR(255),
     @telefono_hotel NVARCHAR(100), @ciudad_hotel NVARCHAR(255), @domicilio_calle_hotel NVARCHAR(255), @domicilio_numero_hotel NVARCHAR(255),
-    @cantidad_estrellas_hotel NUMERIC(18,0), @id_pais INT, @fecha_creacion_hotel DATETIME, @recarga_por_estrellas_hotel NUMERIC(18,0), @regimenes listaDeRegimenes READONLY)
+    @cantidad_estrellas_hotel NUMERIC(18,0), @id_pais INT, @fecha_creacion_hotel DATETIME, @recarga_por_estrellas_hotel NUMERIC(18,0), @regimenes EL_MONSTRUO_DEL_LAGO_MASER.listaDeRegimenes READONLY)
 AS
 BEGIN
     DECLARE @id_reg INT

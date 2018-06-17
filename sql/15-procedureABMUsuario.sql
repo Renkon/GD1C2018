@@ -63,19 +63,19 @@ END
 GO
 
 
-CREATE TYPE listaDeRoles AS TABLE
+CREATE TYPE [EL_MONSTRUO_DEL_LAGO_MASER].[listaDeRoles] AS TABLE
 (id_rol INT)
 
 GO
 
-CREATE TYPE listaDeHoteles AS TABLE
+CREATE TYPE [EL_MONSTRUO_DEL_LAGO_MASER].[listaDeHoteles] AS TABLE
 (id_hotel INT)
 
 GO
 
 -- Se ejecuta para crear un usuario nuevo
-CREATE PROCEDURE [EL_MONSTRUO_DEL_LAGO_MASER].[INSERTAR_USUARIO](@id_rol_user INT, @usuario_cuenta NVARCHAR(255), @contraseña_cuenta CHAR(64), @roles listaDeRoles READONLY, 
-@hoteles listaDeHoteles READONLY, @nombre_usuario NVARCHAR(255), @apellido_usuario NVARCHAR(255), @id_tipo_documento INT, @numero_documento_usuario NUMERIC(18,0), @correo_usuario NVARCHAR(255), @telefono_usuario NVARCHAR(100), @direccion_usuario NVARCHAR(255), @fecha_nacimiento_usuario DATETIME)
+CREATE PROCEDURE [EL_MONSTRUO_DEL_LAGO_MASER].[INSERTAR_USUARIO](@id_rol_user INT, @usuario_cuenta NVARCHAR(255), @contraseña_cuenta CHAR(64), @roles EL_MONSTRUO_DEL_LAGO_MASER.listaDeRoles READONLY, 
+@hoteles EL_MONSTRUO_DEL_LAGO_MASER.listaDeHoteles READONLY, @nombre_usuario NVARCHAR(255), @apellido_usuario NVARCHAR(255), @id_tipo_documento INT, @numero_documento_usuario NUMERIC(18,0), @correo_usuario NVARCHAR(255), @telefono_usuario NVARCHAR(100), @direccion_usuario NVARCHAR(255), @fecha_nacimiento_usuario DATETIME)
 AS
 BEGIN
     DECLARE @id_usuario             INT
@@ -196,8 +196,8 @@ END
 GO
 
 -- Modifica un usuario en particular
-CREATE PROCEDURE [EL_MONSTRUO_DEL_LAGO_MASER].[MODIFICAR_USUARIO](@id_rol_user INT, @id_usuario INT, @usuario_cuenta NVARCHAR(255), @contraseña_cuenta CHAR(64), @roles listaDeRoles READONLY,
-	@hoteles listaDeHoteles READONLY, @nombre_usuario NVARCHAR(255), @apellido_usuario NVARCHAR(255), @id_tipo_documento INT, @numero_documento_usuario NUMERIC(18,0), @correo_usuario NVARCHAR(255), 
+CREATE PROCEDURE [EL_MONSTRUO_DEL_LAGO_MASER].[MODIFICAR_USUARIO](@id_rol_user INT, @id_usuario INT, @usuario_cuenta NVARCHAR(255), @contraseña_cuenta CHAR(64), @roles EL_MONSTRUO_DEL_LAGO_MASER.listaDeRoles READONLY,
+	@hoteles EL_MONSTRUO_DEL_LAGO_MASER.listaDeHoteles READONLY, @nombre_usuario NVARCHAR(255), @apellido_usuario NVARCHAR(255), @id_tipo_documento INT, @numero_documento_usuario NUMERIC(18,0), @correo_usuario NVARCHAR(255), 
 	@telefono_usuario NVARCHAR(100), @direccion_usuario NVARCHAR(255), @fecha_nacimiento_usuario DATETIME, @estado BIT)
 AS
 BEGIN
