@@ -146,6 +146,8 @@ CREATE TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[habitaciones] -- 13
     ubicacion_habitacion     NVARCHAR(50),
     id_tipo_habitacion       INT NOT NULL,
     descripcion_habitacion   NVARCHAR(255)
+
+    UNIQUE(id_hotel, numero_habitacion)
 );
 
 
