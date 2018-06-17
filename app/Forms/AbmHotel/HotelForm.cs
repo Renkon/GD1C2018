@@ -193,7 +193,7 @@ namespace FrbaHotel.Forms.AbmHotel
                 ErrMsg += "Debe seleccionar al menos un regimen\n";
             if (Nombre.Equals(""))
                 ErrMsg += "Debe ingresar el nombre del hotel\n";
-            if (Correo.Equals("") || !Regex.IsMatch(Correo, pattern))
+            if (Correo.Equals("") || !Regex.IsMatch(Correo.ToLower(), pattern))
                 ErrMsg += "Debe ingresar un correo válido del hotel\n";
             if (Teléfono.Equals(""))
                 ErrMsg += "Debe ingresar un teléfono para hotel\n";
