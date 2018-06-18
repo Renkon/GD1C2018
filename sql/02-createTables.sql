@@ -121,7 +121,6 @@ CREATE TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[estadias] -- 11
     id_estadia                INT IDENTITY (1, 1) PRIMARY KEY,
     id_reserva                INT NOT NULL,
     id_usuario                INT NOT NULL,
-    id_cliente                INT NOT NULL,
     fecha_ingreso_estadia     DATETIME NOT NULL,
     fecha_egreso_estadia      DATETIME NOT NULL
 );
@@ -219,6 +218,7 @@ CREATE TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[reservas] -- 19
     fecha_inicio_reserva          DATETIME NOT NULL,
     fecha_fin_reserva             DATETIME NOT NULL,
     id_usuario                    INT NOT NULL,
+    id_cliente                    INT NOT NULL,
     id_regimen                    INT NOT NULL,
     id_estado_reserva             INT NOT NULL DEFAULT 1
 );
