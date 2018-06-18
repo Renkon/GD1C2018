@@ -23,11 +23,11 @@ END
 GO
 
 -- Procedimiento que crea las reservas con IDENTITY (respetando los valores recibidos)
--- Requiere editar el regimen a posteriori de la ejecución
+-- Requiere editar el cliente y el regimen a posteriori de la ejecución
 CREATE PROCEDURE [EL_MONSTRUO_DEL_LAGO_MASER].[CREAR_RESERVAS] AS
 BEGIN
     INSERT INTO [EL_MONSTRUO_DEL_LAGO_MASER].[reservas]
-    SELECT '2018-01-01', inicio, inicio + noches, 1, -1, 7
+    SELECT '2018-01-01', inicio, inicio + noches, 1, -1, -1, 7
     FROM (
             SELECT DISTINCT Reserva_Codigo codigo, Reserva_Fecha_Inicio inicio, Reserva_Cant_Noches noches
             FROM [gd_esquema].[Maestra]
@@ -408,6 +408,12 @@ BEGIN
                         VALUES (@id_cliente, @id_estadia);
                     END
                 END
+				
+				-- Updateamos en reservas el cliente
+                UPDATE [EL_MONSTRUO_DEL_LAGO_MASER].[reservas]
+                SET id_cliente = @id_cliente
+                WHERE id_reserva = @id_reserva;
+				
                 ---------------------- CLIENTES ------------------------------
 
                 -- Finalmente defino nulo los IDs utilizados.
