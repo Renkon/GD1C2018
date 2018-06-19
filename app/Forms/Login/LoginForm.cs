@@ -46,6 +46,8 @@ namespace FrbaHotel.Forms.Login
                         LoginRol Form = new LoginRol(User.Roles);
                         Form.ShowDialog();
                         Rol = Form.Rol;
+                        Form.Close();
+                        Form.Dispose();
                     }
 
                     if (User.Hoteles.Count == 1)
@@ -55,6 +57,8 @@ namespace FrbaHotel.Forms.Login
                         LoginHotel Form = new LoginHotel(User.Hoteles);
                         Form.ShowDialog();
                         Hotel = Form.Hotel;
+                        Form.Close();
+                        Form.Dispose();
                     }
 
                     Session.Set(User, Rol, Hotel);

@@ -32,7 +32,7 @@ namespace FrbaHotel
             Rol = R;
             Hotel = H;
 
-            // todo: mostrar solo ciertos menues segun los roles.
+            // TODO: mostrar solo ciertos menues segun los roles.
         }
     }
 }

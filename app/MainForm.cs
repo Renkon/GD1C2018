@@ -7,6 +7,7 @@ using FrbaHotel.Forms.AbmHabitacion;
 using FrbaHotel.Forms.AbmHotel;
 using FrbaHotel.Forms.AbmRol;
 using FrbaHotel.Forms.AbmUsuario;
+using FrbaHotel.Forms.GenerarModificacionReserva;
 using FrbaHotel.Forms.Login;
 using FrbaHotel.Login;
 using System;
@@ -117,6 +118,11 @@ namespace FrbaHotel
         private void eliminarHabitaciónToolStripMenuItem_Click(object sender, EventArgs e)
         {
             new ViewerHabitacionForm(FormType.Delete).ShowDialog();
+        }
+
+        private void nuevaReservaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            new ReservaFormPaso1(FormType.Add).ShowDialog();
         }
     }
 }

@@ -126,6 +126,7 @@ namespace FrbaHotel
             this.nuevaReservaToolStripMenuItem.Name = "nuevaReservaToolStripMenuItem";
             this.nuevaReservaToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
             this.nuevaReservaToolStripMenuItem.Text = "Nueva reserva";
+            this.nuevaReservaToolStripMenuItem.Click += new System.EventHandler(this.nuevaReservaToolStripMenuItem_Click);
             // 
             // modificarReservaToolStripMenuItem
             // 
@@ -276,14 +277,14 @@ namespace FrbaHotel
             // nuevaHabitaciónToolStripMenuItem
             // 
             this.nuevaHabitaciónToolStripMenuItem.Name = "nuevaHabitaciónToolStripMenuItem";
-            this.nuevaHabitaciónToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
+            this.nuevaHabitaciónToolStripMenuItem.Size = new System.Drawing.Size(250, 22);
             this.nuevaHabitaciónToolStripMenuItem.Text = "Nueva habitación";
             this.nuevaHabitaciónToolStripMenuItem.Click += new System.EventHandler(this.nuevaHabitaciónToolStripMenuItem_Click);
             // 
             // modificarHabitaciónToolStripMenuItem
             // 
             this.modificarHabitaciónToolStripMenuItem.Name = "modificarHabitaciónToolStripMenuItem";
-            this.modificarHabitaciónToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
+            this.modificarHabitaciónToolStripMenuItem.Size = new System.Drawing.Size(250, 22);
             this.modificarHabitaciónToolStripMenuItem.Text = "Modificar habitación";
             this.modificarHabitaciónToolStripMenuItem.Click += new System.EventHandler(this.modificarHabitaciónToolStripMenuItem_Click);
             // 
@@ -333,7 +334,7 @@ namespace FrbaHotel
             // facturarToolStripMenuItem
             // 
             this.facturarToolStripMenuItem.Name = "facturarToolStripMenuItem";
-            this.facturarToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.facturarToolStripMenuItem.Size = new System.Drawing.Size(117, 22);
             this.facturarToolStripMenuItem.Text = "Facturar";
             // 
             // estadísticasToolStripMenuItem

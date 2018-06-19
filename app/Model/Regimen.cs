@@ -25,5 +25,19 @@ namespace FrbaHotel.Model
         {
             return Descripción;
         }
+
+        public override bool Equals(object obj)
+        {
+            var reg = obj as Regimen;
+            if (reg == null)
+                return false;
+
+            return this.Id == reg.Id;
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
     }
 }

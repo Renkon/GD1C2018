@@ -119,6 +119,24 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\FormType.cs" />
+    <Compile Include="Forms\GenerarModificacionReserva\ReservaFormPaso1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\GenerarModificacionReserva\ReservaFormPaso1.Designer.cs">
+      <DependentUpon>ReservaFormPaso1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\GenerarModificacionReserva\SeleccionarHabitacion.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\GenerarModificacionReserva\SeleccionarHabitacion.Designer.cs">
+      <DependentUpon>SeleccionarHabitacion.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\GenerarModificacionReserva\SeleccionarRegimen.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\GenerarModificacionReserva\SeleccionarRegimen.Designer.cs">
+      <DependentUpon>SeleccionarRegimen.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Login\LoginForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -142,12 +160,6 @@
     </Compile>
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\GenerarModificacionReserva\Form1.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\GenerarModificacionReserva\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\ListadoEstadistico\Form1.cs">
       <SubType>Form</SubType>
@@ -239,6 +251,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\AbmUsuario\ViewerUsuarioForm.resx">
       <DependentUpon>ViewerUsuarioForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\GenerarModificacionReserva\ReservaFormPaso1.resx">
+      <DependentUpon>ReservaFormPaso1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\GenerarModificacionReserva\SeleccionarHabitacion.resx">
+      <DependentUpon>SeleccionarHabitacion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\GenerarModificacionReserva\SeleccionarRegimen.resx">
+      <DependentUpon>SeleccionarRegimen.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Login\LoginForm.resx">
       <DependentUpon>LoginForm.cs</DependentUpon>
