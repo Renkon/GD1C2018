@@ -43,12 +43,6 @@ ADD FOREIGN KEY (id_reserva) REFERENCES [EL_MONSTRUO_DEL_LAGO_MASER].[reservas](
 ALTER TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[estadias]
 ADD FOREIGN KEY (id_usuario) REFERENCES [EL_MONSTRUO_DEL_LAGO_MASER].[usuarios](id_usuario);
 
-ALTER TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[estadiasXhabitaciones]
-ADD FOREIGN KEY (id_estadia) REFERENCES [EL_MONSTRUO_DEL_LAGO_MASER].[estadias](id_estadia);
-
-ALTER TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[estadiasXhabitaciones]
-ADD FOREIGN KEY (id_habitacion) REFERENCES [EL_MONSTRUO_DEL_LAGO_MASER].[habitaciones](id_habitacion);
-
 ALTER TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[habitaciones]
 ADD FOREIGN KEY (id_hotel) REFERENCES [EL_MONSTRUO_DEL_LAGO_MASER].[hoteles](id_hotel);
 

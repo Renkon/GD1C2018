@@ -125,19 +125,8 @@ CREATE TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[estadias] -- 11
     fecha_egreso_estadia      DATETIME NOT NULL
 );
 
-
 -------------------------------------------------------------------------------------------------------------------------------------------
-CREATE TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[estadiasXhabitaciones] -- 12
-(
-    id_estadia        INT NOT NULL,
-    id_habitacion     INT NOT NULL
-    
-    PRIMARY KEY (id_estadia, id_habitacion)
-);
-
-
--------------------------------------------------------------------------------------------------------------------------------------------
-CREATE TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[habitaciones] -- 13
+CREATE TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[habitaciones] -- 12
 (
     id_habitacion            INT IDENTITY (1, 1) PRIMARY KEY,
     id_hotel                 INT NOT NULL,
@@ -152,7 +141,7 @@ CREATE TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[habitaciones] -- 13
 
 
 -------------------------------------------------------------------------------------------------------------------------------------------
-CREATE TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[usuarios] -- 14
+CREATE TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[usuarios] -- 13
 (
     id_usuario                    INT IDENTITY (1, 1) PRIMARY KEY,
     nombre_usuario                NVARCHAR(255) NOT NULL,
@@ -170,7 +159,7 @@ CREATE TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[usuarios] -- 14
 
 
 -------------------------------------------------------------------------------------------------------------------------------------------
-CREATE TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[reservasXhabitaciones] -- 15
+CREATE TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[reservasXhabitaciones] -- 14
 (
     id_reserva        INT NOT NULL,
     id_habitacion     INT NOT NULL
@@ -180,7 +169,7 @@ CREATE TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[reservasXhabitaciones] -- 15
 
 
 -------------------------------------------------------------------------------------------------------------------------------------------
-CREATE TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[tipos_habitacion] -- 16
+CREATE TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[tipos_habitacion] -- 15
 (
     id_tipo_habitacion                    INT IDENTITY (1001, 1) PRIMARY KEY,
     descripcion_tipo_habitacion           NVARCHAR(255),
@@ -190,7 +179,7 @@ CREATE TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[tipos_habitacion] -- 16
 
 
 -------------------------------------------------------------------------------------------------------------------------------------------
-CREATE TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[usuariosXroles] -- 17
+CREATE TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[usuariosXroles] -- 16
 (
     id_rol        INT NOT NULL,
     id_usuario    INT NOT NULL
@@ -200,7 +189,7 @@ CREATE TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[usuariosXroles] -- 17
 
 
 -------------------------------------------------------------------------------------------------------------------------------------------
-CREATE TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[cancelaciones_reserva] -- 18
+CREATE TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[cancelaciones_reserva] -- 17
 (
     id_cancelacion_reserva        INT IDENTITY (1, 1) PRIMARY KEY,
     id_reserva                    INT NOT NULL,
@@ -211,7 +200,7 @@ CREATE TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[cancelaciones_reserva] -- 18
 
 
 -------------------------------------------------------------------------------------------------------------------------------------------
-CREATE TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[reservas] -- 19
+CREATE TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[reservas] -- 18
 (
     id_reserva                    INT IDENTITY (10001, 1) PRIMARY KEY,
     fecha_realizacion_reserva     DATETIME NOT NULL,
@@ -225,7 +214,7 @@ CREATE TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[reservas] -- 19
 
 
 -------------------------------------------------------------------------------------------------------------------------------------------
-CREATE TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[estados_reserva] -- 20
+CREATE TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[estados_reserva] -- 19
 (
     id_estado_reserva                INT IDENTITY (1, 1) PRIMARY KEY,
     descripcion_estados_reserva      NVARCHAR(255) NOT NULL
@@ -233,7 +222,7 @@ CREATE TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[estados_reserva] -- 20
 
 
 -------------------------------------------------------------------------------------------------------------------------------------------
-CREATE TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[usuariosXhoteles] -- 21
+CREATE TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[usuariosXhoteles] -- 20
 (
     id_usuario    INT NOT NULL,
     id_hotel      INT NOT NULL
@@ -243,14 +232,14 @@ CREATE TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[usuariosXhoteles] -- 21
 
 
 -------------------------------------------------------------------------------------------------------------------------------------------
-CREATE TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[paises] -- 22
+CREATE TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[paises] -- 21
 (
     id_pais        INT IDENTITY (1, 1) PRIMARY KEY,
     nombre_pais    NVARCHAR(255) NOT NULL
 );
 
 -------------------------------------------------------------------------------------------------------------------------------------------
-CREATE TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[roles] -- 23
+CREATE TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[roles] -- 22
 (
     id_rol        INT IDENTITY (1, 1) PRIMARY KEY,
     nombre_rol    NVARCHAR(255) NOT NULL,
@@ -259,7 +248,7 @@ CREATE TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[roles] -- 23
 
 
 -------------------------------------------------------------------------------------------------------------------------------------------
-CREATE TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[regimenes] -- 24
+CREATE TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[regimenes] -- 23
 (
     id_regimen            INT IDENTITY (1, 1) PRIMARY KEY,
     descripcion_regimen   NVARCHAR(255) NOT NULL,
@@ -269,7 +258,7 @@ CREATE TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[regimenes] -- 24
 
 
 -------------------------------------------------------------------------------------------------------------------------------------------
-CREATE TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[hotelesXregimenes] -- 25
+CREATE TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[hotelesXregimenes] -- 24
 (
     id_hotel        INT NOT NULL,
     id_regimen      INT NOT NULL
@@ -279,7 +268,7 @@ CREATE TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[hotelesXregimenes] -- 25
 
 
 -------------------------------------------------------------------------------------------------------------------------------------------
-CREATE TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[hoteles] -- 26
+CREATE TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[hoteles] -- 25
 (
     id_hotel                        INT IDENTITY (1, 1) PRIMARY KEY,
     nombre_hotel                    NVARCHAR(255) NOT NULL DEFAULT 'Hotel sin nombre',
@@ -296,7 +285,7 @@ CREATE TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[hoteles] -- 26
 
 
 -------------------------------------------------------------------------------------------------------------------------------------------
-CREATE TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[rolesXfuncionalidades] -- 27
+CREATE TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[rolesXfuncionalidades] -- 26
 (
     id_rol                INT NOT NULL,
     id_funcionalidad      INT NOT NULL
@@ -305,7 +294,7 @@ CREATE TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[rolesXfuncionalidades] -- 27
 );
 
 -------------------------------------------------------------------------------------------------------------------------------------------
-CREATE TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[funcionalidades] -- 28
+CREATE TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[funcionalidades] -- 27
 (
     id_funcionalidad            INT IDENTITY (1, 1) PRIMARY KEY,
     descripcion_funcionalidad   NVARCHAR(255) NOT NULL
@@ -313,7 +302,7 @@ CREATE TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[funcionalidades] -- 28
 
 
 -------------------------------------------------------------------------------------------------------------------------------------------
-CREATE TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[cierres_temporales_hotel] -- 29
+CREATE TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[cierres_temporales_hotel] -- 28
 (
     id_cierre_temporal_hotel            INT IDENTITY (1, 1) PRIMARY KEY,
     fecha_inicio_cierre_temporal_hotel  DATETIME NOT NULL,

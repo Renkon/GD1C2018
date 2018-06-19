@@ -335,17 +335,6 @@ BEGIN
                         SET @id_estadia = SCOPE_IDENTITY();
                     END
 
-                    -- Populamos estadiasXhabitaciones
-                    IF (NOT EXISTS(SELECT *
-                                   FROM [EL_MONSTRUO_DEL_LAGO_MASER].[estadiasXhabitaciones]
-                                   WHERE id_estadia = @id_estadia
-                                   AND id_habitacion = @id_habitacion
-                                  ))
-                    BEGIN
-                        INSERT INTO [EL_MONSTRUO_DEL_LAGO_MASER].[estadiasXhabitaciones]
-                        VALUES (@id_estadia, @id_habitacion);
-                    END
-
                     -- Updateamos en facturas la estadía
                     UPDATE [EL_MONSTRUO_DEL_LAGO_MASER].[facturas]
                     SET id_estadia = @id_estadia
