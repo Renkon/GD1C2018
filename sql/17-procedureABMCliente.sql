@@ -113,15 +113,15 @@ GO
 -- Este procedure se usa cuando se re-registra un cliente existente previo a la migración
 CREATE PROCEDURE [EL_MONSTRUO_DEL_LAGO_MASER].[INSERTAR_CLIENTE_PREEXISTENTE]
     (@nombre_cliente NVARCHAR(255), @apellido_cliente NVARCHAR(255), @id_tipo_documento INT,
-	@numero_documento_cliente NUMERIC(18,0), @correo_cliente NVARCHAR(255), @telefono_cliente NVARCHAR(100),
-	@domicilio_calle_cliente NVARCHAR(255), @domicilio_numero_cliente NUMERIC(18,0), @domicilio_piso_cliente NUMERIC(18,0),
-	@domicilio_departamento_cliente NVARCHAR(50), @ciudad_cliente NVARCHAR(255), @id_pais INT,
-	@nacionalidad_cliente NVARCHAR(20), @fecha_nacimiento_cliente DATETIME)
+        @numero_documento_cliente NUMERIC(18,0), @correo_cliente NVARCHAR(255), @telefono_cliente NVARCHAR(100),
+        @domicilio_calle_cliente NVARCHAR(255), @domicilio_numero_cliente NUMERIC(18,0), @domicilio_piso_cliente NUMERIC(18,0),
+        @domicilio_departamento_cliente NVARCHAR(50), @ciudad_cliente NVARCHAR(255), @id_pais INT,
+        @nacionalidad_cliente NVARCHAR(20), @fecha_nacimiento_cliente DATETIME)
 AS
 BEGIN
     DECLARE @id_reserva INT
-	DECLARE @id_estadia INT
-	DECLARE @id_cliente INT
+        DECLARE @id_estadia INT
+        DECLARE @id_cliente INT
 
     DECLARE cursor_clientes_preexistentes CURSOR FOR
         SELECT Estadia_Codigo, Reserva_Codigo
@@ -136,7 +136,7 @@ BEGIN
         AND Cliente_Piso = @domicilio_piso_cliente
 
     BEGIN TRY
-	    BEGIN TRANSACTION
+            BEGIN TRANSACTION
 
         -- Hacemos el insert a la tabla de clientes primero
         INSERT INTO [EL_MONSTRUO_DEL_LAGO_MASER].[clientes] (nombre_cliente, apellido_cliente, id_tipo_documento,
@@ -153,7 +153,7 @@ BEGIN
         FETCH cursor_clientes_preexistentes INTO @id_estadia, @id_reserva
 
         WHILE (@@FETCH_STATUS = 0) BEGIN
-		    IF (@id_reserva IS NOT NULL) BEGIN
+                    IF (@id_reserva IS NOT NULL) BEGIN
                 UPDATE [EL_MONSTRUO_DEL_LAGO_MASER].[reservas]
                 SET id_cliente = @id_cliente
                 WHERE id_reserva = @id_reserva
@@ -165,7 +165,7 @@ BEGIN
                                 AND id_estadia = @id_estadia)) BEGIN
                 INSERT INTO [EL_MONSTRUO_DEL_LAGO_MASER].[clientesXestadias]
                     (id_cliente, id_estadia)
-                VALUES (@id_cliente, @id_estadia)         
+                VALUES (@id_cliente, @id_estadia)
             END
 
             DELETE FROM [EL_MONSTRUO_DEL_LAGO_MASER].[migracion_errores]
@@ -174,19 +174,21 @@ BEGIN
             FETCH cursor_clientes_preexistentes INTO @id_estadia, @id_reserva
         END
 
-		COMMIT TRANSACTION
+        SELECT @id_cliente
+
+        COMMIT TRANSACTION
         CLOSE cursor_clientes_preexistentes
         DEALLOCATE cursor_clientes_preexistentes
     END TRY
     BEGIN CATCH
-	    ROLLBACK TRANSACTION
+            ROLLBACK TRANSACTION
 
         IF CURSOR_STATUS('global', 'cursor_clientes_preexistentes') = 1 BEGIN
             CLOSE cursor_clientes_preexistentes
         END
         DEALLOCATE cursor_clientes_preexistentes;
 
-		THROW
+                THROW
     END CATCH
 END
 

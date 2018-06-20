@@ -80,8 +80,8 @@ BEGIN
 		JOIN EL_MONSTRUO_DEL_LAGO_MASER.reservasXhabitaciones rXh ON h.id_habitacion = rXh.id_habitacion
 		JOIN EL_MONSTRUO_DEL_LAGO_MASER.reservas r ON rXh.id_reserva = r.id_reserva
 		WHERE id_hotel = @id_hotel
-		AND @fecha_inicio <= fecha_fin_reserva
-		AND @fecha_fin >= fecha_inicio_reserva
+		AND @fecha_inicio < fecha_fin_reserva
+		AND @fecha_fin > fecha_inicio_reserva
 		AND id_estado_reserva IN (1, 2, 6, 7)
 	EXCEPT -- Y las que estén cerradas temporalmente
 		SELECT h.* FROM EL_MONSTRUO_DEL_LAGO_MASER.habitaciones h
@@ -164,4 +164,78 @@ END
 
 GO
 
- 
+CREATE TYPE [EL_MONSTRUO_DEL_LAGO_MASER].[listaDeHabitaciones] AS TABLE
+(id_habitacion INT)
+
+GO
+
+-- Este procedimiento hace el insert de la reserva al sistema
+CREATE PROCEDURE [EL_MONSTRUO_DEL_LAGO_MASER].[INSERTAR_RESERVA]
+    (@id_rol_user INT, @fecha_realizacion DATETIME, @fecha_inicio DATETIME, @fecha_fin DATETIME,
+    @id_cliente INT, @id_regimen INT, @habitaciones EL_MONSTRUO_DEL_LAGO_MASER.listaDeHabitaciones READONLY,
+    @id_usuario INT)
+AS
+BEGIN
+    DECLARE @id_reserva     INT
+    DECLARE @id_habitacion  INT
+
+    DECLARE cursor_habitaciones CURSOR FOR
+        SELECT id_habitacion
+        FROM @habitaciones
+
+    EXEC [EL_MONSTRUO_DEL_LAGO_MASER].[VALIDAR_ROL_USUARIO] @id_rol_user, 1
+
+    IF (EXISTS(SELECT * FROM [EL_MONSTRUO_DEL_LAGO_MASER].[clientes]
+               WHERE id_cliente = @id_cliente
+               AND estado_cliente = 0)) BEGIN
+        RAISERROR('El cliente está deshabilitado. No puede realizar reservas', 20, 1) WITH LOG
+    END
+
+    BEGIN TRY
+        BEGIN TRANSACTION
+            -- Primero, insertamos la nueva reserva
+            INSERT INTO [EL_MONSTRUO_DEL_LAGO_MASER].[reservas]
+                (fecha_realizacion_reserva, fecha_inicio_reserva, fecha_fin_reserva, id_cliente, id_regimen, id_estado_reserva)
+            VALUES (@fecha_realizacion, @fecha_inicio, @fecha_fin, @id_cliente, @id_regimen, 1)
+
+            -- Seteamos el ID reserva
+            SET @id_reserva = SCOPE_IDENTITY()
+
+            -- Ahora insertamos la transaccion en el log de generacion y modificacion
+            INSERT INTO [EL_MONSTRUO_DEL_LAGO_MASER].[generacion_modificacion_reservas]
+                (id_reserva, id_usuario, tipo_generacion_modificacion_reserva, fecha_generacion_modificacion_reserva)
+            VALUES (@id_reserva, @id_usuario, 'G', @fecha_realizacion)
+
+            -- Finalmente, insertamos en clientes por habitaciones haciendo un loop del cursor
+            OPEN cursor_habitaciones
+            FETCH cursor_habitaciones INTO @id_habitacion
+
+            WHILE (@@FETCH_STATUS = 0) BEGIN
+                INSERT INTO [EL_MONSTRUO_DEL_LAGO_MASER].[reservasXhabitaciones]
+                    (id_reserva, id_habitacion)
+                VALUES (@id_reserva, @id_habitacion)
+
+                FETCH cursor_habitaciones INTO @id_habitacion
+            END
+        COMMIT TRANSACTION
+
+        -- Hago un select para poder tomarlo desde la aplicación
+        SELECT @id_reserva
+
+        CLOSE cursor_habitaciones
+        DEALLOCATE cursor_habitaciones
+    END TRY
+    BEGIN CATCH
+        ROLLBACK TRANSACTION
+
+        IF CURSOR_STATUS('global', 'cursor_habitaciones') = 1 BEGIN
+            CLOSE cursor_habitaciones
+        END
+        DEALLOCATE cursor_habitaciones;
+
+        THROW
+    END CATCH
+END
+
+GO
+
