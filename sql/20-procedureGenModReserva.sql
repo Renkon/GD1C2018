@@ -51,8 +51,8 @@ END
 GO
 
 -- Este procedure obtiene las habitaciones disponibles para cierta reserva
-CREATE PROCEDURE [EL_MONSTRUO_DEL_LAGO_MASER].[OBTENER_HABITACIONES_DISPONIBLES_RESERVA] 
-    (@id_rol INT, @today DATETIME, @fecha_inicio DATETIME, @fecha_fin DATETIME, @id_hotel INT)
+CREATE PROCEDURE [EL_MONSTRUO_DEL_LAGO_MASER].[OBTENER_HABITACIONES_DISPONIBLES_RESERVA]
+    (@id_rol INT, @today DATETIME, @fecha_inicio DATETIME, @fecha_fin DATETIME, @id_hotel INT, @id_reserva INT)
 AS
 BEGIN
 
@@ -62,33 +62,34 @@ BEGIN
     -- Actualizo las reservas vencidas para que estén disponibles
     EXEC [EL_MONSTRUO_DEL_LAGO_MASER].[CANCELAR_RESERVAS_VENCIDAS] @today
 
-	-- Si contiene al menos una ROW, el hotel estará cerrado
-    IF (EXISTS (SELECT fecha_inicio_cierre_temporal_hotel, fecha_fin_cierre_temporal_hotel 
+        -- Si contiene al menos una ROW, el hotel estará cerrado
+    IF (EXISTS (SELECT fecha_inicio_cierre_temporal_hotel, fecha_fin_cierre_temporal_hotel
                 FROM EL_MONSTRUO_DEL_LAGO_MASER.cierres_temporales_hotel
-                WHERE @fecha_inicio <= fecha_fin_cierre_temporal_hotel 
+                WHERE @fecha_inicio <= fecha_fin_cierre_temporal_hotel
                 AND @fecha_fin >= fecha_inicio_cierre_temporal_hotel
                 AND id_hotel = @id_hotel)) BEGIN
         SELECT -1 id_habitacion
-		RETURN
+                RETURN
     END
 
-	-- Todas las habitaciones disponibles
-		SELECT * FROM EL_MONSTRUO_DEL_LAGO_MASER.habitaciones
-		WHERE id_hotel = @id_hotel
-	EXCEPT -- Excepto las que estén reservadas
-		SELECT h.* FROM EL_MONSTRUO_DEL_LAGO_MASER.habitaciones h
-		JOIN EL_MONSTRUO_DEL_LAGO_MASER.reservasXhabitaciones rXh ON h.id_habitacion = rXh.id_habitacion
-		JOIN EL_MONSTRUO_DEL_LAGO_MASER.reservas r ON rXh.id_reserva = r.id_reserva
-		WHERE id_hotel = @id_hotel
-		AND @fecha_inicio < fecha_fin_reserva
-		AND @fecha_fin > fecha_inicio_reserva
-		AND id_estado_reserva IN (1, 2, 6, 7)
-	EXCEPT -- Y las que estén cerradas temporalmente
-		SELECT h.* FROM EL_MONSTRUO_DEL_LAGO_MASER.habitaciones h
-		JOIN EL_MONSTRUO_DEL_LAGO_MASER.cierres_temporales_habitacion c ON h.id_habitacion = c.id_habitacion
-		WHERE @fecha_inicio <= fecha_fin_cierre_temporal_habitacion 
-		AND @fecha_fin >= fecha_inicio_cierre_temporal_habitacion
-		AND id_hotel = @id_hotel
+        -- Todas las habitaciones disponibles
+                SELECT * FROM EL_MONSTRUO_DEL_LAGO_MASER.habitaciones
+                WHERE id_hotel = @id_hotel
+        EXCEPT -- Excepto las que estén reservadas
+                SELECT h.* FROM EL_MONSTRUO_DEL_LAGO_MASER.habitaciones h
+                JOIN EL_MONSTRUO_DEL_LAGO_MASER.reservasXhabitaciones rXh ON h.id_habitacion = rXh.id_habitacion
+                JOIN EL_MONSTRUO_DEL_LAGO_MASER.reservas r ON rXh.id_reserva = r.id_reserva
+                WHERE id_hotel = @id_hotel
+                AND rXh.id_reserva <> @id_reserva
+                AND @fecha_inicio < fecha_fin_reserva
+                AND @fecha_fin > fecha_inicio_reserva
+                AND id_estado_reserva IN (1, 2, 6, 7)
+        EXCEPT -- Y las que estén cerradas temporalmente
+                SELECT h.* FROM EL_MONSTRUO_DEL_LAGO_MASER.habitaciones h
+                JOIN EL_MONSTRUO_DEL_LAGO_MASER.cierres_temporales_habitacion c ON h.id_habitacion = c.id_habitacion
+                WHERE @fecha_inicio <= fecha_fin_cierre_temporal_habitacion
+                AND @fecha_fin >= fecha_inicio_cierre_temporal_habitacion
+                AND id_hotel = @id_hotel
 END
 
 GO
@@ -224,6 +225,107 @@ BEGIN
 
         CLOSE cursor_habitaciones
         DEALLOCATE cursor_habitaciones
+    END TRY
+    BEGIN CATCH
+        ROLLBACK TRANSACTION
+
+        IF CURSOR_STATUS('global', 'cursor_habitaciones') = 1 BEGIN
+            CLOSE cursor_habitaciones
+        END
+        DEALLOCATE cursor_habitaciones;
+
+        THROW
+    END CATCH
+END
+
+GO
+
+-- Este procedure obtiene información de una reserva
+CREATE PROCEDURE [EL_MONSTRUO_DEL_LAGO_MASER].[OBTENER_RESERVA]
+    (@id_reserva INT, @today DATETIME)
+AS
+BEGIN
+    SELECT fecha_realizacion_reserva, fecha_inicio_reserva, fecha_fin_reserva, id_regimen
+    FROM [EL_MONSTRUO_DEL_LAGO_MASER].[reservas]
+    WHERE id_reserva = @id_reserva
+    AND id_estado_reserva IN (1, 2, 7)
+    AND fecha_inicio_reserva > @today 
+END
+
+GO
+
+-- Este procedure obtiene los tipos de habitación de una reserva
+CREATE PROCEDURE [EL_MONSTRUO_DEL_LAGO_MASER].[OBTENER_TIPOS_HABITACION_RESERVA]
+    (@id_reserva INT)
+AS
+BEGIN
+    SELECT h.id_tipo_habitacion, descripcion_tipo_habitacion, porcentual_tipo_habitacion, cantidad_huespedes_tipo_habitacion 
+    FROM [EL_MONSTRUO_DEL_LAGO_MASER].[reservasXhabitaciones] rxh
+    JOIN [EL_MONSTRUO_DEL_LAGO_MASER].[habitaciones] h
+        ON rxh.id_habitacion = h.id_habitacion
+    JOIN [EL_MONSTRUO_DEL_LAGO_MASER].[tipos_habitacion] th
+        ON h.id_tipo_habitacion = th.id_tipo_habitacion
+    WHERE id_reserva = @id_reserva
+END
+
+GO
+
+-- Obtengo el ID de hotel relacionado de una reserva
+CREATE PROCEDURE [EL_MONSTRUO_DEL_LAGO_MASER].[OBTENER_HOTEL_DE_RESERVA]
+    (@id_reserva INT)
+AS
+BEGIN
+    SELECT id_hotel FROM [EL_MONSTRUO_DEL_LAGO_MASER].[reservas] r
+    LEFT JOIN [EL_MONSTRUO_DEL_LAGO_MASER].[reservasXhabitaciones] rXh
+        ON r.id_reserva = rXh.id_reserva
+    LEFT JOIN [EL_MONSTRUO_DEL_LAGO_MASER].[habitaciones] h
+        ON rXh.id_habitacion = h.id_habitacion
+    WHERE r.id_reserva = @id_reserva
+END
+
+GO
+
+-- Modifica una reserva con datos nuevos
+CREATE PROCEDURE [EL_MONSTRUO_DEL_LAGO_MASER].[MODIFICAR_RESERVA]
+    (@id_usuario INT, @id_rol_user INT, @fecha_inicio DATETIME, @fecha_fin DATETIME, @id_regimen INT,
+    @id_reserva INT, @fecha_hoy DATETIME, @habitaciones EL_MONSTRUO_DEL_LAGO_MASER.listaDeHabitaciones READONLY)
+AS
+BEGIN
+    DECLARE @id_habitacion  INT
+    DECLARE cursor_habitaciones CURSOR FOR
+        SELECT id_habitacion
+        FROM @habitaciones
+
+    EXEC [EL_MONSTRUO_DEL_LAGO_MASER].[VALIDAR_ROL_USUARIO] @id_rol_user, 2
+
+    BEGIN TRY
+        BEGIN TRANSACTION
+        UPDATE [EL_MONSTRUO_DEL_LAGO_MASER].[reservas]
+        SET fecha_inicio_reserva = @fecha_inicio, fecha_fin_reserva = @fecha_fin, 
+            id_estado_reserva = 2, id_regimen = @id_regimen
+        WHERE id_reserva = @id_reserva
+
+        DELETE FROM [EL_MONSTRUO_DEL_LAGO_MASER].[reservasXhabitaciones]
+        WHERE id_reserva = @id_reserva 
+
+        OPEN cursor_habitaciones
+        FETCH cursor_habitaciones INTO @id_habitacion
+        WHILE (@@FETCH_STATUS = 0) BEGIN
+            INSERT INTO [EL_MONSTRUO_DEL_LAGO_MASER].[reservasXhabitaciones]
+                (id_reserva, id_habitacion)
+            VALUES (@id_reserva, @id_habitacion)
+
+            FETCH cursor_habitaciones INTO @id_habitacion
+        END
+
+        CLOSE cursor_habitaciones
+        DEALLOCATE cursor_habitaciones
+
+        INSERT INTO [EL_MONSTRUO_DEL_LAGO_MASER].[generacion_modificacion_reservas]
+            (fecha_generacion_modificacion_reserva, tipo_generacion_modificacion_reserva, id_usuario, id_reserva)
+        VALUES (@fecha_hoy, 'M', @id_usuario, @id_reserva)
+
+        COMMIT TRANSACTION
     END TRY
     BEGIN CATCH
         ROLLBACK TRANSACTION
