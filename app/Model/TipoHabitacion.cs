@@ -32,15 +32,13 @@ namespace FrbaHotel.Model
             if (hab == null)
                 return false;
 
-            return this.Id == hab.Id &&
-                    this.Descripción.Equals(hab.Descripción) &&
-                    this.Porcentual.Equals(hab.Porcentual) &&
-                    this.Huéspedes.Equals(hab.Huéspedes);
+            return this.Id == hab.Id;
         }
 
         public override int GetHashCode()
         {
-            return base.GetHashCode();
+            return this.Id.GetHashCode() + this.Descripción.GetHashCode() + this.Huéspedes.GetHashCode()
+                + this.Porcentual.GetHashCode();
         }
     }
 }

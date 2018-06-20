@@ -27,5 +27,10 @@ namespace FrbaHotel.Model
             this.TipoHabitación = TipoHabitación;
             this.Descripción = Descripción;
         }
+
+        public Habitacion(int? Id)
+        {
+            this.Id = Id;
+        }
     }
 }

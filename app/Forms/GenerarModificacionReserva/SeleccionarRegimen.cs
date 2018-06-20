@@ -15,7 +15,6 @@ namespace FrbaHotel.Forms.GenerarModificacionReserva
     public partial class SeleccionarRegimen : Form
     {
         public Regimen Regimen { get; private set; }
-        private Hotel Hotel;
 
         public SeleccionarRegimen(Hotel Hotel)
         {

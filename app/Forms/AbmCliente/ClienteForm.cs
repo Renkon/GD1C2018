@@ -41,6 +41,14 @@ namespace FrbaHotel.AbmCliente
             LoadContent();
         }
 
+        public Cliente GetCliente()
+        {
+            if (type != FormType.Register)
+                throw new Exception("Excepción de seguridad - ClienteForm");
+
+            return cliente;
+        }
+
         private void PopulateLists()
         {
             List<TipoDocumento> TiposDocumento = new TipoDocumentoDAO().ObtenerTiposDocumento();
@@ -122,7 +130,7 @@ namespace FrbaHotel.AbmCliente
         {
             switch (type)
             {
-                case FormType.Add:
+                case FormType.Add: case FormType.Register:
                     buttonAccion.Text = "Registrar cliente";
                     this.Text = "Alta de cliente";
                     checkBoxEstado.Visible = false;
@@ -176,7 +184,7 @@ namespace FrbaHotel.AbmCliente
 
             switch (type)
             {
-                case FormType.Add:
+                case FormType.Add: case FormType.Register:
                     if (!InputValido(Nombre, Apellido, TipoDocumento,
                         NumeroDocumento, Correo, Telefono, Calle, Nro ,Piso, Departamento, Ciudad, Pais, Nacionalidad, FechaNacimiento))
                         return;
@@ -184,9 +192,17 @@ namespace FrbaHotel.AbmCliente
                     Cliente NewUser = new Cliente(null, Nombre, Apellido, TipoDocumento, Convert.ToInt64(NumeroDocumento), Correo,
                         Telefono, Calle, Convert.ToInt32(Nro), Convert.ToInt32("0" + Piso), Departamento, Ciudad, Pais, Nacionalidad, DateTime.ParseExact(FechaNacimiento, "dd/MM/yyyy", CultureInfo.InvariantCulture), true);
 
-                    if (new ClienteDAO().InsertarNuevoUsuario(NewUser))
-                        this.Close();
-                    break;
+                    if (new ClienteDAO().InsertarNuevoUsuario(NewUser, type))
+                    {
+                        if (type == FormType.Add)
+                            this.Close();
+                        else
+                        {
+                            cliente = NewUser;
+                            this.DialogResult = DialogResult.OK;
+                        }
+                    }
+                break;
                 case FormType.Modify:
                     if (!InputValido(Nombre, Apellido, TipoDocumento,
                         NumeroDocumento, Correo, Telefono, Calle, Nro ,Piso, Departamento, Ciudad, Pais, Nacionalidad, FechaNacimiento))
@@ -213,7 +229,7 @@ namespace FrbaHotel.AbmCliente
                         parent.RefreshGrid();
                         this.Close();
                     }
-                    break;
+                break;
                 case FormType.Delete:
                     
                     if (new ClienteDAO().DeshabilitarUsuario(cliente))
@@ -221,13 +237,14 @@ namespace FrbaHotel.AbmCliente
                         parent.RefreshGrid();
                         this.Close();
                     }
-                    break;
+                break;
             }
         }
 
         private bool InputValido(string Nombre, string Apellido, TipoDocumento TipoDocumento, string NumeroDocumento, string Correo,
             string Telefono, string Calle, string Nro, string Piso, string Departamento, string Ciudad, Pais Pais, string Nacionalidad, string FechaNacimiento)
         {
+            ClienteDAO cDAO = new ClienteDAO();
             // pattern q matchea un email 
             // source: https://stackoverflow.com/questions/1365407/c-sharp-code-to-validate-email-address
             const string pattern = @"^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?$";
@@ -256,6 +273,11 @@ namespace FrbaHotel.AbmCliente
                 ErrMsg += "Debe ingresar una nacionalidad\n";
             if (FechaNacimiento.Equals(""))
                 ErrMsg += "Debe seleccionar una fecha de nacimiento\n";
+            if (type != FormType.Modify && !Correo.Equals("") && !cDAO.isCorreoUnico(Correo))
+                ErrMsg += "El correo que ingresó ya está en uso\n";
+            if (type != FormType.Modify && !NumeroDocumento.Equals("")
+                && TipoDocumento != null && !cDAO.isDocumentoUnico(TipoDocumento, Convert.ToInt64(NumeroDocumento)))
+                ErrMsg += "El tipo y documento ya están en uso\n";
 
             bool Valido = ErrMsg.Equals("");
             if (!Valido)

@@ -1,4 +1,5 @@
 ﻿using FrbaHotel.Database;
+using FrbaHotel.Forms;
 using FrbaHotel.Utils;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,22 @@ namespace FrbaHotel.Model.DAO
 {
     class ClienteDAO
     {
-        internal List<Cliente> ObtenerClientesFiltrado(string Nombre, string Apellido, TipoDocumento TipoDocumento, long Documento, string Correo, bool SoloActivos)
+        public bool isCorreoUnico(string Correo)
+        {
+            return Convert.ToBoolean(DatabaseConnection.GetInstance().ExecuteProcedureScalar("VALIDAR_CORREO_UNICO_CLIENTE",
+                new SqlParameter("@correo", Correo)));
+        }
+
+        public bool isDocumentoUnico(TipoDocumento Tipo, long Documento)
+        {
+            return Convert.ToBoolean(
+                DatabaseConnection.GetInstance().ExecuteProcedureScalar("VALIDAR_DOCUMENTO_UNICO_CLIENTE",
+                new SqlParameter("@id_tipo_documento", Tipo.Id),
+                new SqlParameter("@numero_documento_cliente", Documento)
+                ));
+        }
+
+        public List<Cliente> ObtenerClientesFiltrado(string Nombre, string Apellido, TipoDocumento TipoDocumento, long Documento, string Correo, bool SoloActivos)
         {
             List<Cliente> clientes = new List<Cliente>();
             Dictionary<int, TipoDocumento> TiposDoc = new Dictionary<int, TipoDocumento>();
@@ -65,6 +81,40 @@ namespace FrbaHotel.Model.DAO
             return clientes;
         }
 
+        public bool InsertarClientePreexistente(Cliente Cliente)
+        {
+            try
+            {
+                int idCliente = Convert.ToInt32(DatabaseConnection.GetInstance().ExecuteProcedureScalar("INSERTAR_CLIENTE_PREEXISTENTE",
+                    new SqlParameter("@nombre_cliente", Cliente.Nombre),
+                    new SqlParameter("@apellido_cliente", Cliente.Apellido),
+                    new SqlParameter("@id_tipo_documento", Cliente.TipoDocumento.Id),
+                    new SqlParameter("@numero_documento_cliente", Cliente.Documento),
+                    new SqlParameter("@correo_cliente", Cliente.Correo),
+                    new SqlParameter("@telefono_cliente", Cliente.Telefono),
+                    new SqlParameter("@domicilio_calle_cliente", Cliente.Calle),
+                    new SqlParameter("@domicilio_numero_cliente", Cliente.Nro),
+                    new SqlParameter("@domicilio_piso_cliente", Cliente.Piso),
+                    new SqlParameter("@domicilio_departamento_cliente", Cliente.Departamento),
+                    new SqlParameter("@ciudad_cliente", Cliente.Ciudad),
+                    new SqlParameter("@id_pais", Cliente.Pais.Id),
+                    new SqlParameter("@nacionalidad_cliente", Cliente.Nacionalidad),
+                    new SqlParameter("@fecha_nacimiento_cliente", Cliente.FechaNacimiento)
+                ));
+                Cliente.Id = idCliente;
+
+                LogUtils.LogInfo("Se creó cliente preexistente " + Cliente.Nombre + " " + Cliente.Apellido);
+                MessageBox.Show("Se agregó satisfactoriamente el cliente preexistente " + Cliente.Nombre + " " + Cliente.Apellido, "INFO");
+                return true;
+            }
+            catch (Exception Ex)
+            {
+                LogUtils.LogError(Ex);
+                MessageBox.Show("Hubo un error al intentar agregar un cliente preexistente. Revise el log", "ERROR");
+                return false;
+            }
+        }
+
         private SqlParameter[] GenerateParamsFilter(string Nombre, string Apellido,
                 TipoDocumento TipoDocumento, long Documento, string Correo, bool SoloActivos)
         {
@@ -80,12 +130,13 @@ namespace FrbaHotel.Model.DAO
             return Params.ToArray();
         }
 
-        internal bool InsertarNuevoUsuario(Cliente cliente)
+        public bool InsertarNuevoUsuario(Cliente cliente, FormType type)
         {
             try
             {
                 DatabaseConnection.GetInstance()
-                    .ExecuteProcedureNonQuery("INSERTAR_NUEVO_CLIENTE", GenerateParamsDML(cliente));
+                    .ExecuteProcedureNonQuery(type == FormType.Add ? 
+                    "INSERTAR_NUEVO_CLIENTE" : "INSERTAR_NUEVO_CLIENTE_SIN_VALIDACION", GenerateParamsDML(cliente, type));
                 LogUtils.LogInfo("Se creó cliente " + cliente.Nombre + " " + cliente.Apellido);
                 MessageBox.Show("Se agregó satisfactoriamente el cliente " + cliente.Nombre + " " + cliente.Apellido, "INFO");
                 return true;
@@ -111,12 +162,12 @@ namespace FrbaHotel.Model.DAO
             }
         }
 
-        internal bool ModificarUsuario(Cliente Cliente)
+        public bool ModificarUsuario(Cliente Cliente)
         {
             try
             {
                 DatabaseConnection.GetInstance()
-                    .ExecuteProcedureNonQuery("MODIFICAR_CLIENTE", GenerateParamsDML(Cliente));
+                    .ExecuteProcedureNonQuery("MODIFICAR_CLIENTE", GenerateParamsDML(Cliente, FormType.Modify));
                 LogUtils.LogInfo("Se modificó cliente " + Cliente.Nombre + " " + Cliente.Apellido);
                 MessageBox.Show("Se modificó satisfactoriamente el cliente " + Cliente.Nombre + " " + Cliente.Apellido, "INFO");
                 return true;
@@ -141,11 +192,12 @@ namespace FrbaHotel.Model.DAO
             }
         }
 
-        private SqlParameter[] GenerateParamsDML(Cliente Cliente)
+        private SqlParameter[] GenerateParamsDML(Cliente Cliente, FormType type)
         {
             List<SqlParameter> Params = new List<SqlParameter>();
             
-            Params.Add(new SqlParameter("@id_rol_user", Session.Rol.Id));
+            if (type == FormType.Add)
+                Params.Add(new SqlParameter("@id_rol_user", Session.Rol.Id));
 
             if (Cliente.Id != null)
                 Params.Add(new SqlParameter("@id_cliente", Cliente.Id));
@@ -171,7 +223,7 @@ namespace FrbaHotel.Model.DAO
             return Params.ToArray();
         }
 
-        internal bool DeshabilitarUsuario(Cliente Cliente)
+        public bool DeshabilitarUsuario(Cliente Cliente)
         {
             try
             {
@@ -190,6 +242,62 @@ namespace FrbaHotel.Model.DAO
                 MessageBox.Show("Hubo un error al intentar deshabilitar un cliente. Revise el log", "ERROR");
                 return false;
             }
+        }
+
+        public List<Cliente> ObtenerClientesCompletosFiltrado(TipoDocumento TipoDocumento, long Documento, string Correo)
+        {
+            List<Cliente> clientes = new List<Cliente>();
+            Dictionary<int, TipoDocumento> TiposDoc = new Dictionary<int, TipoDocumento>();
+
+            List<TipoDocumento> tempDocs = new TipoDocumentoDAO().ObtenerTiposDocumento();
+            foreach (var TipoDoc in tempDocs)
+                TiposDoc.Add(TipoDoc.Id.Value, TipoDoc);
+
+            foreach (var row in DatabaseConnection.GetInstance().
+                ExecuteProcedure("OBTENER_CLIENTES_COMPLETOS_FILTRADOS",
+                    new SqlParameter("@id_documento", TipoDocumento.Id),
+                    new SqlParameter("@numero_documento", Documento),
+                    new SqlParameter("@correo", Correo)
+                ))
+            {
+                int nro = 0;
+                int piso = 0;
+                Pais pais;
+
+                if (!(Convert.ToString(row["domicilio_numero_cliente"]).Equals("")))
+                    nro = Convert.ToInt32(row["domicilio_numero_cliente"]);
+
+                if (!(Convert.ToString(row["domicilio_piso_cliente"]).Equals("")))
+                    piso = Convert.ToInt32(row["domicilio_piso_cliente"]);
+
+                if (!(row["id_pais"].Equals(DBNull.Value)))
+                    pais = new Pais(Convert.ToInt32(row["id_pais"]), new PaisDAO().ObtenerNombrePais(Convert.ToInt32(row["id_pais"])));
+                else
+                    pais = new Pais(-1, "");
+
+                Cliente cliente = new Cliente(
+                    Convert.ToInt32(row["id_cliente"]),
+                    Convert.ToString(row["nombre_cliente"]),
+                    Convert.ToString(row["apellido_cliente"]),
+                    TiposDoc[Convert.ToInt32(row["id_tipo_documento"])],
+                    Convert.ToInt64(row["numero_documento_cliente"]),
+                    Convert.ToString(row["correo_cliente"]),
+                    Convert.ToString(row["telefono_cliente"]),
+                    Convert.ToString(row["domicilio_calle_cliente"]),
+                    nro,
+                    piso,
+                    Convert.ToString(row["domicilio_departamento_cliente"]),
+                    Convert.ToString(row["ciudad_cliente"]),
+                    pais,
+                    Convert.ToString(row["nacionalidad_cliente"]),
+                    Convert.ToDateTime(row["fecha_nacimiento_cliente"]),
+                    Convert.ToBoolean(row["estado_cliente"])
+                );
+
+                clientes.Add(cliente);
+            }
+
+            return clientes;
         }
     }
 }

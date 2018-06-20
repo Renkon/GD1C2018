@@ -41,6 +41,44 @@ namespace FrbaHotel.Model.DAO
             return Habitaciones;
         }
 
+        public List<Habitacion> ObtenerHabitacionesDisponiblesReserva(DateTime inicio, DateTime fin, Hotel hotel)
+        {
+            List<Habitacion> Habitaciones = new List<Habitacion>();
+
+            Dictionary<int, TipoHabitacion> TiposHab = new Dictionary<int, TipoHabitacion>();
+
+            List<TipoHabitacion> tempHabs = new TipoHabitacionDAO().ObtenerTiposHabitacion();
+            foreach (var TipoHab in tempHabs)
+                TiposHab.Add(TipoHab.Id, TipoHab);
+
+            foreach (var row in DatabaseConnection.GetInstance().
+                ExecuteProcedure("OBTENER_HABITACIONES_DISPONIBLES_RESERVA", 
+                    GetHabitacionesDisponiblesParameters(inicio, fin, hotel)))
+            {
+                int Id = Convert.ToInt32(row["id_habitacion"]);
+
+                if (Id == -1) // Hotel cerrado??
+                {
+                    Habitaciones.Add(new Habitacion(Id));
+                    break;
+                }
+
+                Habitacion h = new Habitacion(
+                    Id,
+                    hotel,
+                    Convert.ToInt32(row["numero_habitacion"]),
+                    Convert.ToInt32(row["piso_habitacion"]),
+                    Convert.ToString(row["ubicacion_habitacion"]),
+                    TiposHab[Convert.ToInt32(row["id_tipo_habitacion"])],
+                    Convert.ToString(row["descripcion_habitacion"])
+                );
+
+                Habitaciones.Add(h);
+            }
+
+            return Habitaciones;
+        }
+
         public bool InsertarNuevaHabitacion(Habitacion NuevaHab)
         {
             try
@@ -135,6 +173,19 @@ namespace FrbaHotel.Model.DAO
                 (object) DBNull.Value : Habitacion.Ubicación));
             Params.Add(new SqlParameter("@descripcion_habitacion", Habitacion.Descripción.Equals("") ?
                 (object) DBNull.Value : Habitacion.Descripción));
+
+            return Params.ToArray();
+        }
+
+        private SqlParameter[] GetHabitacionesDisponiblesParameters(DateTime inicio, DateTime fin, Hotel hotel)
+        {
+            List<SqlParameter> Params = new List<SqlParameter>();
+
+            Params.Add(new SqlParameter("@id_rol", Session.Rol.Id));
+            Params.Add(new SqlParameter("@today", Config.GetInstance().GetCurrentDate()));
+            Params.Add(new SqlParameter("@fecha_inicio", inicio));
+            Params.Add(new SqlParameter("@fecha_fin", fin));
+            Params.Add(new SqlParameter("@id_hotel", hotel.Id));
 
             return Params.ToArray();
         }

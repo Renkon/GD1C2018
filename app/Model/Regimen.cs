@@ -21,6 +21,11 @@ namespace FrbaHotel.Model
             this.Estado = Estado;
         }
 
+        public Regimen(int Id)
+        {
+            this.Id = Id;
+        }
+
         public override string ToString()
         {
             return Descripción;

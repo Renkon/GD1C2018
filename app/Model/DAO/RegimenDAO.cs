@@ -30,6 +30,12 @@ namespace FrbaHotel.Model.DAO
             return Regimenes;
         }
 
+        public Regimen ObtenerRegimenAllInclusive()
+        {
+            return new Regimen(Convert.ToInt32(DatabaseConnection.GetInstance().
+                ExecuteProcedureScalar("OBTENER_REGIMEN_ALL_INCLUSIVE")));
+        }
+
         public List<Regimen> ObtenerRegimenesActivosDeHotel(Hotel Hotel)
         {
             List<Regimen> Regimenes = new List<Regimen>();

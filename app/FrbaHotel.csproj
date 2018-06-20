@@ -119,11 +119,23 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\FormType.cs" />
+    <Compile Include="Forms\GenerarModificacionReserva\ActualizarClienteMigrado.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\GenerarModificacionReserva\ActualizarClienteMigrado.Designer.cs">
+      <DependentUpon>ActualizarClienteMigrado.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\GenerarModificacionReserva\ReservaFormPaso1.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\GenerarModificacionReserva\ReservaFormPaso1.Designer.cs">
       <DependentUpon>ReservaFormPaso1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\GenerarModificacionReserva\ReservaFormPaso2.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\GenerarModificacionReserva\ReservaFormPaso2.Designer.cs">
+      <DependentUpon>ReservaFormPaso2.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\GenerarModificacionReserva\SeleccionarHabitacion.cs">
       <SubType>Form</SubType>
@@ -185,15 +197,18 @@
     <Compile Include="Model\DAO\HotelDAO.cs" />
     <Compile Include="Model\DAO\PaisDAO.cs" />
     <Compile Include="Model\DAO\RegimenDAO.cs" />
+    <Compile Include="Model\DAO\ReservaDAO.cs" />
     <Compile Include="Model\DAO\RolDAO.cs" />
     <Compile Include="Model\DAO\TipoDocumentoDAO.cs" />
     <Compile Include="Model\DAO\TipoHabitacionDAO.cs" />
     <Compile Include="Model\DAO\UsuarioDAO.cs" />
+    <Compile Include="Model\EstadoReserva.cs" />
     <Compile Include="Model\Funcionalidad.cs" />
     <Compile Include="Model\Habitacion.cs" />
     <Compile Include="Model\Hotel.cs" />
     <Compile Include="Model\Pais.cs" />
     <Compile Include="Model\Regimen.cs" />
+    <Compile Include="Model\Reserva.cs" />
     <Compile Include="Model\Rol.cs" />
     <Compile Include="Model\TipoDocumento.cs" />
     <Compile Include="Model\TipoHabitacion.cs" />
@@ -252,8 +267,14 @@
     <EmbeddedResource Include="Forms\AbmUsuario\ViewerUsuarioForm.resx">
       <DependentUpon>ViewerUsuarioForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\GenerarModificacionReserva\ActualizarClienteMigrado.resx">
+      <DependentUpon>ActualizarClienteMigrado.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\GenerarModificacionReserva\ReservaFormPaso1.resx">
       <DependentUpon>ReservaFormPaso1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\GenerarModificacionReserva\ReservaFormPaso2.resx">
+      <DependentUpon>ReservaFormPaso2.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\GenerarModificacionReserva\SeleccionarHabitacion.resx">
       <DependentUpon>SeleccionarHabitacion.cs</DependentUpon>

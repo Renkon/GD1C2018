@@ -1,9 +1,11 @@
-﻿using FrbaHotel.Model;
+﻿using FrbaHotel.Database;
+using FrbaHotel.Model;
 using FrbaHotel.Model.DAO;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -19,8 +21,10 @@ namespace FrbaHotel.Forms.GenerarModificacionReserva
         {
             InitializeComponent();
 
+            monthCalendar1.MinDate = Config.GetInstance().GetCurrentDate();
             monthCalendar1.TodayDate = Config.GetInstance().GetCurrentDate();
             monthCalendar2.TodayDate = Config.GetInstance().GetCurrentDate();
+
             
             LoadData();
 
@@ -33,9 +37,135 @@ namespace FrbaHotel.Forms.GenerarModificacionReserva
         }
 
         private void ValidateReserva(DateTime inicio, DateTime fin,
-            Regimen regimen, Hotel hotel, List<TipoHabitacion> habitaciones)
+            Regimen regimen, Hotel hotel, List<TipoHabitacion> tiposHabitación)
         {
-            // TODO: definir una estrategia para validar la reserva!
+            List<Habitacion> habitaciones = new HabitacionDAO().ObtenerHabitacionesDisponiblesReserva(inicio, fin, hotel);
+
+            if (habitaciones.Count == 0) // No hay habitaciones disponibles
+            {
+                MessageBox.Show("Lo sentimos. No hay ninguna habitación disponible en ese periodo", "INFO");
+                return;
+            }
+
+            if (habitaciones.Count == 1 && habitaciones[0].Id == -1) // Hotel cerrado ??
+            {
+                MessageBox.Show("Lo sentimos. Durante ese período el hotel se cerrará temporalmente", "INFO");
+                return;
+            }
+
+            // Hacemos la validación de tipos de habitaación con las habitaciones
+            // Para eso generamos un dictionary por tipo de habitación y cantidad ^.^
+            Dictionary<TipoHabitacion, int> tiposNecesarios = new Dictionary<TipoHabitacion,int>();
+            Dictionary<TipoHabitacion, int> tiposDisponibles = new Dictionary<TipoHabitacion, int>();
+            foreach (var tipo in tiposHabitación)
+            {
+                if (!tiposNecesarios.ContainsKey(tipo))
+                    tiposNecesarios[tipo] = 1;
+                else
+                    tiposNecesarios[tipo]++;
+            }
+
+            foreach (var tipo in new TipoHabitacionDAO().ObtenerTiposHabitacion())
+                tiposDisponibles[tipo] = 0;
+
+            // Y ahora analizamos qué habitaciones se van disponibilizando
+            List<Habitacion> habitacionesTomadas = new List<Habitacion>();
+
+            // Finalmente, loopeamos por cada habitación hasta asegurarnos que ningun tipo de habitación requiera más.
+            foreach (var habitación in habitaciones)
+            {
+                TipoHabitacion tipo = habitación.TipoHabitación;
+                if (tiposNecesarios.ContainsKey(tipo) && tiposNecesarios[tipo] > 0)
+                {
+                    tiposNecesarios[tipo]--;
+                    habitacionesTomadas.Add(habitación);
+                }
+                
+                tiposDisponibles[tipo]++;
+            }
+
+            if (!tiposNecesarios.All(pair => pair.Value == 0))
+            {
+                StringBuilder noHabitaciones = new StringBuilder(
+                    "No hay suficientes habitaciones disponibles.\n\nPara este periodo, contamos con:\n\n");
+
+                foreach (var kv in tiposDisponibles)
+                {
+                    noHabitaciones.Append(kv.Key.Descripción).Append(": ").Append(kv.Value)
+                        .Append(" habitacion(es) disponible(s)\n");
+                }
+
+                noHabitaciones.Append("\nLo sentimos");
+
+                MessageBox.Show(noHabitaciones.ToString(), "INFO");
+                return;
+            }
+
+            // Armo el nuevo string en base a las habitaciones
+            StringBuilder PrecioRecibo = new StringBuilder("Detalle de la reserva\n\n");
+            double SubTotalDiario = 0;
+            int dias = (fin - inicio).Days;
+            PrecioRecibo.Append(dias).Append(" día(s) reservado(s)\n\n");
+            foreach (var habitacion in habitacionesTomadas)
+            {
+                var tipo = habitacion.TipoHabitación;
+                double precioDiario = GetPrecioFinalDiarioHabitación(regimen, hotel, tipo);
+                PrecioRecibo.Append("Habitación ").Append(habitacion.Número).Append(" - ")
+                    .Append(tipo.Descripción).Append(". USD ")
+                    .Append(precioDiario).Append(" por día.\n        Subtotal (habitación) por estadía: USD ")
+                    .Append(precioDiario * dias).Append(".\n");
+
+                SubTotalDiario += precioDiario;
+            }
+
+            if (regimen.Equals(new RegimenDAO().ObtenerRegimenAllInclusive()))
+                PrecioRecibo.Append("\nPrecio FINAL (todo incluído): USD ");
+            else
+                PrecioRecibo.Append("\nSubtotal: USD ");
+
+            PrecioRecibo.Append(SubTotalDiario * dias).Append("\n\n¿Desea continuar con la reserva?");
+
+            if (MessageBox.Show(PrecioRecibo.ToString(), "ATENCIÓN!", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                ProcederFormCliente(inicio, fin, regimen, hotel, habitacionesTomadas);
+            }
+        }
+
+        private void ProcederFormCliente(DateTime inicio, DateTime fin, Regimen regimen,
+            Hotel hotel, List<Habitacion> habitaciones)
+        {
+            DateTime fechaReserva = Config.GetInstance().GetCurrentDate();
+            Cliente cliente;
+
+            ReservaFormPaso2 Form = new ReservaFormPaso2();
+            if (Form.ShowDialog() == DialogResult.OK)
+            {
+                cliente = Form.Cliente;
+                Form.Close();
+                Form.Dispose();
+            }
+            else
+            {
+                Form.Close();
+                Form.Dispose();
+                return;
+            }
+
+            // Ya tenemos todos los datos
+            // f. reserva, f. inicio, f. fin, regimen, hotel, habitaciones y cliente
+            // Validamos inicialmente si el cliente está habilitado
+            if (!cliente.Estado)
+            {
+                MessageBox.Show("Lo sentimos. Usted no puede realizar reservas en este momento.\n"
+                    + "Contacte a la administración para solicitar la re-habilitación.", "INFO");
+                return;
+            }
+
+            Reserva reserva = new Reserva(null, fechaReserva, inicio, fin, cliente, 
+                regimen, new EstadoReserva(1), habitaciones);
+
+            if (new ReservaDAO().InsertarReserva(reserva))
+                this.Close();
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -156,7 +286,7 @@ namespace FrbaHotel.Forms.GenerarModificacionReserva
 
                 double precioFinalDiario = GetPrecioFinalDiarioHabitación(regimen, hotel, tipo);
                    
-                Precio.Append("US ")
+                Precio.Append("USD ")
                     .Append(precioFinalDiario.ToString("0.00"))
                     .Append(" final por día - ")
                     .Append(tipo.Descripción)

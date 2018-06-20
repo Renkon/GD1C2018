@@ -41,6 +41,11 @@ namespace FrbaHotel.Model.DAO
             return Hoteles;
         }
 
+        public Hotel ObtenerHotelPorId(int Id)
+        {
+            return ObtenerHoteles().First(h => h.Id == Id);
+        }
+
         public List<Hotel> ObtenerHotelesDeUsuario(Usuario Usuario)
         {
             List<Hotel> HotelesUsuario = new List<Hotel>();
