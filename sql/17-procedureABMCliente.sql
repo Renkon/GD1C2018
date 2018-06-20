@@ -18,10 +18,11 @@ BEGIN
         domicilio_numero_cliente, domicilio_piso_cliente, domicilio_departamento_cliente, ciudad_cliente, id_pais, nacionalidad_cliente, fecha_nacimiento_cliente, estado_cliente    FROM [EL_MONSTRUO_DEL_LAGO_MASER].[clientes]
     WHERE LOWER(nombre_cliente) LIKE '%' + LOWER(@nombre) + '%'
     AND LOWER(apellido_cliente) LIKE '%' + LOWER(@apellido) + '%'
-	AND LOWER(correo_cliente) LIKE '%' + LOWER(@correo) + '%'
+    AND LOWER(correo_cliente) LIKE '%' + LOWER(@correo) + '%'
     AND (@id_documento = -1 OR id_tipo_documento = @id_documento)
     AND (@numero_documento = 0 OR CAST (numero_documento_cliente AS VARCHAR) LIKE '%' + CAST (@numero_documento AS VARCHAR) + '%')
     AND (@soloActivos = 0 OR estado_cliente = 1)
+    AND id_cliente != 0
 END
 
 GO
@@ -91,6 +92,7 @@ BEGIN
     WHERE LOWER(correo_cliente) LIKE '%' + LOWER(@correo) + '%'
     AND (@id_documento = -1 OR id_tipo_documento = @id_documento)
     AND (@numero_documento = 0 OR CAST (numero_documento_cliente AS VARCHAR) LIKE '%' + CAST (@numero_documento AS VARCHAR) + '%')
+    AND id_cliente != 0
 END
 
 GO

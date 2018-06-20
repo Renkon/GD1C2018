@@ -1,7 +1,7 @@
 -------------------------------------------------------------------------------------------------------------------------------------------
 CREATE TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[clientes] -- 1
 (
-    id_cliente                      INT IDENTITY(1, 1) PRIMARY KEY,
+    id_cliente                      INT IDENTITY(0, 1) PRIMARY KEY,
     nombre_cliente                  NVARCHAR(255),
     apellido_cliente                NVARCHAR(255),
     id_tipo_documento               INT NOT NULL DEFAULT 6,

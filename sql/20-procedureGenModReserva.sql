@@ -108,6 +108,7 @@ GO
 CREATE VIEW [EL_MONSTRUO_DEL_LAGO_MASER].[clientes_completos]
 AS
 	SELECT * FROM [EL_MONSTRUO_DEL_LAGO_MASER].[clientes]
+        WHERE id_cliente != 0
 	UNION
 	SELECT DISTINCT
 		-1 id_cliente,
