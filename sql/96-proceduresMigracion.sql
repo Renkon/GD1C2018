@@ -405,14 +405,6 @@ BEGIN
 				
                 ---------------------- CLIENTES ------------------------------
 
-                -- Finalmente defino nulo los IDs utilizados.
-                SET @id_hotel = NULL;
-                SET @id_habitacion = NULL;
-                SET @id_regimen = NULL;
-                SET @id_estadia = NULL;
-                SET @id_consumo = NULL;
-                SET @id_item_factura = NULL;
-                SET @id_cliente = NULL;
             END TRY
             BEGIN CATCH
                 INSERT INTO [EL_MONSTRUO_DEL_LAGO_MASER].[migracion_errores]
@@ -434,6 +426,7 @@ BEGIN
                     @id_reserva,
                     @cant_noches_reserva,
                     @fecha_ingreso_estadia,
+                    @id_estadia,
                     @cant_dias_estadia,
                     @id_consumible,
                     @descripcion_consumible,
@@ -496,6 +489,14 @@ BEGIN
                                     @nacionalidad_cliente;
 
         SET @currentRow = @currentRow + 1;
+        -- Finalmente defino nulo los IDs utilizados.
+        SET @id_hotel = NULL;
+        SET @id_habitacion = NULL;
+        SET @id_regimen = NULL;
+        SET @id_estadia = NULL;
+        SET @id_consumo = NULL;
+        SET @id_item_factura = NULL;
+        SET @id_cliente = NULL;
 
         END
 

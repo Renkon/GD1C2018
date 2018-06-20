@@ -79,3 +79,19 @@ BEGIN
 END
 
 GO
+
+-- Filtra y obtiene los clientes de nuestro sistema, y los del sistema anterior
+CREATE PROCEDURE [EL_MONSTRUO_DEL_LAGO_MASER].[OBTENER_CLIENTES_COMPLETOS_FILTRADOS]
+    (@id_documento int, @numero_documento numeric(18,0), @correo nvarchar(255))
+AS
+BEGIN
+    SELECT TOP 100 id_cliente, nombre_cliente, apellido_cliente, id_tipo_documento, numero_documento_cliente, correo_cliente, telefono_cliente, domicilio_calle_cliente,
+        domicilio_numero_cliente, domicilio_piso_cliente, domicilio_departamento_cliente, ciudad_cliente, id_pais, nacionalidad_cliente, fecha_nacimiento_cliente, estado_cliente 
+	FROM [EL_MONSTRUO_DEL_LAGO_MASER].[clientes_completos]
+    WHERE LOWER(correo_cliente) LIKE '%' + LOWER(@correo) + '%'
+    AND (@id_documento = -1 OR id_tipo_documento = @id_documento)
+    AND (@numero_documento = 0 OR CAST (numero_documento_cliente AS VARCHAR) LIKE '%' + CAST (@numero_documento AS VARCHAR) + '%')
+END
+
+GO
+
