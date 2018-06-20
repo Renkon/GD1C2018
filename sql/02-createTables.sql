@@ -207,7 +207,6 @@ CREATE TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[reservas] -- 18
     fecha_realizacion_reserva     DATETIME NOT NULL,
     fecha_inicio_reserva          DATETIME NOT NULL,
     fecha_fin_reserva             DATETIME NOT NULL,
-    id_usuario                    INT NOT NULL,
     id_cliente                    INT NOT NULL,
     id_regimen                    INT NOT NULL,
     id_estado_reserva             INT NOT NULL DEFAULT 1
@@ -312,6 +311,15 @@ CREATE TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[cierres_temporales_hotel] -- 28
     motivo_cierre_temporal_hotel        NVARCHAR(2500) NOT NULL
 );
 
+-------------------------------------------------------------------------------------------------------------------------------------------
+CREATE TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[generacion_modificacion_reservas] -- 29
+(
+    id_generacion_modificacion_reserva      INT IDENTITY(1, 1) PRIMARY KEY,
+    id_reserva                              INT NOT NULL,
+    id_usuario                              INT NOT NULL,
+    tipo_generacion_modificacion_reserva    NCHAR(1) NOT NULL,
+    fecha_generacion_modificacion_reserva   DATETIME NOT NULL
+);
 
 -------------------------------------------------------------------------------------------------------------------------------------------
 
