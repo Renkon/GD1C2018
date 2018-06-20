@@ -41,7 +41,7 @@ namespace FrbaHotel.Model.DAO
             return Habitaciones;
         }
 
-        public List<Habitacion> ObtenerHabitacionesDisponiblesReserva(DateTime inicio, DateTime fin, Hotel hotel)
+        public List<Habitacion> ObtenerHabitacionesDisponiblesReserva(DateTime inicio, DateTime fin, Hotel hotel, Reserva reserva)
         {
             List<Habitacion> Habitaciones = new List<Habitacion>();
 
@@ -53,7 +53,7 @@ namespace FrbaHotel.Model.DAO
 
             foreach (var row in DatabaseConnection.GetInstance().
                 ExecuteProcedure("OBTENER_HABITACIONES_DISPONIBLES_RESERVA", 
-                    GetHabitacionesDisponiblesParameters(inicio, fin, hotel)))
+                    GetHabitacionesDisponiblesParameters(inicio, fin, hotel, reserva)))
             {
                 int Id = Convert.ToInt32(row["id_habitacion"]);
 
@@ -177,7 +177,7 @@ namespace FrbaHotel.Model.DAO
             return Params.ToArray();
         }
 
-        private SqlParameter[] GetHabitacionesDisponiblesParameters(DateTime inicio, DateTime fin, Hotel hotel)
+        private SqlParameter[] GetHabitacionesDisponiblesParameters(DateTime inicio, DateTime fin, Hotel hotel, Reserva reserva)
         {
             List<SqlParameter> Params = new List<SqlParameter>();
 
@@ -186,6 +186,7 @@ namespace FrbaHotel.Model.DAO
             Params.Add(new SqlParameter("@fecha_inicio", inicio));
             Params.Add(new SqlParameter("@fecha_fin", fin));
             Params.Add(new SqlParameter("@id_hotel", hotel.Id));
+            Params.Add(new SqlParameter("@id_reserva", reserva.Id));
 
             return Params.ToArray();
         }

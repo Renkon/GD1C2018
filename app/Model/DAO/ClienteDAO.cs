@@ -181,7 +181,8 @@ namespace FrbaHotel.Model.DAO
                     if (Sex.Message.Contains("UNIQUE"))
                         MessageBox.Show("No se pudo modificar el cliente. \nHay un usuario con ese documento y/o con ese correo.", "ERROR");
                 }
-                else throw;
+                else
+                    MessageBox.Show("Error SQL desconocido. Revise el log para más información", "ERROR");
                 return false;
             }
             catch (Exception Ex)
@@ -196,7 +197,7 @@ namespace FrbaHotel.Model.DAO
         {
             List<SqlParameter> Params = new List<SqlParameter>();
             
-            if (type == FormType.Add)
+            if (type == FormType.Add || type == FormType.Modify)
                 Params.Add(new SqlParameter("@id_rol_user", Session.Rol.Id));
 
             if (Cliente.Id != null)

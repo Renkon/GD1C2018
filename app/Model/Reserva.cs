@@ -16,10 +16,10 @@ namespace FrbaHotel.Model
         public Regimen Regimen { get; set; }
         public EstadoReserva EstadoReserva { get; set; }
         public List<Habitacion> Habitaciones { get; set; }
+        public List<TipoHabitacion> TiposHabitaciones { get; set; }
 
         public Reserva(int? Id, DateTime Fecha_Realización, DateTime Fecha_Inicio,
-            DateTime Fecha_Fin, Cliente Cliente, Regimen Regimen, EstadoReserva EstadoReserva,
-            List<Habitacion> Habitaciones)
+            DateTime Fecha_Fin, Cliente Cliente, Regimen Regimen, EstadoReserva EstadoReserva)
         {
             this.Id = Id;
             this.Fecha_Realización = Fecha_Realización;
@@ -28,7 +28,11 @@ namespace FrbaHotel.Model
             this.Cliente = Cliente;
             this.Regimen = Regimen;
             this.EstadoReserva = EstadoReserva;
-            this.Habitaciones = Habitaciones;
+        }
+
+        public Reserva(int? Id)
+        {
+            this.Id = Id;
         }
     }
 }

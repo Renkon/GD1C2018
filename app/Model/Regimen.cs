@@ -42,7 +42,7 @@ namespace FrbaHotel.Model
 
         public override int GetHashCode()
         {
-            return base.GetHashCode();
+            return this.Id.GetHashCode();
         }
     }
 }

@@ -10,6 +10,7 @@ using FrbaHotel.Forms.AbmUsuario;
 using FrbaHotel.Forms.GenerarModificacionReserva;
 using FrbaHotel.Forms.Login;
 using FrbaHotel.Login;
+using FrbaHotel.Model;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -122,7 +123,21 @@ namespace FrbaHotel
 
         private void nuevaReservaToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            new ReservaFormPaso1(FormType.Add).ShowDialog();
+            new ReservaFormPaso1(null, FormType.Add).ShowDialog();
+        }
+
+        private void modificarReservaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ReservaModificacion FormTmp = new ReservaModificacion();
+            if (FormTmp.ShowDialog() == DialogResult.OK)
+            {
+                Reserva r = FormTmp.Reserva;
+
+                FormTmp.Close();
+                FormTmp.Dispose();
+
+                new ReservaFormPaso1(r, FormType.Modify).ShowDialog();
+            }
         }
     }
 }

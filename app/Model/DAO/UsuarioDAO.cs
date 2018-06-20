@@ -160,9 +160,9 @@ namespace FrbaHotel.Model.DAO
                         MessageBox.Show("No se pudo agregar el usuario. Ese documento ya está en uso", "ERROR");
                     else if (Sex.Message.Contains("UNIQUE") && Sex.Message.Contains("EL_MONSTRUO_DEL_LAGO_MASER.cuenta"))
                         MessageBox.Show("No se pudo agregar el usuario. Ese nombre de usuario ya está en uso", "ERROR");
-                    else throw;
                 }
-                else throw;
+                else
+                    MessageBox.Show("Error SQL desconocido. Revise el log para más información", "ERROR");
                 return false;
             }
             catch (Exception Ex)

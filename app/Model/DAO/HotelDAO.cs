@@ -41,6 +41,14 @@ namespace FrbaHotel.Model.DAO
             return Hoteles;
         }
 
+        public Hotel ObtenerHotelPorReserva(Reserva r)
+        {
+            int Id = Convert.ToInt32(DatabaseConnection.GetInstance().
+                ExecuteProcedureScalar("OBTENER_HOTEL_DE_RESERVA", new SqlParameter("@id_reserva", r.Id)));
+
+            return ObtenerHotelPorId(Id);
+        }
+
         public Hotel ObtenerHotelPorId(int Id)
         {
             return ObtenerHoteles().First(h => h.Id == Id);

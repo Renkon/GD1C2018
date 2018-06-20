@@ -137,6 +137,12 @@
     <Compile Include="Forms\GenerarModificacionReserva\ReservaFormPaso2.Designer.cs">
       <DependentUpon>ReservaFormPaso2.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\GenerarModificacionReserva\ReservaModificacion.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\GenerarModificacionReserva\ReservaModificacion.Designer.cs">
+      <DependentUpon>ReservaModificacion.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\GenerarModificacionReserva\SeleccionarHabitacion.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -275,6 +281,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\GenerarModificacionReserva\ReservaFormPaso2.resx">
       <DependentUpon>ReservaFormPaso2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\GenerarModificacionReserva\ReservaModificacion.resx">
+      <DependentUpon>ReservaModificacion.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\GenerarModificacionReserva\SeleccionarHabitacion.resx">
       <DependentUpon>SeleccionarHabitacion.cs</DependentUpon>

@@ -16,17 +16,24 @@ namespace FrbaHotel.Forms.GenerarModificacionReserva
 {
     public partial class ReservaFormPaso1 : Form
     {
+        private Reserva reserva;
+        private FormType type;
 
-        public ReservaFormPaso1(FormType type)
+        public ReservaFormPaso1(Reserva reserva, FormType type)
         {
+            this.reserva = reserva;
+            this.type = type;
+
             InitializeComponent();
 
             monthCalendar1.MinDate = Config.GetInstance().GetCurrentDate();
             monthCalendar1.TodayDate = Config.GetInstance().GetCurrentDate();
             monthCalendar2.TodayDate = Config.GetInstance().GetCurrentDate();
 
-            
+            ApplyType();
+
             LoadData();
+            LoadContentFromReserva();
 
             if (Session.Hotel != null) // hay una sesión con hotel seleccionado
             {
@@ -36,10 +43,50 @@ namespace FrbaHotel.Forms.GenerarModificacionReserva
             }
         }
 
+        private void LoadContentFromReserva()
+        {
+            if (reserva != null)
+            {
+                textBox1.Text = reserva.Fecha_Inicio.ToString("dd/MM/yyyy");
+                textBox1.Tag = reserva.Fecha_Inicio;
+                monthCalendar1.SelectionStart = reserva.Fecha_Inicio;
+                monthCalendar1.MaxDate = reserva.Fecha_Fin.AddDays(-1);
+                textBox2.Text = reserva.Fecha_Fin.ToString("dd/MM/yyyy");
+                textBox2.Tag = reserva.Fecha_Fin;
+                monthCalendar2.SelectionStart = reserva.Fecha_Fin;
+                monthCalendar2.MinDate = reserva.Fecha_Inicio.AddDays(1);
+                comboBox1.SelectedItem = new HotelDAO().ObtenerHotelPorReserva(reserva);
+                comboBox2.SelectedItem = reserva.Regimen;
+
+                foreach (var tipo in reserva.TiposHabitaciones)
+                {
+                    dataGridView2.Rows.Add(tipo.Descripción, tipo.Huéspedes, tipo.Porcentual + "%");
+                    dataGridView2.Rows[dataGridView2.Rows.Count - 1].Tag = tipo;
+                    dataGridView2.Rows[dataGridView2.Rows.Count - 1].Cells[3].Value = "Eliminar habitación";
+                }
+            }
+        }
+
+        private void ApplyType()
+        {
+            switch (type)
+            {
+                case FormType.Add:
+                    this.Text = "Generación de una nueva reserva";
+                    button4.Text = "Continuar con reserva";
+                break;
+                case FormType.Modify:
+                    this.Text = "Modificación de reserva existente";
+                    button4.Text = "Modificar reserva";
+                break;
+            }
+        }
+
         private void ValidateReserva(DateTime inicio, DateTime fin,
             Regimen regimen, Hotel hotel, List<TipoHabitacion> tiposHabitación)
         {
-            List<Habitacion> habitaciones = new HabitacionDAO().ObtenerHabitacionesDisponiblesReserva(inicio, fin, hotel);
+            List<Habitacion> habitaciones = new HabitacionDAO().ObtenerHabitacionesDisponiblesReserva(
+                inicio, fin, hotel, reserva == null ? new Reserva(-1) : reserva);
 
             if (habitaciones.Count == 0) // No hay habitaciones disponibles
             {
@@ -127,8 +174,24 @@ namespace FrbaHotel.Forms.GenerarModificacionReserva
 
             if (MessageBox.Show(PrecioRecibo.ToString(), "ATENCIÓN!", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
-                ProcederFormCliente(inicio, fin, regimen, hotel, habitacionesTomadas);
+                if (reserva == null) // es nueva
+                    ProcederFormCliente(inicio, fin, regimen, hotel, habitacionesTomadas);
+                else
+                {
+                    reserva.Fecha_Inicio = inicio;
+                    reserva.Fecha_Fin = fin;
+                    reserva.Regimen = regimen;
+                    reserva.Habitaciones = habitacionesTomadas;
+
+                    ProcederUpdateReserva(reserva);
+                }
             }
+        }
+
+        private void ProcederUpdateReserva(Reserva reserva)
+        {
+            if (new ReservaDAO().ModificarReserva(reserva))
+                this.Close();
         }
 
         private void ProcederFormCliente(DateTime inicio, DateTime fin, Regimen regimen,
@@ -162,7 +225,8 @@ namespace FrbaHotel.Forms.GenerarModificacionReserva
             }
 
             Reserva reserva = new Reserva(null, fechaReserva, inicio, fin, cliente, 
-                regimen, new EstadoReserva(1), habitaciones);
+                regimen, new EstadoReserva(1));
+            reserva.Habitaciones = habitaciones;
 
             if (new ReservaDAO().InsertarReserva(reserva))
                 this.Close();

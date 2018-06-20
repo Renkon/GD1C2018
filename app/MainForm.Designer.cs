@@ -133,6 +133,7 @@ namespace FrbaHotel
             this.modificarReservaToolStripMenuItem.Name = "modificarReservaToolStripMenuItem";
             this.modificarReservaToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
             this.modificarReservaToolStripMenuItem.Text = "Modificar reserva";
+            this.modificarReservaToolStripMenuItem.Click += new System.EventHandler(this.modificarReservaToolStripMenuItem_Click);
             // 
             // cancelarReservaToolStripMenuItem
             // 
