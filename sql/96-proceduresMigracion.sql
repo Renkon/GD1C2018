@@ -332,8 +332,8 @@ BEGIN
                     IF @id_estadia IS NULL
                     BEGIN
                         INSERT INTO [EL_MONSTRUO_DEL_LAGO_MASER].[estadias]
-                            (id_reserva, id_usuario, fecha_ingreso_estadia, fecha_egreso_estadia)
-                        VALUES (@id_reserva, 1, @fecha_ingreso_estadia, @fecha_egreso_estadia);
+                            (id_reserva, id_usuario_ingreso, id_usuario_egreso, fecha_ingreso_estadia, fecha_egreso_estadia)
+                        VALUES (@id_reserva, 1, 1, @fecha_ingreso_estadia, @fecha_egreso_estadia);
                         SET @id_estadia = SCOPE_IDENTITY();
                     END
 
