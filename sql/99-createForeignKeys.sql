@@ -104,8 +104,8 @@ ALTER TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[cierres_temporales_hotel]
 ADD FOREIGN KEY (id_hotel) REFERENCES [EL_MONSTRUO_DEL_LAGO_MASER].[hoteles](id_hotel);
 
 ALTER TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[generacion_modificacion_reservas]
-ADD FOREIGN KEY (id_reserva) REFERENCES [reservas](id_reserva);
+ADD FOREIGN KEY (id_reserva) REFERENCES [EL_MONSTRUO_DEL_LAGO_MASER].[reservas](id_reserva);
 
 ALTER TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[generacion_modificacion_reservas]
-ADD FOREIGN KEY (id_usuario) REFERENCES [usuarios](id_usuario);
+ADD FOREIGN KEY (id_usuario) REFERENCES [EL_MONSTRUO_DEL_LAGO_MASER].[usuarios](id_usuario);
 
