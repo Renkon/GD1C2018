@@ -7,6 +7,7 @@ using FrbaHotel.Forms.AbmHabitacion;
 using FrbaHotel.Forms.AbmHotel;
 using FrbaHotel.Forms.AbmRol;
 using FrbaHotel.Forms.AbmUsuario;
+using FrbaHotel.Forms.CancelarReserva;
 using FrbaHotel.Forms.GenerarModificacionReserva;
 using FrbaHotel.Forms.Login;
 using FrbaHotel.Login;
@@ -128,7 +129,7 @@ namespace FrbaHotel
 
         private void modificarReservaToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ReservaModificacion FormTmp = new ReservaModificacion();
+            ReservaModDel FormTmp = new ReservaModDel(FormType.Modify);
             if (FormTmp.ShowDialog() == DialogResult.OK)
             {
                 Reserva r = FormTmp.Reserva;
@@ -137,6 +138,20 @@ namespace FrbaHotel
                 FormTmp.Dispose();
 
                 new ReservaFormPaso1(r, FormType.Modify).ShowDialog();
+            }
+        }
+
+        private void cancelarReservaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ReservaModDel FormTmp = new ReservaModDel(FormType.Delete);
+            if (FormTmp.ShowDialog() == DialogResult.OK)
+            {
+                Reserva r = FormTmp.Reserva;
+
+                FormTmp.Close();
+                FormTmp.Dispose();
+
+                new ReservaCancelForm(r).ShowDialog();
             }
         }
     }

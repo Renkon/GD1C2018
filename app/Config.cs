@@ -32,12 +32,14 @@ namespace FrbaHotel
             }
             else
             {
+                // Armo el string de conexión a la BBDD
                 ConnectionString =
                     new StringBuilder("Server=").Append(Properties["Host"]).Append("\\").Append(Properties["DbInstance"]).Append(";")
                               .Append("Database=").Append(Properties["Database"]).Append(";")
                               .Append("User Id=").Append(Properties["Username"]).Append(";")
                               .Append("Password=").Append(Properties["Password"]).Append(";")
                               .ToString();
+                // Seteo el día de hoy
                 CurrentDate = DateTime.ParseExact(Properties["Date"], "dd-MM-yyyy", CultureInfo.InvariantCulture);
             }
         }

@@ -13,13 +13,23 @@ using System.Windows.Forms;
 
 namespace FrbaHotel.Forms.GenerarModificacionReserva
 {
-    public partial class ReservaModificacion : Form
+    public partial class ReservaModDel : Form
     {
         public Reserva Reserva { get; private set; }
 
-        public ReservaModificacion()
+        public ReservaModDel(FormType type)
         {
             InitializeComponent();
+
+            switch (type)
+            {
+                case FormType.Modify:
+                    this.Text = "Modificación de reserva";
+                break;
+                case FormType.Delete:
+                    this.Text = "Eliminación de reserva";
+                break;
+            }
         }
 
         private void textBox1_Validating(object sender, CancelEventArgs e)

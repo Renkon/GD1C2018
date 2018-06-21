@@ -32,6 +32,24 @@ namespace FrbaHotel.Model.DAO
             }
         }
 
+        public bool CancelarReseva(Reserva reserva, String motivo)
+        {
+            try
+            {
+                DatabaseConnection.GetInstance()
+                    .ExecuteProcedureNonQuery("CANCELAR_RESERVA", GenerateParamsCancel(reserva, motivo));
+                LogUtils.LogInfo("Se canceló reserva con ID " + reserva.Id);
+                MessageBox.Show("Se canceló la reserva con código " + reserva.Id, "INFO");
+                return true;
+            }
+            catch (Exception Ex)
+            {
+                LogUtils.LogError(Ex);
+                MessageBox.Show("Hubo un error al intentar cancelar una reserva. Revise el log", "ERROR");
+                return false;
+            }
+        }
+
         public bool ModificarReserva(Reserva reserva)
         {
             try
@@ -67,6 +85,19 @@ namespace FrbaHotel.Model.DAO
             }
 
             return r;
+        }
+
+        private SqlParameter[] GenerateParamsCancel(Reserva reserva, string motivo)
+        {
+            List<SqlParameter> Params = new List<SqlParameter>();
+
+            Params.Add(new SqlParameter("@id_rol_user", Session.Rol.Id));
+            Params.Add(new SqlParameter("@id_reserva", reserva.Id));
+            Params.Add(new SqlParameter("@motivo_cancelacion_reserva", motivo));
+            Params.Add(new SqlParameter("@fecha_cancelacion_reserva", Config.GetInstance().GetCurrentDate()));
+            Params.Add(new SqlParameter("@id_usuario", Session.User.Id));
+
+            return Params.ToArray();
         }
 
         private SqlParameter[] GenerateParams(Reserva reserva)

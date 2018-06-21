@@ -24,6 +24,7 @@ namespace FrbaHotel.Model
         public Regimen(int Id)
         {
             this.Id = Id;
+            this.Estado = true;
         }
 
         public override string ToString()
