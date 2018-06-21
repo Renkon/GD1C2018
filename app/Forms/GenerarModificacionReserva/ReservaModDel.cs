@@ -53,7 +53,8 @@ namespace FrbaHotel.Forms.GenerarModificacionReserva
 
             if (reserva.Id == -1)
             {
-                MessageBox.Show("Lo sentimos, es posible que el código de reserva sea inválido, "
+                MessageBox.Show("Lo sentimos, es posible que el código de reserva sea inválido, que se "
+                    + "haya efectivizado por medio de una estadía en curso/finalizada, "
                     + "o que el período de modificación (hasta un día antes de su inicio) haya finalizado", "INFO");
                 return;
             }

@@ -308,8 +308,9 @@ namespace FrbaHotel
             // registrarEstadíaToolStripMenuItem
             // 
             this.registrarEstadíaToolStripMenuItem.Name = "registrarEstadíaToolStripMenuItem";
-            this.registrarEstadíaToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
-            this.registrarEstadíaToolStripMenuItem.Text = "Registrar estadía";
+            this.registrarEstadíaToolStripMenuItem.Size = new System.Drawing.Size(211, 22);
+            this.registrarEstadíaToolStripMenuItem.Text = "Registrar inicio/fin estadía";
+            this.registrarEstadíaToolStripMenuItem.Click += new System.EventHandler(this.registrarEstadíaToolStripMenuItem_Click);
             // 
             // consumiblesToolStripMenuItem
             // 

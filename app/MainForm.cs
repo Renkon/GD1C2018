@@ -154,5 +154,10 @@ namespace FrbaHotel
                 new ReservaCancelForm(r).ShowDialog();
             }
         }
+
+        private void registrarEstadíaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
