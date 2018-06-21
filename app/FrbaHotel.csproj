@@ -112,11 +112,11 @@
     <Compile Include="Forms\AbmUsuario\ViewerUsuarioForm.Designer.cs">
       <DependentUpon>ViewerUsuarioForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\CancelarReserva\Form1.cs">
+    <Compile Include="Forms\CancelarReserva\ReservaCancelForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\CancelarReserva\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="Forms\CancelarReserva\ReservaCancelForm.Designer.cs">
+      <DependentUpon>ReservaCancelForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\FormType.cs" />
     <Compile Include="Forms\GenerarModificacionReserva\ActualizarClienteMigrado.cs">
@@ -137,11 +137,11 @@
     <Compile Include="Forms\GenerarModificacionReserva\ReservaFormPaso2.Designer.cs">
       <DependentUpon>ReservaFormPaso2.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\GenerarModificacionReserva\ReservaModificacion.cs">
+    <Compile Include="Forms\GenerarModificacionReserva\ReservaModDel.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\GenerarModificacionReserva\ReservaModificacion.Designer.cs">
-      <DependentUpon>ReservaModificacion.cs</DependentUpon>
+    <Compile Include="Forms\GenerarModificacionReserva\ReservaModDel.Designer.cs">
+      <DependentUpon>ReservaModDel.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\GenerarModificacionReserva\SeleccionarHabitacion.cs">
       <SubType>Form</SubType>
@@ -273,6 +273,9 @@
     <EmbeddedResource Include="Forms\AbmUsuario\ViewerUsuarioForm.resx">
       <DependentUpon>ViewerUsuarioForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\CancelarReserva\ReservaCancelForm.resx">
+      <DependentUpon>ReservaCancelForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\GenerarModificacionReserva\ActualizarClienteMigrado.resx">
       <DependentUpon>ActualizarClienteMigrado.cs</DependentUpon>
     </EmbeddedResource>
@@ -282,8 +285,8 @@
     <EmbeddedResource Include="Forms\GenerarModificacionReserva\ReservaFormPaso2.resx">
       <DependentUpon>ReservaFormPaso2.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\GenerarModificacionReserva\ReservaModificacion.resx">
-      <DependentUpon>ReservaModificacion.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\GenerarModificacionReserva\ReservaModDel.resx">
+      <DependentUpon>ReservaModDel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\GenerarModificacionReserva\SeleccionarHabitacion.resx">
       <DependentUpon>SeleccionarHabitacion.cs</DependentUpon>

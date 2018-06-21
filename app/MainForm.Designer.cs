@@ -140,6 +140,7 @@ namespace FrbaHotel
             this.cancelarReservaToolStripMenuItem.Name = "cancelarReservaToolStripMenuItem";
             this.cancelarReservaToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
             this.cancelarReservaToolStripMenuItem.Text = "Cancelar reserva";
+            this.cancelarReservaToolStripMenuItem.Click += new System.EventHandler(this.cancelarReservaToolStripMenuItem_Click);
             // 
             // rolesToolStripMenuItem
             // 
