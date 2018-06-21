@@ -173,6 +173,18 @@
     <Compile Include="Forms\Login\LoginRol.Designer.cs">
       <DependentUpon>LoginRol.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\RegistrarEstadia\EstadiaForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\RegistrarEstadia\EstadiaForm.Designer.cs">
+      <DependentUpon>EstadiaForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\RegistrarEstadia\ReservaGetterForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\RegistrarEstadia\ReservaGetterForm.Designer.cs">
+      <DependentUpon>ReservaGetterForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -198,6 +210,7 @@
     <Compile Include="Model\DAO\CierreTemporalHabitacionDAO.cs" />
     <Compile Include="Model\DAO\CierreTemporalHotelDAO.cs" />
     <Compile Include="Model\DAO\ClienteDAO.cs" />
+    <Compile Include="Model\DAO\EstadiaDAO.cs" />
     <Compile Include="Model\DAO\FuncionalidadDAO.cs" />
     <Compile Include="Model\DAO\HabitacionDAO.cs" />
     <Compile Include="Model\DAO\HotelDAO.cs" />
@@ -208,6 +221,7 @@
     <Compile Include="Model\DAO\TipoDocumentoDAO.cs" />
     <Compile Include="Model\DAO\TipoHabitacionDAO.cs" />
     <Compile Include="Model\DAO\UsuarioDAO.cs" />
+    <Compile Include="Model\Estadia.cs" />
     <Compile Include="Model\EstadoReserva.cs" />
     <Compile Include="Model\Funcionalidad.cs" />
     <Compile Include="Model\Habitacion.cs" />
@@ -225,12 +239,6 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\RegistrarConsumible\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\RegistrarEstadia\Form1.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\RegistrarEstadia\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="Session.cs" />
@@ -302,6 +310,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Login\LoginRol.resx">
       <DependentUpon>LoginRol.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\RegistrarEstadia\EstadiaForm.resx">
+      <DependentUpon>EstadiaForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\RegistrarEstadia\ReservaGetterForm.resx">
+      <DependentUpon>ReservaGetterForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>

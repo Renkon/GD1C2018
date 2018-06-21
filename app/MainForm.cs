@@ -10,6 +10,7 @@ using FrbaHotel.Forms.AbmUsuario;
 using FrbaHotel.Forms.CancelarReserva;
 using FrbaHotel.Forms.GenerarModificacionReserva;
 using FrbaHotel.Forms.Login;
+using FrbaHotel.Forms.RegistrarEstadia;
 using FrbaHotel.Login;
 using FrbaHotel.Model;
 using System;
@@ -34,6 +35,9 @@ namespace FrbaHotel
             Session.InitGuest();
 
             InitializeComponent();
+
+            this.label1.Text = this.label1.Text.Replace("${fecha}",
+                Config.GetInstance().GetCurrentDate().ToString("dd/MM/yyyy"));
         }
 
         private void nuevoRolToolStripMenuItem_Click(object sender, EventArgs e)
@@ -157,7 +161,16 @@ namespace FrbaHotel
 
         private void registrarEstadíaToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            ReservaGetterForm Form = new ReservaGetterForm();
+            if (Form.ShowDialog() == DialogResult.OK)
+            {
+                Reserva reservaRelacionada = Form.Reserva;
 
+                Form.Close();
+                Form.Dispose();
+
+                new EstadiaForm(reservaRelacionada).ShowDialog();
+            }
         }
     }
 }

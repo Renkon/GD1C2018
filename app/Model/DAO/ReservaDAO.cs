@@ -13,6 +13,33 @@ namespace FrbaHotel.Model.DAO
 {
     public class ReservaDAO
     {
+        public Reserva ObtenerReservaAptaEstadia(int Id)
+        {
+            Reserva r = new Reserva(-1);
+
+            Dictionary<int, Regimen> Regimenes = new Dictionary<int, Regimen>();
+            List<Regimen> tempRegs = new RegimenDAO().ObtenerRegimenes();
+            foreach (var Reg in tempRegs)
+                Regimenes.Add(Reg.Id, Reg);
+
+            foreach (var row in DatabaseConnection.GetInstance().
+                ExecuteProcedure("OBTENER_RESERVA_APTA_ESTADIA", 
+                new SqlParameter("@id_reserva", Id),
+                new SqlParameter("@today", Config.GetInstance().GetCurrentDate()),
+                new SqlParameter("@id_rol_user", Session.Rol.Id)))
+            {
+                r.Id = Id;
+                r.Fecha_Realización = Convert.ToDateTime(row["fecha_realizacion_reserva"]);
+                r.Fecha_Inicio = Convert.ToDateTime(row["fecha_inicio_reserva"]);
+                r.Fecha_Fin = Convert.ToDateTime(row["fecha_fin_reserva"]);
+                r.Habitaciones = new HabitacionDAO().ObtenerHabitacionesDeReserva(r);
+                r.Regimen = Regimenes[Convert.ToInt32(row["id_regimen"])];
+                r.EstadoReserva = new EstadoReserva(Convert.ToInt32(row["id_estado_reserva"]));
+            }
+
+            return r;
+        }
+
         public bool InsertarReserva(Reserva reserva)
         {
             try

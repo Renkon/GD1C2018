@@ -13,6 +13,61 @@ namespace FrbaHotel.Model.DAO
 {
     class ClienteDAO
     {
+        public List<Cliente> ObtenerClientesDeEstadia(Estadia estadia)
+        {
+            List<Cliente> Clientes = new List<Cliente>();
+
+            Dictionary<int, TipoDocumento> TiposDoc = new Dictionary<int, TipoDocumento>();
+
+            List<TipoDocumento> tempDocs = new TipoDocumentoDAO().ObtenerTiposDocumento();
+            foreach (var TipoDoc in tempDocs)
+                TiposDoc.Add(TipoDoc.Id.Value, TipoDoc);
+
+            foreach (var row in DatabaseConnection.GetInstance().ExecuteProcedure("OBTENER_CLIENTES_ESTADIA",
+                new SqlParameter("@id_estadia", estadia.Id)))
+            {
+                Cliente c = new Cliente(
+                    Convert.ToInt32(row["id_cliente"]),
+                    Convert.ToString(row["nombre_cliente"]),
+                    Convert.ToString(row["apellido_cliente"]),
+                    TiposDoc[Convert.ToInt32(row["id_tipo_documento"])],
+                    Convert.ToInt64(row["numero_documento_cliente"]),
+                    Convert.ToString(row["correo_cliente"])
+                );
+
+                Clientes.Add(c);
+            }
+
+            return Clientes;
+        }
+
+
+        public Cliente ObtenerClienteDeReserva(Reserva reserva)
+        {
+            Cliente cliente = null;
+
+            Dictionary<int, TipoDocumento> TiposDoc = new Dictionary<int, TipoDocumento>();
+
+            List<TipoDocumento> tempDocs = new TipoDocumentoDAO().ObtenerTiposDocumento();
+            foreach (var TipoDoc in tempDocs)
+                TiposDoc.Add(TipoDoc.Id.Value, TipoDoc);
+
+            foreach (var row in DatabaseConnection.GetInstance().ExecuteProcedure("OBTENER_CLIENTE_DE_RESERVA",
+                new SqlParameter("@id_reserva", reserva.Id)))
+            {
+                cliente = new Cliente(
+                    Convert.ToInt32(row["id_cliente"]),
+                    Convert.ToString(row["nombre_cliente"]),
+                    Convert.ToString(row["apellido_cliente"]),
+                    TiposDoc[Convert.ToInt32(row["id_tipo_documento"])],
+                    Convert.ToInt64(row["numero_documento_cliente"]),
+                    Convert.ToString(row["correo_cliente"])
+                );
+            }
+
+            return cliente;
+        }
+
         public bool isCorreoUnico(string Correo)
         {
             return Convert.ToBoolean(DatabaseConnection.GetInstance().ExecuteProcedureScalar("VALIDAR_CORREO_UNICO_CLIENTE",

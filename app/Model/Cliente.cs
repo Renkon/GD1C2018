@@ -47,6 +47,31 @@ namespace FrbaHotel.Model
             this.Estado = Estado;
         }
 
+        public Cliente(int Id, string Nombre, string Apellido, TipoDocumento TipoDoc,
+            long Documento, string Correo)
+        {
+            this.Id = Id;
+            this.Nombre = Nombre;
+            this.Apellido = Apellido;
+            this.TipoDocumento = TipoDoc;
+            this.Documento = Documento;
+            this.Correo = Correo;
+        }
+
+        public override bool Equals(object obj)
+        {
+            Cliente cli = obj as Cliente;
+
+            if (cli == null)
+                return false;
+
+            return this.Id == cli.Id;
+        }
+
+        public override int GetHashCode()
+        {
+            return this.Id.GetHashCode();
+        }
     }
 
 }
