@@ -246,10 +246,13 @@ CREATE PROCEDURE [EL_MONSTRUO_DEL_LAGO_MASER].[OBTENER_RESERVA]
 AS
 BEGIN
     SELECT fecha_realizacion_reserva, fecha_inicio_reserva, fecha_fin_reserva, id_regimen
-    FROM [EL_MONSTRUO_DEL_LAGO_MASER].[reservas]
-    WHERE id_reserva = @id_reserva
+    FROM [EL_MONSTRUO_DEL_LAGO_MASER].[reservas] r
+    LEFT JOIN [EL_MONSTRUO_DEL_LAGO_MASER].[estadias] e
+        ON r.id_reserva = e.id_reserva
+    WHERE r.id_reserva = @id_reserva
     AND id_estado_reserva IN (1, 2, 7)
     AND fecha_inicio_reserva > @today 
+    AND id_estadia IS NULL
 END
 
 GO
