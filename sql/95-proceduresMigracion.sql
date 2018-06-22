@@ -134,7 +134,7 @@ BEGIN
 
     -- Campos para la tabla de Consumo
     DECLARE @id_consumo                                INT;
-    DECLARE @fecha_hora_consumo                        DATETIME;
+    DECLARE @fecha_consumo                            DATETIME;
 
     -- Campos para la tabla de Facturas
     DECLARE @id_factura                                INT;
