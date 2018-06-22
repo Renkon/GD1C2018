@@ -211,6 +211,12 @@ namespace FrbaHotel.Forms.AbmHotel
                 ErrMsg += "Debe ingresar la recarga por estrella del hotel\n";
             if (Creacion.Equals(""))
                 ErrMsg += "Debe ingresar una fecha de creación válida\n";
+            if (type == FormType.Modify)
+            {
+                List<Regimen> regimenesEnUso = new RegimenDAO().ObtenerRegimenesEnUsoHotel(hotel);
+                if (!regimenesEnUso.All(regimen => Regimenes.Contains(regimen)))
+                    ErrMsg += "Hay regímenes en uso que no pueden ser quitados!";
+            }
 
             bool Valido = ErrMsg.Equals("");
             if (!Valido)

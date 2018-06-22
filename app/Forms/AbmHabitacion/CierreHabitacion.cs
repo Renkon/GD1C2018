@@ -25,6 +25,7 @@ namespace FrbaHotel.Forms.AbmHabitacion
 
             textBox1.Text = habitacion.Número.ToString();
             textBox5.Text = Session.Hotel.Nombre;
+            monthCalendar1.MinDate = Config.GetInstance().GetCurrentDate();
             monthCalendar1.TodayDate = Config.GetInstance().GetCurrentDate();
             monthCalendar2.TodayDate = Config.GetInstance().GetCurrentDate();
         }
@@ -74,7 +75,7 @@ namespace FrbaHotel.Forms.AbmHabitacion
             string Inicio = textBox2.Text;
             string Fin = textBox3.Text;
             string Descripción = textBox4.Text;
-
+            bool ReservadaEnPeriodo;
             string ErrMsg = "";
 
             if (Inicio.Equals(""))
@@ -83,6 +84,15 @@ namespace FrbaHotel.Forms.AbmHabitacion
                 ErrMsg += "Debe ingresar la fecha de fin del cierre temporal\n";
             if (Descripción.Equals(""))
                 ErrMsg += "Debe ingresar el motivo del cierre temporal\n";
+            if (!Inicio.Equals("") && !Fin.Equals(""))
+            {
+                ReservadaEnPeriodo = new HabitacionDAO().IsHabitacionReservadaEnPeriodo(
+                    DateTime.ParseExact(Inicio, "dd/MM/yyyy", CultureInfo.InvariantCulture),
+                    DateTime.ParseExact(Fin, "dd/MM/yyyy", CultureInfo.InvariantCulture),
+                    habitacion);
+                if (ReservadaEnPeriodo)
+                    ErrMsg += "La habitación tiene una reserva en ese período!";
+            }
 
             if (!ErrMsg.Equals("")) // hay error
                 MessageBox.Show(ErrMsg, "ERROR");

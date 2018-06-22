@@ -24,6 +24,7 @@ namespace FrbaHotel.Forms.AbmHotel
             InitializeComponent();
 
             textBox1.Text = hotel.Nombre;
+            monthCalendar1.MinDate = Config.GetInstance().GetCurrentDate();
             monthCalendar1.TodayDate = Config.GetInstance().GetCurrentDate();
             monthCalendar2.TodayDate = Config.GetInstance().GetCurrentDate();
         }
@@ -73,8 +74,8 @@ namespace FrbaHotel.Forms.AbmHotel
             string Inicio = textBox2.Text;
             string Fin = textBox3.Text;
             string Descripción = textBox4.Text;
-
             string ErrMsg = "";
+            int ReservasEnPeriodo;
 
             if (Inicio.Equals(""))
                 ErrMsg += "Debe ingresar la fecha de inicio del cierre temporal\n";
@@ -82,6 +83,15 @@ namespace FrbaHotel.Forms.AbmHotel
                 ErrMsg += "Debe ingresar la fecha de fin del cierre temporal\n";
             if (Descripción.Equals(""))
                 ErrMsg += "Debe ingresar el motivo del cierre temporal\n";
+            if (!Inicio.Equals("") && !Fin.Equals(""))
+            {
+                ReservasEnPeriodo = new ReservaDAO().ObtenerCantidadReservasEnPeriodoDeHotel(
+                    DateTime.ParseExact(Inicio, "dd/MM/yyyy", CultureInfo.InvariantCulture),
+                    DateTime.ParseExact(Fin, "dd/MM/yyyy", CultureInfo.InvariantCulture),
+                    hotel);
+                if (ReservasEnPeriodo != 0)
+                    ErrMsg += "Hay " + ReservasEnPeriodo + " reservas que se intersecan con ese período";
+            }
 
             if (!ErrMsg.Equals("")) // hay error
                 MessageBox.Show(ErrMsg, "ERROR");

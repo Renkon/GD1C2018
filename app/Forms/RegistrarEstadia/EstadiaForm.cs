@@ -35,16 +35,15 @@ namespace FrbaHotel.Forms.RegistrarEstadia
         {
             if (estadia.Id != null)
             {
-                if (estadia.Clientes == null)
+                dataGridView1.Rows.Clear();
+
+                estadia.Clientes = new ClienteDAO().ObtenerClientesDeEstadia(estadia);
+                foreach (var cliente in estadia.Clientes)
                 {
-                    estadia.Clientes = new ClienteDAO().ObtenerClientesDeEstadia(estadia);
-                    foreach (var cliente in estadia.Clientes)
-                    {
-                        dataGridView1.Rows.Add(cliente.Nombre, cliente.Apellido,
-                            cliente.TipoDocumento.Sigla, cliente.Documento,
-                            cliente.Correo);
-                        dataGridView1.Rows[dataGridView1.Rows.Count - 1].Tag = cliente;
-                    }
+                    dataGridView1.Rows.Add(cliente.Nombre, cliente.Apellido,
+                        cliente.TipoDocumento.Sigla, cliente.Documento,
+                        cliente.Correo);
+                    dataGridView1.Rows[dataGridView1.Rows.Count - 1].Tag = cliente;
                 }
 
                 textBox1.Text = estadia.Fecha_Inicio.HasValue ? estadia.Fecha_Inicio.Value.ToString("dd/MM/yyyy") : string.Empty;

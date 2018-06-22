@@ -13,6 +13,14 @@ namespace FrbaHotel.Model.DAO
 {
     public class ReservaDAO
     {
+        public int ObtenerCantidadReservasEnPeriodoDeHotel(DateTime Inicio, DateTime Fin, Hotel Hotel)
+        {
+            return Convert.ToInt32(DatabaseConnection.GetInstance().ExecuteProcedureScalar("OBTENER_CANTIDAD_RESERVAS_EN_PERIODO_HOTEL",
+                new SqlParameter("@fecha_inicio", Inicio),
+                new SqlParameter("@fecha_fin", Fin),
+                new SqlParameter("@id_hotel", Hotel.Id)));
+        }
+
         public Reserva ObtenerReservaAptaEstadia(int Id)
         {
             Reserva r = new Reserva(-1);

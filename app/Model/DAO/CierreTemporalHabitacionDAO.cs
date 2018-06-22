@@ -19,7 +19,9 @@ namespace FrbaHotel.Model.DAO
                 DatabaseConnection.GetInstance()
                     .ExecuteProcedureNonQuery("INSERTAR_CIERRE_TEMPORAL_HABITACION", GenerateParamsDML(Cierre));
                 LogUtils.LogInfo("Se cerrará temporalmente la habitación " + Cierre.Habitacion.Número + " del hotel " + Session.Hotel.Nombre);
-                MessageBox.Show("Se cerrará temporalmente la habitación " + Cierre.Habitacion.Número + " del hotel " + Session.Hotel.Nombre, "INFO");
+                MessageBox.Show("Se cerrará temporalmente la habitación " + Cierre.Habitacion.Número + " del hotel " + Session.Hotel.Nombre
+                    + " desde el " + Cierre.Inicio.ToString("dd/MM/yyyy") + " hasta el "
+                    + Cierre.Fin.ToString("dd/MM/yyyy"), "INFO");
                 return true;
             }
             catch (SqlException Sex)
