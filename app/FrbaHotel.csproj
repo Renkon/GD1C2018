@@ -173,6 +173,30 @@
     <Compile Include="Forms\Login\LoginRol.Designer.cs">
       <DependentUpon>LoginRol.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\RegistrarConsumible\ConsumibleForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\RegistrarConsumible\ConsumibleForm.Designer.cs">
+      <DependentUpon>ConsumibleForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\RegistrarConsumible\ConsumibleViewerForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\RegistrarConsumible\ConsumibleViewerForm.Designer.cs">
+      <DependentUpon>ConsumibleViewerForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\RegistrarConsumible\ConsumosForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\RegistrarConsumible\ConsumosForm.Designer.cs">
+      <DependentUpon>ConsumosForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\RegistrarConsumible\EstadiaGetterForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\RegistrarConsumible\EstadiaGetterForm.Designer.cs">
+      <DependentUpon>EstadiaGetterForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\RegistrarEstadia\EstadiaForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -206,10 +230,13 @@
     <Compile Include="Model\CierreTemporalHabitacion.cs" />
     <Compile Include="Model\CierreTemporalHotel.cs" />
     <Compile Include="Model\Cliente.cs" />
+    <Compile Include="Model\Consumible.cs" />
+    <Compile Include="Model\Consumo.cs" />
     <Compile Include="Model\Cuenta.cs" />
     <Compile Include="Model\DAO\CierreTemporalHabitacionDAO.cs" />
     <Compile Include="Model\DAO\CierreTemporalHotelDAO.cs" />
     <Compile Include="Model\DAO\ClienteDAO.cs" />
+    <Compile Include="Model\DAO\ConsumibleDAO.cs" />
     <Compile Include="Model\DAO\EstadiaDAO.cs" />
     <Compile Include="Model\DAO\FuncionalidadDAO.cs" />
     <Compile Include="Model\DAO\HabitacionDAO.cs" />
@@ -235,12 +262,6 @@
     <Compile Include="Model\Usuario.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Forms\RegistrarConsumible\Form1.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\RegistrarConsumible\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </Compile>
     <Compile Include="Session.cs" />
     <Compile Include="Utils\DatabaseUtils.cs" />
     <Compile Include="Utils\LogUtils.cs" />
@@ -310,6 +331,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Login\LoginRol.resx">
       <DependentUpon>LoginRol.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\RegistrarConsumible\ConsumibleForm.resx">
+      <DependentUpon>ConsumibleForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\RegistrarConsumible\ConsumibleViewerForm.resx">
+      <DependentUpon>ConsumibleViewerForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\RegistrarConsumible\ConsumosForm.resx">
+      <DependentUpon>ConsumosForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\RegistrarConsumible\EstadiaGetterForm.resx">
+      <DependentUpon>EstadiaGetterForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\RegistrarEstadia\EstadiaForm.resx">
       <DependentUpon>EstadiaForm.cs</DependentUpon>

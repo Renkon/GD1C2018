@@ -32,5 +32,12 @@ namespace FrbaHotel.Model
         {
             this.Id = Id;
         }
+
+        public override string ToString()
+        {
+            if (Id == -1)
+                return " - Seleccione una habitación - ";
+            return "Habitación número " + this.Número + ". Piso: " + this.Piso;
+        }
     }
 }

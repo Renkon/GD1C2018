@@ -10,6 +10,7 @@ using FrbaHotel.Forms.AbmUsuario;
 using FrbaHotel.Forms.CancelarReserva;
 using FrbaHotel.Forms.GenerarModificacionReserva;
 using FrbaHotel.Forms.Login;
+using FrbaHotel.Forms.RegistrarConsumible;
 using FrbaHotel.Forms.RegistrarEstadia;
 using FrbaHotel.Login;
 using FrbaHotel.Model;
@@ -170,6 +171,20 @@ namespace FrbaHotel
                 Form.Dispose();
 
                 new EstadiaForm(reservaRelacionada).ShowDialog();
+            }
+        }
+
+        private void registrarConsumiblesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            EstadiaGetterForm Form = new EstadiaGetterForm();
+            if (Form.ShowDialog() == DialogResult.OK)
+            {
+                Estadia estadiaRelacionada = Form.Estadia;
+
+                Form.Close();
+                Form.Dispose();
+
+                new ConsumosForm(estadiaRelacionada).ShowDialog();
             }
         }
     }

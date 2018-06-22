@@ -12,6 +12,34 @@ namespace FrbaHotel.Model.DAO
 {
     class HabitacionDAO
     {
+        public List<Habitacion> ObtenerHabitacionesDeEstadia(Estadia estadia)
+        {
+            List<Habitacion> Habitaciones = new List<Habitacion>();
+
+            Dictionary<int, TipoHabitacion> TiposHab = new Dictionary<int, TipoHabitacion>();
+
+            List<TipoHabitacion> tempHabs = new TipoHabitacionDAO().ObtenerTiposHabitacion();
+            foreach (var TipoHab in tempHabs)
+                TiposHab.Add(TipoHab.Id, TipoHab);
+
+            foreach (var row in DatabaseConnection.GetInstance().ExecuteProcedure("OBTENER_HABITACIONES_DE_ESTADIA",
+                new SqlParameter("@id_estadia", estadia.Id)))
+            {
+                Habitacion h = new Habitacion(
+                    Convert.ToInt32(row["id_habitacion"]),
+                    null,
+                    Convert.ToInt32(row["numero_habitacion"]),
+                    Convert.ToInt32(row["piso_habitacion"]),
+                    Convert.ToString(row["ubicacion_habitacion"]),
+                    TiposHab[Convert.ToInt32(row["id_tipo_habitacion"])],
+                    Convert.ToString(row["descripcion_habitacion"])
+                    );
+
+                Habitaciones.Add(h);
+            }
+            return Habitaciones;
+        }
+
         public bool IsHabitacionReservadaEnPeriodo(DateTime Inicio, DateTime Fin, Habitacion Habitacion)
         {
             return Convert.ToBoolean(DatabaseConnection.GetInstance().ExecuteProcedureScalar("HABITACION_RESERVADA_EN_INTERVALO",

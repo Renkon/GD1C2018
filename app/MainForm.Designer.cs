@@ -326,6 +326,7 @@ namespace FrbaHotel
             this.registrarConsumiblesToolStripMenuItem.Name = "registrarConsumiblesToolStripMenuItem";
             this.registrarConsumiblesToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
             this.registrarConsumiblesToolStripMenuItem.Text = "Registrar consumibles";
+            this.registrarConsumiblesToolStripMenuItem.Click += new System.EventHandler(this.registrarConsumiblesToolStripMenuItem_Click);
             // 
             // facturaciónToolStripMenuItem
             // 
