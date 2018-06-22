@@ -124,7 +124,7 @@ CREATE TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[estadias] -- 11
     id_usuario_ingreso        INT NOT NULL,
     id_usuario_egreso         INT,
     fecha_ingreso_estadia     DATETIME NOT NULL,
-    fecha_egreso_estadia      DATETIME
+    fecha_egreso_estadia      DATETIME,
     consumos_cerrados         BIT NOT NULL DEFAULT 0
 );
 
