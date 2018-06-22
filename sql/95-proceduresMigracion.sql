@@ -345,11 +345,12 @@ BEGIN
                 ---------------------- ESTADIAS ------------------------------
                 ---------------------- CONSUMOS ------------------------------
                 IF (@id_consumible IS NOT NULL
-                    AND @id_estadia IS NOT NULL)
+                    AND @id_estadia IS NOT NULL
+                    AND @cantidad_item_factura IS NOT NULL)
                 BEGIN
                     INSERT INTO [EL_MONSTRUO_DEL_LAGO_MASER].[consumos]
-                        (id_consumible, id_estadia, id_habitacion)
-                    VALUES (@id_consumible, @id_estadia, @id_habitacion)
+                        (id_consumible, id_estadia, id_habitacion, cantidad_consumo)
+                    VALUES (@id_consumible, @id_estadia, @id_habitacion, @cantidad_item_factura)
                     SET @id_consumo = SCOPE_IDENTITY();
                 END
                 ---------------------- CONSUMOS ------------------------------

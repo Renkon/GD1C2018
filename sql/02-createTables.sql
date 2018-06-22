@@ -68,7 +68,8 @@ CREATE TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[consumos] -- 6
     id_consumible         INT NOT NULL,
     id_estadia            INT NOT NULL,
     id_habitacion         INT NOT NULL,
-    fecha_consumo         DATETIME
+    fecha_consumo         DATETIME,
+    cantidad_consumo      NUMERIC(18,0) NOT NULL
 );
 
 
