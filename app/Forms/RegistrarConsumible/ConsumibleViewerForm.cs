@@ -16,8 +16,10 @@ namespace FrbaHotel.Forms.RegistrarConsumible
     {
         public Consumible Consumible { get; private set; }
 
-        public ConsumibleViewerForm()
+        public ConsumibleViewerForm(Consumible c)
         {
+            this.Consumible = c;
+
             InitializeComponent();
 
             LoadContent();
@@ -45,6 +47,11 @@ namespace FrbaHotel.Forms.RegistrarConsumible
                 dataGridView1.Rows.Add(c.Descripción, "USD " + c.Precio);
                 dataGridView1.Rows[dataGridView1.Rows.Count - 1].Tag = c;
                 dataGridView1.Rows[dataGridView1.Rows.Count - 1].Cells[2].Value = "Seleccionar";
+                if (c.Equals(Consumible))
+                {
+                    dataGridView1.Rows[dataGridView1.Rows.Count - 1].Selected = true;
+                    dataGridView1.CurrentCell = dataGridView1.Rows[dataGridView1.Rows.Count - 1].Cells[0];
+                }
             }
         }
 

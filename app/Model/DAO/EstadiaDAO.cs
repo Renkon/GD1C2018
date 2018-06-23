@@ -13,6 +13,25 @@ namespace FrbaHotel.Model.DAO
 {
     public class EstadiaDAO
     {
+        public bool CerrarConsumosEstadia(Estadia Estadia)
+        {
+            try
+            {
+                DatabaseConnection.GetInstance().ExecuteProcedureNonQuery("CERRAR_CONSUMO_ESTADIA",
+                    new SqlParameter("@id_estadia", Estadia.Id),
+                    new SqlParameter("@id_rol_user", Session.Rol.Id));
+                LogUtils.LogInfo("Se cerraron los consumos de la estadía " + Estadia.Id);
+                MessageBox.Show("Se cerraron satisfactoriamente los consumos de la estadía", "INFO");
+                return true;
+            }
+            catch (Exception ex)
+            {
+                LogUtils.LogError(ex);
+                MessageBox.Show("Hubo un error al intentar cerrar los consumos de la estadía. Revise el log", "ERROR");
+                return false;
+            }
+        }
+
         public Estadia ObtenerEstadia(int Id)
         {
             Estadia e = null;
@@ -23,7 +42,8 @@ namespace FrbaHotel.Model.DAO
             {
                 e = new Estadia(Id,
                         Convert.ToDateTime(row["fecha_ingreso_estadia"]),
-                        Convert.ToDateTime(row["fecha_egreso_estadia"]),
+                        row["fecha_egreso_estadia"].GetType() == typeof(DBNull) ? 
+                            (DateTime?) null : Convert.ToDateTime(row["fecha_egreso_estadia"]),
                         Convert.ToBoolean(row["consumos_cerrados"])
                     );
             }
@@ -97,7 +117,7 @@ namespace FrbaHotel.Model.DAO
             {
                 estadia.Id = Convert.ToInt32(row["id_estadia"]);
                 estadia.Fecha_Inicio = Convert.ToDateTime(row["fecha_ingreso_estadia"]);
-                if (row["fecha_egreso_estadia"] != DBNull.Value)
+                if (row["fecha_egreso_estadia"].GetType() != typeof(DBNull)) 
                     estadia.Fecha_Fin = Convert.ToDateTime(row["fecha_egreso_estadia"]);
             }
 

@@ -28,6 +28,12 @@ namespace FrbaHotel.Model
             this.Descripción = Descripción;
         }
 
+        public Habitacion(int? Id, int Número)
+        {
+            this.Id = Id;
+            this.Número = Número;
+        }
+
         public Habitacion(int? Id)
         {
             this.Id = Id;
@@ -38,6 +44,20 @@ namespace FrbaHotel.Model
             if (Id == -1)
                 return " - Seleccione una habitación - ";
             return "Habitación número " + this.Número + ". Piso: " + this.Piso;
+        }
+
+        public override bool Equals(object obj)
+        {
+            var hab = obj as Habitacion;
+            if (hab == null)
+                return false;
+
+            return hab.Id == this.Id;
+        }
+
+        public override int GetHashCode()
+        {
+            return this.Id.GetHashCode();
         }
     }
 }

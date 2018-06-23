@@ -15,7 +15,7 @@ namespace FrbaHotel.Model
         public DateTime Fecha { get; set; }
         public int Cantidad { get; set; }
 
-        public Consumo(int? Id, Consumible Consumible, Estadia Estadia, Habitacion Habitacio, DateTime Fecha, int Cantidad)
+        public Consumo(int? Id, Consumible Consumible, Estadia Estadia, Habitacion Habitacion, DateTime Fecha, int Cantidad)
         {
             this.Id = Id;
             this.Consumible = Consumible;

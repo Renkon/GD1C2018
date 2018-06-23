@@ -23,5 +23,19 @@ namespace FrbaHotel.Model
         {
             return Descripción + " - Precio: USD " + Precio;
         }
+
+        public override bool Equals(object obj)
+        {
+            var con = obj as Consumible;
+            if (con == null)
+                return false;
+
+            return con.Id == this.Id;
+        }
+
+        public override int GetHashCode()
+        {
+            return this.Id.GetHashCode();
+        }
     }
 }

@@ -237,6 +237,7 @@
     <Compile Include="Model\DAO\CierreTemporalHotelDAO.cs" />
     <Compile Include="Model\DAO\ClienteDAO.cs" />
     <Compile Include="Model\DAO\ConsumibleDAO.cs" />
+    <Compile Include="Model\DAO\ConsumoDAO.cs" />
     <Compile Include="Model\DAO\EstadiaDAO.cs" />
     <Compile Include="Model\DAO\FuncionalidadDAO.cs" />
     <Compile Include="Model\DAO\HabitacionDAO.cs" />
