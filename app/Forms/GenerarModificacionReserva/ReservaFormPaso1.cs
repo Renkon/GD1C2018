@@ -29,6 +29,7 @@ namespace FrbaHotel.Forms.GenerarModificacionReserva
             monthCalendar1.MinDate = Config.GetInstance().GetCurrentDate();
             monthCalendar1.TodayDate = Config.GetInstance().GetCurrentDate();
             monthCalendar2.TodayDate = Config.GetInstance().GetCurrentDate();
+            monthCalendar2.MinDate = Config.GetInstance().GetCurrentDate().AddDays(1);
 
             ApplyType();
 

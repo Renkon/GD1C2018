@@ -28,6 +28,7 @@ namespace FrbaHotel.Forms.AbmHabitacion
             monthCalendar1.MinDate = Config.GetInstance().GetCurrentDate();
             monthCalendar1.TodayDate = Config.GetInstance().GetCurrentDate();
             monthCalendar2.TodayDate = Config.GetInstance().GetCurrentDate();
+            monthCalendar2.MinDate = Config.GetInstance().GetCurrentDate();
         }
 
         private void button1_Click(object sender, EventArgs e)
