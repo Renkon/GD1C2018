@@ -106,7 +106,10 @@ namespace FrbaHotel.Forms.RegistrarConsumible
 
             if (new EstadiaDAO().CerrarConsumosEstadia(this.estadia))
             {
-                this.Close();
+                this.button1.Text = "Consumibles cerrados";
+                this.button1.Enabled = false;
+                this.dataGridView1.Columns[6].Visible = false;
+                this.dataGridView1.Columns[7].Visible = false;
             }
         }
     }
