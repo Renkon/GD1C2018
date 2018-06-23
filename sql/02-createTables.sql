@@ -281,7 +281,7 @@ CREATE TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[hoteles] -- 25
     domicilio_numero_hotel          NUMERIC(18,0) NOT NULL,
     cantidad_estrellas_hotel        NUMERIC(18,0) NOT NULL,
     id_pais                         INT NOT NULL DEFAULT 10,
-    fecha_creacion_hotel            DATETIME NOT NULL DEFAULT convert(datetime, '2001-01-01', 105),
+    fecha_creacion_hotel            DATETIME NOT NULL DEFAULT convert(datetime, '20010101', 112),
     recarga_por_estrellas_hotel     NUMERIC(18,0) NOT NULL
 );
 
