@@ -48,7 +48,8 @@ namespace FrbaHotel.Model
             
             foreach (ItemFactura i in Items_Factura)
                 sb.Append("\t").Append(i.Descripción).Append(" - CANT ").Append(i.Cantidad).
-                    Append(" - USD ").Append(i.Precio).Append("\r\n");
+                    Append(" - USD ").Append(i.Precio).Append(" - TOTAL ").
+                    Append("USD ").Append(i.Precio * i.Cantidad).Append("\r\n");
 
             sb.Append("\r\n\r\nTOTAL FACTURA: USD ").Append(this.Monto_Total).Append("\r\n\r\n")
                 .Append("FORMA DE PAGO: ").Append(this.Forma_Pago.Descripción).Append("\r\n\r\n")
