@@ -17,13 +17,15 @@ END
 
 GO
 
--- Este procedure obtiene el costo diario de una estadia/reserva
-CREATE PROCEDURE [EL_MONSTRUO_DEL_LAGO_MASER].[CALCULAR_COSTO_DIARIO_ESTADIA]
-    (@id_estadia INT)
+-- Funcion que obtiene el costo diario de una estadia
+CREATE FUNCTION [EL_MONSTRUO_DEL_LAGO_MASER].[OBTENER_COSTO_DIARIO_ESTADIA]
+(@id_estadia INT)
+RETURNS NUMERIC(18,2)
 AS
 BEGIN
-    SELECT SUM((precio_base_regimen * cantidad_huespedes_tipo_habitacion * (1 + (porcentual_tipo_habitacion/100))) + 
-           (cantidad_estrellas_hotel * recarga_por_estrellas_hotel)) costo_diario
+    DECLARE @costo NUMERIC(18,2)
+    SELECT @costo = SUM((precio_base_regimen * cantidad_huespedes_tipo_habitacion * (1 + (porcentual_tipo_habitacion/100))) +
+           (cantidad_estrellas_hotel * recarga_por_estrellas_hotel))
     FROM [EL_MONSTRUO_DEL_LAGO_MASER].[estadias] e
     JOIN [EL_MONSTRUO_DEL_LAGO_MASER].[reservas] r
         ON e.id_reserva = r.id_reserva
@@ -38,6 +40,16 @@ BEGIN
     JOIN [EL_MONSTRUO_DEL_LAGO_MASER].[hoteles] hh
         ON h.id_hotel = hh.id_hotel
     WHERE id_estadia = @id_estadia
+
+    RETURN @costo
+END
+
+-- Este procedure obtiene el costo diario de una estadia/reserva
+CREATE PROCEDURE [EL_MONSTRUO_DEL_LAGO_MASER].[CALCULAR_COSTO_DIARIO_ESTADIA]
+    (@id_estadia INT)
+AS
+BEGIN
+    SELECT EL_MONSTRUO_DEL_LAGO_MASER.OBTENER_COSTO_DIARIO_ESTADIA(@id_estadia)
 END
 
 GO
