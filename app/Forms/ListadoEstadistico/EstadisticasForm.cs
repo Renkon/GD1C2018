@@ -69,8 +69,10 @@ namespace FrbaHotel.Forms.ListadoEstadistico
                 true));
 
             comboBox2.Items.Add(new Listado(5, "clientes con mayor cantidad de puntos",
-                "LISTADO_TOP5_NOSEQPIJA", new string[] { }, new string[] { },
-                false));
+                "TOP5_CLIENTES_PUNTOS", 
+                new string[] { "Nombre", "Apellido", "Correo", "Puntos" }, 
+                new string[] { "nombre_cliente", "apellido_cliente", "correo_cliente", "puntos" },
+                true));
 
             comboBox2.SelectedIndex = 0;
         }
