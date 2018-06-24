@@ -42,6 +42,8 @@ BEGIN
         domicilio_piso_cliente, domicilio_departamento_cliente, ciudad_cliente, id_pais, nacionalidad_cliente, fecha_nacimiento_cliente)
     VALUES(@nombre, @apellido, @id_documento, @numero_documento, @correo, @telefono, @domicilio_calle, @domicilio_numero, @domicilio_piso, @domicilio_departamento,
         @ciudad, @pais, @nacionalidad, @fecha_nacimiento)
+
+    SELECT SCOPE_IDENTITY() id_cliente
 END
 
 GO
