@@ -46,25 +46,31 @@ namespace FrbaHotel.Forms.ListadoEstadistico
             comboBox2.Items.Add(new Listado(1, "hoteles con mayor cantidad de reservas canceladas",
                 "TOP5_HOTELES_RESERVAS_CANCELADAS", 
                 new string[] { "Nombre de hotel", "Reservas canceladas" },
-                new string[] { "nombre_hotel", "cancelaciones" }));
+                new string[] { "nombre_hotel", "cancelaciones" },
+                false));
 
             comboBox2.Items.Add(new Listado(2, "hoteles con mayor cantidad de consumibles facturados",
                 "TOP5_HOTELES_MAYOR_CANTIDAD_CONSUMOS", 
                 new string[] { "Nombre de hotel", "Consumibles facturados" }, 
-                new string[] { "nombre_hotel", "cantidad_consumibles_total" }));
+                new string[] { "nombre_hotel", "cantidad_consumibles_total" },
+                false));
 
             comboBox2.Items.Add(new Listado(3, "hoteles con mayor cantidad de días fuera de servicio",
                 "TOP5_HOTELES_DIAS_CERRADO", 
                 new string[] { "Nombre de hotel", "Cantidad de días que estuvo cerrado" }, 
-                new string[] { "nombre_hotel", "dias_cerrado" }));
+                new string[] { "nombre_hotel", "dias_cerrado" },
+                false));
 
             comboBox2.Items.Add(new Listado(4, "habitaciones con mayor cantidad de días "
                 + "y veces que fueron ocupadas",
-                "LISTADO_TOP5_NOSEQPIJA", new string[] { }, new string[] { }));
+                "TOP5_HABITACIONES_MAYOR_CANTIDAD_DIAS_ESTADIAS", 
+                new string[] { "Número de habitación", "Nombre de hotel", "Días (ocupados)", "Cantidad de estadías" }, 
+                new string[] { "numero_habitacion", "nombre_hotel", "cantidad_dias", "cantidad_estadias" },
+                true));
 
             comboBox2.Items.Add(new Listado(5, "clientes con mayor cantidad de puntos",
-                "LISTADO_TOP5_NOSEQPIJA", new string[] { }, new string[] { }));
-
+                "LISTADO_TOP5_NOSEQPIJA", new string[] { }, new string[] { },
+                false));
 
             comboBox2.SelectedIndex = 0;
         }

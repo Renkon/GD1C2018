@@ -15,8 +15,7 @@ namespace FrbaHotel.Model.Custom.DAO
             List<string[]> content = new List<string[]>();
 
             foreach (var row in DatabaseConnection.GetInstance().ExecuteProcedure(listado.Procedure,
-                new SqlParameter("@inicio", trimestre.Inicio_Trimestre),
-                new SqlParameter("@fin", trimestre.Fin_Trimestre)))
+                GetParams(listado, trimestre)))
             {
                 string[] contentRow = new string[listado.Columns.Length];
                 int i = 0;
@@ -27,6 +26,20 @@ namespace FrbaHotel.Model.Custom.DAO
             }
 
             return content;
+        }
+
+        public SqlParameter[] GetParams(Listado listado, Trimestre trimestre)
+        {
+            List<SqlParameter> Params = new List<SqlParameter>();
+
+            Params.Add(new SqlParameter("@inicio", trimestre.Inicio_Trimestre));
+            Params.Add(new SqlParameter("@fin", trimestre.Fin_Trimestre));
+
+            if (listado.WithTodayDate)
+                Params.Add(new SqlParameter("@fechaHoy",
+                    Config.GetInstance().GetCurrentDate()));
+
+            return Params.ToArray();
         }
     }
 }

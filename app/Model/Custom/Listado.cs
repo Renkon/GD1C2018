@@ -13,14 +13,16 @@ namespace FrbaHotel.Model.Custom
         public string Procedure { get; set; }
         public string[] Columns { get; set; }
         public string[] DbCols { get; set; }
+        public bool WithTodayDate { get; set; }
 
-        public Listado(int Id, string Nombre, string Procedure, string[] Columns, string[] DbCols)
+        public Listado(int Id, string Nombre, string Procedure, string[] Columns, string[] DbCols, bool WithTodayDate)
         {
             this.Id = Id;
             this.Nombre = Nombre;
             this.Procedure = Procedure;
             this.Columns = Columns;
             this.DbCols = DbCols;
+            this.WithTodayDate = WithTodayDate;
         }
 
         public Listado(int Id)
