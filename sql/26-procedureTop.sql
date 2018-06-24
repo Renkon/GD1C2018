@@ -93,7 +93,10 @@ BEGIN
     RETURN @date;
 END
 
+GO
+
 --
+
 CREATE PROCEDURE [EL_MONSTRUO_DEL_LAGO_MASER].[TOP5_HOTELES_DIAS_CERRADO]
     (@inicio DATETIME, @fin DATETIME)
 AS
@@ -113,4 +116,64 @@ BEGIN
 END
 
 GO
+
+--
+
+CREATE PROCEDURE [EL_MONSTRUO_DEL_LAGO_MASER].[TOP5_HABITACIONES_MAYOR_CANTIDAD_DIAS_ESTADIAS]
+    (@inicio DATETIME, @fin DATETIME, @fechaHoy DATETIME)
+AS
+BEGIN
+    SELECT TOP 5 id_habitacion, id_hotel, nombre_hotel, numero_habitacion, 
+        SUM(cantidad_dias) cantidad_dias, SUM(cantidad_estadias) cantidad_estadias
+    FROM (
+                -- Generamos todas las habitaciones
+                SELECT DISTINCT ha.id_habitacion, ha.id_hotel, nombre_hotel, numero_habitacion, 0 cantidad_dias, 0 cantidad_estadias
+                FROM [EL_MONSTRUO_DEL_LAGO_MASER].[habitaciones] ha
+                INNER JOIN [EL_MONSTRUO_DEL_LAGO_MASER].[hoteles] ho
+                    ON ha.id_hotel = ho.id_hotel
+                LEFT JOIN [EL_MONSTRUO_DEL_LAGO_MASER].[reservasXhabitaciones] rh
+                    ON ha.id_habitacion = rh.id_habitacion
+                LEFT JOIN [EL_MONSTRUO_DEL_LAGO_MASER].[estadias] e
+                    ON rh.id_reserva = e.id_reserva
+            UNION ALL
+                -- Ahora los que tienen finalizada la estadía (no importa el día de hoy)
+                SELECT ha.id_habitacion, ha.id_hotel, nombre_hotel, numero_habitacion, 
+                    ISNULL(SUM(DATEDIFF(day, EL_MONSTRUO_DEL_LAGO_MASER.MAXDATE(@inicio, fecha_ingreso_estadia),
+                    EL_MONSTRUO_DEL_LAGO_MASER.MINDATE(@fin, fecha_egreso_estadia))), 0) cantidad_dias, COUNT(DISTINCT id_estadia) cantidad_estadias
+                FROM [EL_MONSTRUO_DEL_LAGO_MASER].[habitaciones] ha
+                INNER JOIN [EL_MONSTRUO_DEL_LAGO_MASER].[hoteles] ho
+                    ON ha.id_hotel = ho.id_hotel
+                INNER JOIN [EL_MONSTRUO_DEL_LAGO_MASER].[reservasXhabitaciones] rh
+                    ON ha.id_habitacion = rh.id_habitacion
+                INNER JOIN [EL_MONSTRUO_DEL_LAGO_MASER].[estadias] e
+                    ON rh.id_reserva = e.id_reserva
+                WHERE fecha_egreso_estadia IS NOT NULL
+                AND ((@inicio <= fecha_egreso_estadia)
+                AND (fecha_ingreso_estadia <= @fin))
+                GROUP BY ha.id_habitacion, ha.id_hotel, nombre_hotel, numero_habitacion
+            UNION ALL
+                -- Ahora los que están en curso (fecha de fin sería la fecha de hoy)
+                SELECT ha.id_habitacion, ha.id_hotel, nombre_hotel, numero_habitacion, 
+                    ISNULL(SUM(DATEDIFF(day, EL_MONSTRUO_DEL_LAGO_MASER.MAXDATE(@inicio, fecha_ingreso_estadia),
+                    EL_MONSTRUO_DEL_LAGO_MASER.MINDATE(@fin, @fechaHoy))), 0) cantidad_dias, COUNT(DISTINCT id_estadia) cantidad_estadias
+                FROM [EL_MONSTRUO_DEL_LAGO_MASER].[habitaciones] ha
+                INNER JOIN [EL_MONSTRUO_DEL_LAGO_MASER].[hoteles] ho
+                    ON ha.id_hotel = ho.id_hotel
+                INNER JOIN [EL_MONSTRUO_DEL_LAGO_MASER].[reservasXhabitaciones] rh
+                    ON ha.id_habitacion = rh.id_habitacion
+                INNER JOIN [EL_MONSTRUO_DEL_LAGO_MASER].[estadias] e
+                    ON rh.id_reserva = e.id_reserva
+                WHERE fecha_egreso_estadia IS NULL
+                AND ((@inicio <= @fechaHoy)
+                AND (fecha_ingreso_estadia <= @fin))
+                GROUP BY ha.id_habitacion, ha.id_hotel, nombre_hotel, numero_habitacion
+        ) data
+    GROUP BY id_habitacion, id_hotel, nombre_hotel, numero_habitacion
+    ORDER BY cantidad_dias DESC
+END
+
+GO
+
+--
+
 
