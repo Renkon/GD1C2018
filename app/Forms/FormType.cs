@@ -12,6 +12,7 @@ namespace FrbaHotel.Forms
         Modify,
         Delete,
         Register,
-        List
+        List,
+        Billing
     }
 }

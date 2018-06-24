@@ -39,9 +39,6 @@
             this.label6 = new System.Windows.Forms.Label();
             this.button2 = new System.Windows.Forms.Button();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
             this.Column8 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -50,6 +47,9 @@
             this.Column5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column6 = new System.Windows.Forms.DataGridViewButtonColumn();
             this.Column7 = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.button1 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
@@ -177,36 +177,6 @@
             this.dataGridView1.TabIndex = 1;
             this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
             // 
-            // label5
-            // 
-            this.label5.Location = new System.Drawing.Point(7, 358);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(752, 16);
-            this.label5.TabIndex = 0;
-            this.label5.Text = "IMPORTANTE: si el régimen es del tipo \'All Inclusive\' o \'All Inclusive moderado\'," +
-    " el descuento se hará efectivo al momento de realizar la facturación.";
-            this.label5.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            // 
-            // label4
-            // 
-            this.label4.Location = new System.Drawing.Point(13, 504);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(759, 16);
-            this.label4.TabIndex = 2;
-            this.label4.Text = "Sólo se podrá cerrar los consumibles de la estadía una vez que los huéspedes haga" +
-    "n el check-out.";
-            this.label4.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(272, 526);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(243, 23);
-            this.button1.TabIndex = 3;
-            this.button1.Text = "Cerrar consumibles";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
             // Column8
             // 
             this.Column8.HeaderText = "Fecha";
@@ -255,6 +225,36 @@
             this.Column7.Name = "Column7";
             this.Column7.ReadOnly = true;
             // 
+            // label5
+            // 
+            this.label5.Location = new System.Drawing.Point(7, 358);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(752, 16);
+            this.label5.TabIndex = 0;
+            this.label5.Text = "IMPORTANTE: si el régimen es del tipo \'All Inclusive\' o \'All Inclusive moderado\'," +
+    " el descuento se hará efectivo al momento de realizar la facturación.";
+            this.label5.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
+            // label4
+            // 
+            this.label4.Location = new System.Drawing.Point(13, 504);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(759, 16);
+            this.label4.TabIndex = 2;
+            this.label4.Text = "Sólo se podrá cerrar los consumibles de la estadía una vez que los huéspedes haga" +
+    "n el check-out.";
+            this.label4.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(272, 526);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(243, 23);
+            this.button1.TabIndex = 3;
+            this.button1.Text = "Cerrar consumibles";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // ConsumosForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -264,6 +264,7 @@
             this.Controls.Add(this.label4);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "ConsumosForm";

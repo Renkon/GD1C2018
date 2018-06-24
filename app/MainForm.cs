@@ -8,6 +8,7 @@ using FrbaHotel.Forms.AbmHotel;
 using FrbaHotel.Forms.AbmRol;
 using FrbaHotel.Forms.AbmUsuario;
 using FrbaHotel.Forms.CancelarReserva;
+using FrbaHotel.Forms.FacturarEstadia;
 using FrbaHotel.Forms.GenerarModificacionReserva;
 using FrbaHotel.Forms.Login;
 using FrbaHotel.Forms.RegistrarConsumible;
@@ -186,6 +187,11 @@ namespace FrbaHotel
 
                 new ConsumosForm(estadiaRelacionada).ShowDialog();
             }
+        }
+
+        private void facturarToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            new FacturacionForm().ShowDialog();
         }
     }
 }

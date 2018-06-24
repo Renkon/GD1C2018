@@ -118,6 +118,18 @@
     <Compile Include="Forms\CancelarReserva\ReservaCancelForm.Designer.cs">
       <DependentUpon>ReservaCancelForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FacturarEstadia\FacturacionForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FacturarEstadia\FacturacionForm.Designer.cs">
+      <DependentUpon>FacturacionForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FacturarEstadia\ItemFacturaForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FacturarEstadia\ItemFacturaForm.Designer.cs">
+      <DependentUpon>ItemFacturaForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormType.cs" />
     <Compile Include="Forms\GenerarModificacionReserva\ActualizarClienteMigrado.cs">
       <SubType>Form</SubType>
@@ -215,12 +227,6 @@
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\ListadoEstadistico\Form1.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\ListadoEstadistico\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\AbmUsuario\UsuarioForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -239,6 +245,8 @@
     <Compile Include="Model\DAO\ConsumibleDAO.cs" />
     <Compile Include="Model\DAO\ConsumoDAO.cs" />
     <Compile Include="Model\DAO\EstadiaDAO.cs" />
+    <Compile Include="Model\DAO\FacturaDAO.cs" />
+    <Compile Include="Model\DAO\FormaDePagoDAO.cs" />
     <Compile Include="Model\DAO\FuncionalidadDAO.cs" />
     <Compile Include="Model\DAO\HabitacionDAO.cs" />
     <Compile Include="Model\DAO\HotelDAO.cs" />
@@ -251,9 +259,12 @@
     <Compile Include="Model\DAO\UsuarioDAO.cs" />
     <Compile Include="Model\Estadia.cs" />
     <Compile Include="Model\EstadoReserva.cs" />
+    <Compile Include="Model\Factura.cs" />
+    <Compile Include="Model\FormaDePago.cs" />
     <Compile Include="Model\Funcionalidad.cs" />
     <Compile Include="Model\Habitacion.cs" />
     <Compile Include="Model\Hotel.cs" />
+    <Compile Include="Model\ItemFactura.cs" />
     <Compile Include="Model\Pais.cs" />
     <Compile Include="Model\Regimen.cs" />
     <Compile Include="Model\Reserva.cs" />
@@ -265,6 +276,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Session.cs" />
     <Compile Include="Utils\DatabaseUtils.cs" />
+    <Compile Include="Utils\FileUtils.cs" />
     <Compile Include="Utils\LogUtils.cs" />
     <Compile Include="Utils\PropertyUtils.cs" />
     <EmbeddedResource Include="Forms\AbmCliente\ClienteForm.resx">
@@ -305,6 +317,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\CancelarReserva\ReservaCancelForm.resx">
       <DependentUpon>ReservaCancelForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FacturarEstadia\FacturacionForm.resx">
+      <DependentUpon>FacturacionForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FacturarEstadia\ItemFacturaForm.resx">
+      <DependentUpon>ItemFacturaForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\GenerarModificacionReserva\ActualizarClienteMigrado.resx">
       <DependentUpon>ActualizarClienteMigrado.cs</DependentUpon>
@@ -377,7 +395,9 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Forms\ListadoEstadistico\" />
+  </ItemGroup>
   <ItemGroup>
     <None Include="Resources\hotel.png" />
   </ItemGroup>

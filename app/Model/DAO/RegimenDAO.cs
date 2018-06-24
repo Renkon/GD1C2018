@@ -10,6 +10,24 @@ namespace FrbaHotel.Model.DAO
 {
     class RegimenDAO
     {
+        public Regimen ObtenerRegimenDeEstadia(Estadia estadia)
+        {
+            Regimen r = null;
+
+            foreach (var row in DatabaseConnection.GetInstance().ExecuteProcedure("OBTENER_REGIMEN_DE_ESTADIA",
+                new SqlParameter("@id_estadia", estadia.Id)))
+            {
+                r = new Regimen(
+                    Convert.ToInt32(row["id_regimen"]),
+                    Convert.ToString(row["descripcion_regimen"]),
+                    Convert.ToDouble(row["precio_base_regimen"]),
+                    Convert.ToBoolean(row["estado_regimen"])
+                );
+            }
+
+            return r;
+        }
+
         public List<Regimen> ObtenerRegimenesEnUsoHotel(Hotel Hotel)
         {
             List<Regimen> Regimenes = new List<Regimen>();
@@ -55,6 +73,12 @@ namespace FrbaHotel.Model.DAO
         {
             return new Regimen(Convert.ToInt32(DatabaseConnection.GetInstance().
                 ExecuteProcedureScalar("OBTENER_REGIMEN_ALL_INCLUSIVE")));
+        }
+
+        public Regimen ObtenerRegimenAllInclusiveModerado()
+        {
+            return new Regimen(Convert.ToInt32(DatabaseConnection.GetInstance().
+                ExecuteProcedureScalar("OBTENER_REGIMEN_ALL_INCLUSIVE_MODERADO")));
         }
 
         public List<Regimen> ObtenerRegimenesActivosDeHotel(Hotel Hotel)

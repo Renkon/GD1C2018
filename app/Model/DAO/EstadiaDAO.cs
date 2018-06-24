@@ -13,6 +13,43 @@ namespace FrbaHotel.Model.DAO
 {
     public class EstadiaDAO
     {
+        public double ObtenerCostoDiarioEstadia(Estadia estadia)
+        {
+            return Convert.ToDouble(
+                DatabaseConnection.GetInstance().ExecuteProcedureScalar("CALCULAR_COSTO_DIARIO_ESTADIA",
+                new SqlParameter("@id_estadia", estadia.Id)));
+        }
+
+        public Tuple<Estadia, Reserva> ObtenerDatosEstadiaFacturacion(int Id)
+        {
+            Tuple<Estadia, Reserva> Tuple = new Tuple<Estadia, Reserva>(null, null);
+            List<Regimen> RegTmp = new RegimenDAO().ObtenerRegimenes();
+
+            Dictionary<int, Regimen> Regimenes = new Dictionary<int, Regimen>();
+            foreach (Regimen r in RegTmp)
+                Regimenes.Add(r.Id, r);
+
+            foreach (var row in DatabaseConnection.GetInstance().ExecuteProcedure("OBTENER_DATOS_ESTADIA_FACTURACION",
+                new SqlParameter("@id_estadia", Id)))
+            {
+                Estadia e = new Estadia(
+                    Id,
+                    Convert.ToDateTime(row["fecha_ingreso_estadia"]),
+                    Convert.ToDateTime(row["fecha_egreso_estadia"])
+                );
+                Reserva r = new Reserva(
+                    null,
+                    Convert.ToDateTime(row["fecha_inicio_reserva"]),
+                    Convert.ToDateTime(row["fecha_fin_reserva"]),
+                    Regimenes[Convert.ToInt32(row["id_regimen"])]
+                );
+
+                Tuple = new Tuple<Estadia, Reserva>(e, r);
+            }
+            return Tuple;
+        }
+
+
         public bool CerrarConsumosEstadia(Estadia Estadia)
         {
             try

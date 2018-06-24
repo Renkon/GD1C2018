@@ -30,6 +30,14 @@ namespace FrbaHotel.Model
             this.EstadoReserva = EstadoReserva;
         }
 
+        public Reserva(int? Id, DateTime Fecha_Inicio, DateTime Fecha_Fin, Regimen Regimen)
+        {
+            this.Id = Id;
+            this.Fecha_Inicio = Fecha_Inicio;
+            this.Fecha_Fin = Fecha_Fin;
+            this.Regimen = Regimen;
+        }
+
         public Reserva(int? Id)
         {
             this.Id = Id;
