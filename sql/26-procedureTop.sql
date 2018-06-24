@@ -176,4 +176,62 @@ GO
 
 --
 
+CREATE PROCEDURE [EL_MONSTRUO_DEL_LAGO_MASER].[TOP5_CLIENTES_PUNTOS]
+    (@inicio DATETIME, @fin DATETIME, @fechaHoy DATETIME)
+AS
+BEGIN
+    SELECT TOP 5 nombre_cliente, apellido_cliente, correo_cliente, SUM(puntos) puntos
+    FROM (
+            ---- Generamos los clientes
+                SELECT id_cliente, nombre_cliente, apellido_cliente, correo_cliente, 0 puntos
+                FROM [EL_MONSTRUO_DEL_LAGO_MASER].[clientes]
+            -- Ahora unimos los consumos de los clientes
+            UNION ALL
+                SELECT cl.id_cliente, nombre_cliente, apellido_cliente, correo_cliente, (precio_consumible * cantidad_consumo)/10 puntos
+                FROM [EL_MONSTRUO_DEL_LAGO_MASER].[consumos] c
+                JOIN [EL_MONSTRUO_DEL_LAGO_MASER].[consumibles] co
+                    ON c.id_consumible = co.id_consumible
+                JOIN [EL_MONSTRUO_DEL_LAGO_MASER].[estadias] e
+                    ON c.id_estadia = e.id_estadia
+                JOIN [EL_MONSTRUO_DEL_LAGO_MASER].[reservas] r
+                    ON e.id_reserva = r.id_reserva
+                JOIN [EL_MONSTRUO_DEL_LAGO_MASER].[clientes] cl
+                    ON r.id_cliente = cl.id_cliente
+                WHERE fecha_consumo >= @inicio
+                AND fecha_consumo <= @fin
+            -- Ahora unimos las estadías COMPLETAS
+            UNION ALL
+                SELECT c.id_cliente, nombre_cliente, apellido_cliente, correo_cliente, 
+                    (DATEDIFF(day,  EL_MONSTRUO_DEL_LAGO_MASER.MAXDATE(fecha_ingreso_estadia, @inicio), 
+                                    EL_MONSTRUO_DEL_LAGO_MASER.MINDATE(fecha_egreso_estadia, @fin)) * 
+                    EL_MONSTRUO_DEL_LAGO_MASER.OBTENER_COSTO_DIARIO_ESTADIA(id_estadia))/20 puntos
+                FROM [EL_MONSTRUO_DEL_LAGO_MASER].[estadias] e
+                JOIN [EL_MONSTRUO_DEL_LAGO_MASER].[reservas] r
+                    ON e.id_reserva = r.id_reserva
+                JOIN [EL_MONSTRUO_DEL_LAGO_MASER].[clientes] c
+                    ON r.id_cliente = c.id_cliente
+                WHERE ((@inicio <= fecha_egreso_estadia)
+                    AND (fecha_ingreso_estadia <= @fin))
+            -- Y finalmente las estadías pendientes
+            UNION ALL
+                SELECT c.id_cliente, nombre_cliente, apellido_cliente, correo_cliente,
+                    (DATEDIFF(day,  EL_MONSTRUO_DEL_LAGO_MASER.MAXDATE(fecha_ingreso_estadia, @inicio), 
+                                    EL_MONSTRUO_DEL_LAGO_MASER.MINDATE(@fechaHoy, @fin)) * 
+                    EL_MONSTRUO_DEL_LAGO_MASER.OBTENER_COSTO_DIARIO_ESTADIA(id_estadia))/20 puntos
+                FROM [EL_MONSTRUO_DEL_LAGO_MASER].[estadias] e
+                JOIN [EL_MONSTRUO_DEL_LAGO_MASER].[reservas] r
+                    ON e.id_reserva = r.id_reserva
+                JOIN [EL_MONSTRUO_DEL_LAGO_MASER].[clientes] c
+                    ON r.id_cliente = c.id_cliente
+                WHERE fecha_egreso_estadia IS NULL
+                AND ((@inicio <= @fechaHoy)
+                AND (fecha_ingreso_estadia <= @fin))
+                AND @fechaHoy >= fecha_ingreso_estadia
+        ) data
+    WHERE id_cliente <> 0
+    GROUP BY nombre_cliente, apellido_cliente, correo_cliente
+    ORDER BY puntos DESC, nombre_cliente, apellido_cliente
+END
+
+GO
 
