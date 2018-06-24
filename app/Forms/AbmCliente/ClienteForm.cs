@@ -192,7 +192,7 @@ namespace FrbaHotel.AbmCliente
                     Cliente NewUser = new Cliente(null, Nombre, Apellido, TipoDocumento, Convert.ToInt64(NumeroDocumento), Correo,
                         Telefono, Calle, Convert.ToInt32(Nro), Convert.ToInt32("0" + Piso), Departamento, Ciudad, Pais, Nacionalidad, DateTime.ParseExact(FechaNacimiento, "dd/MM/yyyy", CultureInfo.InvariantCulture), true);
 
-                    if (new ClienteDAO().InsertarNuevoUsuario(NewUser, type))
+                    if (new ClienteDAO().InsertarNuevoCliente(NewUser, type))
                     {
                         if (type == FormType.Add)
                             this.Close();
@@ -224,7 +224,7 @@ namespace FrbaHotel.AbmCliente
                     cliente.FechaNacimiento = DateTime.ParseExact(FechaNacimiento, "dd/MM/yyyy", CultureInfo.InvariantCulture);
                     cliente.Estado = Estado;
 
-                    if (new ClienteDAO().ModificarUsuario(cliente))
+                    if (new ClienteDAO().ModificarCliente(cliente))
                     {
                         parent.RefreshGrid();
                         this.Close();
@@ -232,7 +232,7 @@ namespace FrbaHotel.AbmCliente
                 break;
                 case FormType.Delete:
                     
-                    if (new ClienteDAO().DeshabilitarUsuario(cliente))
+                    if (new ClienteDAO().DeshabilitarCliente(cliente))
                     {
                         parent.RefreshGrid();
                         this.Close();

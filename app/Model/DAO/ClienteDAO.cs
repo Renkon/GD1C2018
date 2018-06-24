@@ -185,13 +185,21 @@ namespace FrbaHotel.Model.DAO
             return Params.ToArray();
         }
 
-        public bool InsertarNuevoUsuario(Cliente cliente, FormType type)
+        public bool InsertarNuevoCliente(Cliente cliente, FormType type)
         {
             try
             {
-                DatabaseConnection.GetInstance()
-                    .ExecuteProcedureNonQuery(type == FormType.Add ? 
-                    "INSERTAR_NUEVO_CLIENTE" : "INSERTAR_NUEVO_CLIENTE_SIN_VALIDACION", GenerateParamsDML(cliente, type));
+                if (type == FormType.Add)
+                {
+                    DatabaseConnection.GetInstance()
+                        .ExecuteProcedureNonQuery("INSERTAR_NUEVO_CLIENTE", GenerateParamsDML(cliente, type));
+                }
+                else
+                {
+                    int id = Convert.ToInt32(DatabaseConnection.GetInstance()
+                        .ExecuteProcedureScalar("INSERTAR_NUEVO_CLIENTE_SIN_VALIDACION", GenerateParamsDML(cliente, type)));
+                    cliente.Id = id;
+                }
                 LogUtils.LogInfo("Se creó cliente " + cliente.Nombre + " " + cliente.Apellido);
                 MessageBox.Show("Se agregó satisfactoriamente el cliente " + cliente.Nombre + " " + cliente.Apellido, "INFO");
                 return true;
@@ -217,7 +225,7 @@ namespace FrbaHotel.Model.DAO
             }
         }
 
-        public bool ModificarUsuario(Cliente Cliente)
+        public bool ModificarCliente(Cliente Cliente)
         {
             try
             {
@@ -279,7 +287,7 @@ namespace FrbaHotel.Model.DAO
             return Params.ToArray();
         }
 
-        public bool DeshabilitarUsuario(Cliente Cliente)
+        public bool DeshabilitarCliente(Cliente Cliente)
         {
             try
             {

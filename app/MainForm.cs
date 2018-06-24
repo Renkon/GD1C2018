@@ -32,6 +32,7 @@ namespace FrbaHotel
     {
         private Dictionary<int, ToolStripMenuItem> menu = new Dictionary<int, ToolStripMenuItem>();
         private List<ToolStripMenuItem> menuParent = new List<ToolStripMenuItem>();
+
         public MainForm()
         {
             DatabaseConnection.GetInstance().TestConnection();

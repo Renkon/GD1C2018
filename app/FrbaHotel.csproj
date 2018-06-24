@@ -245,6 +245,9 @@
     <Compile Include="Model\Consumible.cs" />
     <Compile Include="Model\Consumo.cs" />
     <Compile Include="Model\Cuenta.cs" />
+    <Compile Include="Model\Custom\DAO\ListadoDAO.cs" />
+    <Compile Include="Model\Custom\Listado.cs" />
+    <Compile Include="Model\Custom\Trimestre.cs" />
     <Compile Include="Model\DAO\CierreTemporalHabitacionDAO.cs" />
     <Compile Include="Model\DAO\CierreTemporalHotelDAO.cs" />
     <Compile Include="Model\DAO\ClienteDAO.cs" />
