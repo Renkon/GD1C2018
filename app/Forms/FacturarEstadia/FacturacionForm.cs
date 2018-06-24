@@ -229,7 +229,7 @@ namespace FrbaHotel.Forms.FacturarEstadia
             if (new FacturaDAO().CrearFactura(NewFactura))
             {
                 NewFactura.GuardarTXT();
-                button2.Enabled = false;
+                this.Close();
             }
         }
     }
