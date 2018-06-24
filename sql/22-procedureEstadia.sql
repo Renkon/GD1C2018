@@ -1,6 +1,6 @@
 -- Este procedure obtiene las reservas que se puede ingresar/cerrar una estadia
 CREATE PROCEDURE [EL_MONSTRUO_DEL_LAGO_MASER].[OBTENER_RESERVA_APTA_ESTADIA]
-    (@id_rol_user INT, @id_reserva INT, @today DATETIME)
+    (@id_rol_user INT, @id_usuario INT, @id_reserva INT, @today DATETIME)
 AS
 BEGIN
 
@@ -8,16 +8,23 @@ BEGIN
 
     EXEC [EL_MONSTRUO_DEL_LAGO_MASER].[VALIDAR_ROL_USUARIO] @id_rol_user, 22
 
-    SELECT fecha_realizacion_reserva, fecha_inicio_reserva, fecha_fin_reserva, id_regimen, id_estado_reserva
+    SELECT DISTINCT fecha_realizacion_reserva, fecha_inicio_reserva, fecha_fin_reserva, id_regimen, id_estado_reserva
     FROM [EL_MONSTRUO_DEL_LAGO_MASER].[reservas] r
     LEFT JOIN [EL_MONSTRUO_DEL_LAGO_MASER].[estadias] e
         ON r.id_reserva = e.id_reserva
+    LEFT JOIN [EL_MONSTRUO_DEL_LAGO_MASER].[reservasXhabitaciones] rh
+        ON r.id_reserva = rh.id_reserva
+    LEFT JOIN [EL_MONSTRUO_DEL_LAGO_MASER].[habitaciones] h
+        ON rh.id_habitacion = h.id_habitacion
     WHERE r.id_reserva = @id_reserva
     AND (
         (id_estado_reserva IN (1, 2, 7) AND fecha_inicio_reserva = @today AND id_estadia IS NULL)
         OR
         (id_estado_reserva = 6 AND id_estadia IS NOT NULL AND fecha_egreso_estadia IS NULL)
     )
+    AND id_hotel IN (SELECT id_hotel 
+                     FROM [EL_MONSTRUO_DEL_LAGO_MASER].[usuariosXhoteles]
+                     WHERE id_usuario = @id_usuario)
 END
 
 GO
