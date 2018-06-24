@@ -339,7 +339,7 @@ namespace FrbaHotel
             // facturarToolStripMenuItem
             // 
             this.facturarToolStripMenuItem.Name = "facturarToolStripMenuItem";
-            this.facturarToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.facturarToolStripMenuItem.Size = new System.Drawing.Size(117, 22);
             this.facturarToolStripMenuItem.Text = "Facturar";
             this.facturarToolStripMenuItem.Click += new System.EventHandler(this.facturarToolStripMenuItem_Click);
             // 
@@ -356,6 +356,7 @@ namespace FrbaHotel
             this.generarListadoToolStripMenuItem.Name = "generarListadoToolStripMenuItem";
             this.generarListadoToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
             this.generarListadoToolStripMenuItem.Text = "Generar listado";
+            this.generarListadoToolStripMenuItem.Click += new System.EventHandler(this.generarListadoToolStripMenuItem_Click);
             // 
             // label1
             // 

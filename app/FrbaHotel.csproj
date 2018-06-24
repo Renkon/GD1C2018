@@ -167,6 +167,12 @@
     <Compile Include="Forms\GenerarModificacionReserva\SeleccionarRegimen.Designer.cs">
       <DependentUpon>SeleccionarRegimen.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\ListadoEstadistico\EstadisticasForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ListadoEstadistico\EstadisticasForm.Designer.cs">
+      <DependentUpon>EstadisticasForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Login\LoginForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -342,6 +348,9 @@
     <EmbeddedResource Include="Forms\GenerarModificacionReserva\SeleccionarRegimen.resx">
       <DependentUpon>SeleccionarRegimen.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ListadoEstadistico\EstadisticasForm.resx">
+      <DependentUpon>EstadisticasForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\Login\LoginForm.resx">
       <DependentUpon>LoginForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -395,9 +404,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Forms\ListadoEstadistico\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="Resources\hotel.png" />
   </ItemGroup>

@@ -13,11 +13,16 @@ namespace FrbaHotel
         public static Usuario User { set; get; }
         public static Rol Rol { set; get; }
         public static Hotel Hotel { set; get; }
+        public static MainForm MainForm { set; get; }
+        public static bool LoggedIn { get; set; }
 
         public static void InitGuest()
         {
             User = new UsuarioDAO().ObtenerUsuarioDummy();
             Rol = new RolDAO().ObtenerRolGuest();
+            LoggedIn = false;
+
+            UpdateFuncionalidades();
         }
 
         public static void Reset()
@@ -31,8 +36,14 @@ namespace FrbaHotel
             User = U;
             Rol = R;
             Hotel = H;
+            LoggedIn = true;
 
-            // TODO: mostrar solo ciertos menues segun los roles.
+            UpdateFuncionalidades();
+        }
+
+        public static void UpdateFuncionalidades()
+        {
+            MainForm.SetFuncionalidadesVisibles(new FuncionalidadDAO().ObtenerIdsFuncionalidadesDeRol(Rol));
         }
     }
 }
