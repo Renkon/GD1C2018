@@ -34,7 +34,8 @@ namespace FrbaHotel.Model.DAO
                 ExecuteProcedure("OBTENER_RESERVA_APTA_ESTADIA", 
                 new SqlParameter("@id_reserva", Id),
                 new SqlParameter("@today", Config.GetInstance().GetCurrentDate()),
-                new SqlParameter("@id_rol_user", Session.Rol.Id)))
+                new SqlParameter("@id_rol_user", Session.Rol.Id),
+                new SqlParameter("@id_usuario", Session.User.Id)))
             {
                 r.Id = Id;
                 r.Fecha_Realización = Convert.ToDateTime(row["fecha_realizacion_reserva"]);

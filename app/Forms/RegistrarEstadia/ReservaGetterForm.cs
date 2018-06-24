@@ -44,7 +44,8 @@ namespace FrbaHotel.Forms.RegistrarEstadia
             if (reserva.Id == -1)
             {
                 MessageBox.Show("Lo sentimos, es posible que el código de reserva sea inválido, "
-                    + "que aún no sea la fecha correspondiente al inicio de la reserva o "
+                    + "que aún no sea la fecha correspondiente al inicio de la reserva, "
+                    + "que no trabaje en el hotel que se hizo la reserva o "
                     + "que ya haya finalizado su estadía", "INFO");
                 return;
             }

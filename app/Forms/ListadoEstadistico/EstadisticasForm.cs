@@ -54,7 +54,9 @@ namespace FrbaHotel.Forms.ListadoEstadistico
                 new string[] { "nombre_hotel", "cantidad_consumibles_total" }));
 
             comboBox2.Items.Add(new Listado(3, "hoteles con mayor cantidad de días fuera de servicio",
-                "LISTADO_TOP5_NOSEQPIJA", new string[] { }, new string[] { }));
+                "TOP5_HOTELES_DIAS_CERRADO", 
+                new string[] { "Nombre de hotel", "Cantidad de días que estuvo cerrado" }, 
+                new string[] { "nombre_hotel", "dias_cerrado" }));
 
             comboBox2.Items.Add(new Listado(4, "habitaciones con mayor cantidad de días "
                 + "y veces que fueron ocupadas",
