@@ -44,6 +44,8 @@ BEGIN
     RETURN @costo
 END
 
+GO
+
 -- Este procedure obtiene el costo diario de una estadia/reserva
 CREATE PROCEDURE [EL_MONSTRUO_DEL_LAGO_MASER].[CALCULAR_COSTO_DIARIO_ESTADIA]
     (@id_estadia INT)
