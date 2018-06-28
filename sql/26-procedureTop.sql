@@ -101,18 +101,23 @@ CREATE PROCEDURE [EL_MONSTRUO_DEL_LAGO_MASER].[TOP5_HOTELES_DIAS_CERRADO]
     (@inicio DATETIME, @fin DATETIME)
 AS
 BEGIN
-    SELECT TOP 5 h.id_hotel, nombre_hotel, 
-        ISNULL(SUM(DATEDIFF(day, EL_MONSTRUO_DEL_LAGO_MASER.MAXDATE(@inicio, fecha_inicio_cierre_temporal_hotel), 
-        EL_MONSTRUO_DEL_LAGO_MASER.MINDATE(@fin, fecha_fin_cierre_temporal_hotel)) + 1), 0) dias_cerrado
-    FROM [EL_MONSTRUO_DEL_LAGO_MASER].[hoteles] h
-    LEFT JOIN [EL_MONSTRUO_DEL_LAGO_MASER].[cierres_temporales_hotel] c
-        ON h.id_hotel = c.id_hotel
-    WHERE ((@inicio <= fecha_fin_cierre_temporal_hotel)
-        AND (fecha_inicio_cierre_temporal_hotel <= @fin))
-    OR id_cierre_temporal_hotel IS NULL
-    GROUP BY h.id_hotel, nombre_hotel
-    ORDER BY ISNULL(SUM(DATEDIFF(day, EL_MONSTRUO_DEL_LAGO_MASER.MAXDATE(@inicio, fecha_inicio_cierre_temporal_hotel), 
-        EL_MONSTRUO_DEL_LAGO_MASER.MINDATE(@fin, fecha_fin_cierre_temporal_hotel)) + 1), 0) DESC, nombre_hotel
+    SELECT TOP 5 id_hotel, nombre_hotel, SUM(dias_cerrado) dias_cerrado
+    FROM (
+        -- Generamos todos los hoteles primero
+            SELECT id_hotel, nombre_hotel, 0 dias_cerrado
+            FROM [EL_MONSTRUO_DEL_LAGO_MASER].[hoteles]
+        UNION ALL
+        -- Obtenemos la suma de dias reservados
+            SELECT h.id_hotel, nombre_hotel, DATEDIFF(day, EL_MONSTRUO_DEL_LAGO_MASER.MAXDATE(@inicio, fecha_inicio_cierre_temporal_hotel),
+                EL_MONSTRUO_DEL_LAGO_MASER.MINDATE(@fin, fecha_fin_cierre_temporal_hotel)) + 1 dias_cerrado
+            FROM [EL_MONSTRUO_DEL_LAGO_MASER].[hoteles] h
+            JOIN [EL_MONSTRUO_DEL_LAGO_MASER].[cierres_temporales_hotel] c
+                ON h.id_hotel = c.id_hotel
+            WHERE ((@inicio <= fecha_fin_cierre_temporal_hotel)
+            AND (fecha_inicio_cierre_temporal_hotel <= @fin))
+        ) data
+    GROUP BY id_hotel, nombre_hotel
+    ORDER BY dias_cerrado DESC, nombre_hotel
 END
 
 GO
@@ -169,7 +174,7 @@ BEGIN
                 GROUP BY ha.id_habitacion, ha.id_hotel, nombre_hotel, numero_habitacion
         ) data
     GROUP BY id_habitacion, id_hotel, nombre_hotel, numero_habitacion
-    ORDER BY cantidad_dias DESC
+    ORDER BY cantidad_dias DESC, nombre_hotel
 END
 
 GO
