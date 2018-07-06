@@ -113,20 +113,20 @@ AS
 	UNION
 	SELECT DISTINCT
 		-1 id_cliente,
-		Cliente_Nombre nombre_cliente, 
-		Cliente_Apellido apellido_cliente, 
+		nombre_cliente, 
+		apellido_cliente, 
 		6 id_tipo_documento, 
-		Cliente_Pasaporte_Nro numero_documento_cliente, 
-		Cliente_Mail correo_cliente, 
+		numero_documento_cliente, 
+		correo_cliente, 
 		null telefono_cliente, 
-		Cliente_Dom_Calle domicilio_calle_cliente, 
-		Cliente_Nro_Calle domicilio_numero_cliente, 
-		Cliente_Piso domicilio_piso_cliente, 
-		Cliente_Depto domicilio_departamento_cliente, 
+		domicilio_calle_cliente, 
+		domicilio_numero_cliente, 
+		domicilio_piso_cliente, 
+		domicilio_departamento_cliente, 
 		null ciudad_cliente, 
 		null id_pais, 
-		Cliente_Nacionalidad nacionalidad_cliente, 
-		Cliente_Fecha_Nac fecha_nacimiento_cliente,
+		nacionalidad_cliente, 
+		fecha_nacimiento_cliente,
 		0 estado_cliente
 	FROM [EL_MONSTRUO_DEL_LAGO_MASER].[migracion_errores]
 

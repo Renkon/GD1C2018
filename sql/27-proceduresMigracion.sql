@@ -68,8 +68,6 @@ GO
 -- Procedure principal de la migración
 CREATE PROCEDURE [EL_MONSTRUO_DEL_LAGO_MASER].[MIGRAR_DATOS] AS
 BEGIN
-    SET NOCOUNT ON;
-
     -- Ejecuciones previas
     -- Debido a que necesitamos que se inserten respetando el orden de código
     -- (porque lo hicimos con IDENTITY), los ejecutamos por separado
@@ -78,434 +76,278 @@ BEGIN
     EXEC [EL_MONSTRUO_DEL_LAGO_MASER].[CREAR_CONSUMIBLES];
     EXEC [EL_MONSTRUO_DEL_LAGO_MASER].[CREAR_FACTURAS];
 
-    DECLARE @currentRow                                INT = 1;
-    -- Campos para la tabla de Hoteles
-    DECLARE @id_hotel                                INT;
-    DECLARE @ciudad_hotel                            NVARCHAR(255);
-    DECLARE @domicilio_calle_hotel                    NVARCHAR(255);
-    DECLARE @domicilio_numero_hotel                    NUMERIC(18,0);
-    DECLARE @cantidad_estrellas_hotel                NUMERIC(18,0);
-    DECLARE @id_pais                                INT;
-    DECLARE @recarga_por_estrellas_hotel            NUMERIC(18,0);
-
-    -- Campos para la tabla de Habitaciones
-    DECLARE @id_habitacion                            INT;
-    DECLARE @numero_habitacion                        NUMERIC(18,0);
-    DECLARE @piso_habitacion                        NUMERIC(18,0);
-    DECLARE @ubicacion_habitacion                    NVARCHAR(50);
-    DECLARE @descripcion_habitacion                    NVARCHAR(255);
+    SELECT CAST(NULL as INT)                          id_hotel,
+           Hotel_Ciudad                               ciudad_hotel,
+           Hotel_Calle                                domicilio_calle_hotel,
+           Hotel_Nro_Calle                            domicilio_numero_hotel,
+           Hotel_CantEstrella                         cantidad_estrellas_hotel,
+           Hotel_Recarga_Estrella                     recarga_por_estrellas_hotel,
+           CAST(NULL as INT)                          id_habitacion,
+           Habitacion_Numero                          numero_habitacion,
+           Habitacion_Piso                            piso_habitacion,
+           Habitacion_Frente                          ubicacion_habitacion,
+           Habitacion_Tipo_Codigo                     id_tipo_habitacion,
+           CAST(NULL as INT)                          id_regimen,
+           Regimen_Descripcion                        descripcion_regimen,
+           Regimen_Precio                             precio_base_regimen,
+           Reserva_Codigo                             id_reserva,
+           CAST(NULL as INT)                          id_estadia,
+           Estadia_Fecha_Inicio                       fecha_ingreso_estadia,
+           Estadia_Fecha_Inicio + Estadia_Cant_Noches fecha_egreso_estadia,
+           Consumible_Codigo                          id_consumible,
+           CAST(NULL as INT)                          id_consumo,
+           CAST(NULL as INT)                          id_item_factura,
+           Item_Factura_Cantidad                      cantidad_item_factura,
+           Item_Factura_Monto                         precio_unitario_item_factura,
+           Factura_Nro                                id_factura,
+           CAST(NULL as INT)                          id_cliente,
+           Cliente_Pasaporte_Nro                      numero_documento_cliente,
+           Cliente_Apellido                           apellido_cliente,
+           Cliente_Nombre                             nombre_cliente,
+           Cliente_Fecha_Nac                          fecha_nacimiento_cliente,
+           Cliente_Mail                               correo_cliente,
+           Cliente_Dom_Calle                          domicilio_calle_cliente,
+           Cliente_Nro_Calle                          domicilio_numero_cliente,
+           Cliente_Piso                               domicilio_piso_cliente,
+           Cliente_Depto                              domicilio_departamento_cliente,
+           Cliente_Nacionalidad                       nacionalidad_cliente
+    INTO #master
+    FROM [gd_esquema].[Maestra]
     
-    -- Campos para la tabla de Tipos de habitación
-    DECLARE @id_tipo_habitacion                        INT;
-    DECLARE @descripcion_tipo_habitacion            NVARCHAR(255);
-    DECLARE @porcentual_tipo_habitacion                NUMERIC(18,2);
-
-    -- Campos para la tabla de Regimenes
-    DECLARE @id_regimen                                INT;
-    DECLARE @descripcion_regimen                    NVARCHAR(255);
-    DECLARE @precio_base_regimen                    NUMERIC(18,2);
-    DECLARE @estado_regimen                            BIT = 1;
-
-    -- Campos para la tabla de Reservas
-    DECLARE @id_reserva                                INT;
-    DECLARE @fecha_realizacion_reserva                DATETIME;
-    DECLARE @fecha_inicio_reserva                    DATETIME;
-    DECLARE @cant_noches_reserva                    NUMERIC(18,0);
-    DECLARE @fecha_fin_reserva                        DATETIME;
-    DECLARE @id_usuario                                INT = 1;
-    DECLARE @id_estado_reserva                        INT = 7;
-
-    -- Campos para la tabla de Estadias
-    DECLARE @id_estadia                                INT;
-    DECLARE @fecha_ingreso_estadia                    DATETIME;
-    DECLARE @cant_dias_estadia                        NUMERIC(18,0);
-    DECLARE @fecha_egreso_estadia                    DATETIME;
-
-    -- Campos para la tabla de Consumibles
-    DECLARE @id_consumible                            INT;
-    DECLARE @precio_consumible                        NUMERIC(18,2);
-    DECLARE @descripcion_consumible                    NVARCHAR(255);
-
-    -- Campos para la tabla de Items Factura
-    DECLARE @id_item_factura                        INT;
-    DECLARE @precio_unitario_item_factura            NUMERIC(18,2);
-    DECLARE @descripcion_item_factura                NVARCHAR(255);
-    DECLARE @cantidad_item_factura                    NUMERIC(18,0);
-
-    -- Campos para la tabla de Consumo
-    DECLARE @id_consumo                                INT;
-    DECLARE @fecha_consumo                            DATETIME;
-
-    -- Campos para la tabla de Facturas
-    DECLARE @id_factura                                INT;
-    DECLARE @fecha_factura                            DATETIME;
-    DECLARE @total_factura                            NUMERIC(18,2);
-    DECLARE @id_forma_de_pago                        INT = 13;
-
-    -- Campos para la tabla de Clientes
-    DECLARE @id_cliente                                INT;
-    DECLARE @nombre_cliente                            NVARCHAR(255);
-    DECLARE @apellido_cliente                        NVARCHAR(255);
-    DECLARE @id_tipo_documento                        INT = 6;
-    DECLARE @numero_documento_cliente                NUMERIC(18,0);
-    DECLARE @correo_cliente                            NVARCHAR(255);
-    DECLARE @telefono_cliente                        NVARCHAR(100);
-    DECLARE @domicilio_calle_cliente                NVARCHAR(255);
-    DECLARE @domicilio_numero_cliente                NUMERIC(18,0);
-    DECLARE @domicilio_piso_cliente                    NUMERIC(18,0);
-    DECLARE @domicilio_departamento_cliente            NVARCHAR(50);
-    DECLARE @nacionalidad_cliente                    NVARCHAR(20);
-    DECLARE @fecha_nacimiento_cliente                DATETIME;
+    -- Necesitamos esta secuencia para los consumos (que no son distinct)
+    CREATE SEQUENCE [EL_MONSTRUO_DEL_LAGO_MASER].[secuencia_consumos]
+    AS INT
+    START WITH 1
+    INCREMENT BY 1
     
-    -- El super cursor
-    DECLARE maestra_cursor CURSOR FOR
-        SELECT    Hotel_Ciudad,
-                Hotel_Calle,
-                Hotel_Nro_Calle,
-                Hotel_CantEstrella,
-                Hotel_Recarga_Estrella,
-                Habitacion_Numero,
-                Habitacion_Piso,
-                Habitacion_Frente,
-                Habitacion_Tipo_Codigo,
-                Habitacion_Tipo_Descripcion,
-                Habitacion_Tipo_Porcentual,
-                Regimen_Descripcion,
-                Regimen_Precio,
-                Reserva_Fecha_Inicio,
-                Reserva_Codigo,
-                Reserva_Cant_Noches,
-                Reserva_Fecha_Inicio + Reserva_Cant_Noches,
-                Estadia_Fecha_Inicio,
-                Estadia_Cant_Noches,
-                Estadia_Fecha_Inicio + Estadia_Cant_Noches,
-                Consumible_Codigo,
-                Consumible_Descripcion,
-                Consumible_Precio,
-                Item_Factura_Cantidad,
-                Item_Factura_Monto,
-                Factura_Nro,
-                Factura_Fecha,
-                Factura_Total,
-                Cliente_Pasaporte_Nro,
-                Cliente_Apellido,
-                Cliente_Nombre,
-                Cliente_Fecha_Nac,
-                Cliente_Mail,
-                Cliente_Dom_Calle,
-                Cliente_Nro_Calle,
-                Cliente_Piso,
-                Cliente_Depto,
-                Cliente_Nacionalidad
-        FROM [gd_esquema].[Maestra];
+    -- Y esta para los items de factura
+    CREATE SEQUENCE [EL_MONSTRUO_DEL_LAGO_MASER].[secuencia_items_factura]
+    AS INT
+    START WITH 1
+    INCREMENT BY 1
+    
+    UPDATE #master
+    SET id_consumo = NEXT VALUE FOR [EL_MONSTRUO_DEL_LAGO_MASER].[secuencia_consumos]
+    WHERE id_consumible IS NOT NULL
+    AND   fecha_ingreso_estadia IS NOT NULL
+    
+    UPDATE #master
+    SET id_item_factura = NEXT VALUE FOR [EL_MONSTRUO_DEL_LAGO_MASER].[secuencia_items_factura]
+    WHERE id_factura IS NOT NULL
+    
+    DROP SEQUENCE [EL_MONSTRUO_DEL_LAGO_MASER].[secuencia_consumos]
+    DROP SEQUENCE [EL_MONSTRUO_DEL_LAGO_MASER].[secuencia_items_factura]
+    
+    ------------------------------------------------ HOTELES ------------------------------------------------
+    INSERT INTO [EL_MONSTRUO_DEL_LAGO_MASER].[hoteles]
+        (ciudad_hotel, domicilio_calle_hotel, domicilio_numero_hotel, cantidad_estrellas_hotel, recarga_por_estrellas_hotel)
+    SELECT DISTINCT ciudad_hotel, domicilio_calle_hotel, domicilio_numero_hotel, cantidad_estrellas_hotel, recarga_por_estrellas_hotel
+    FROM #master
+    
+    -- Seteamos el id_hotel en la tabla temporal para seguir con el procesamiento
+    UPDATE #master
+    SET id_hotel = h.id_hotel
+    FROM #master temp
+    JOIN [EL_MONSTRUO_DEL_LAGO_MASER].[hoteles] h
+    ON  h.ciudad_hotel = temp.ciudad_hotel
+    AND h.domicilio_calle_hotel = temp.domicilio_calle_hotel
+    AND h.domicilio_numero_hotel = temp.domicilio_numero_hotel
+    AND h.cantidad_estrellas_hotel = temp.cantidad_estrellas_hotel
+    AND h.recarga_por_estrellas_hotel = temp.recarga_por_estrellas_hotel
+    
+    -- Limpiamos las columnas que no necesitamos más
+    ALTER TABLE #master
+    DROP COLUMN ciudad_hotel, domicilio_calle_hotel, domicilio_numero_hotel, cantidad_estrellas_hotel, recarga_por_estrellas_hotel
+    ------------------------------------------------ HOTELES ------------------------------------------------
+    ---------------------------------------------- HABITACIONES ---------------------------------------------
+    INSERT INTO [EL_MONSTRUO_DEL_LAGO_MASER].[habitaciones]
+        (id_hotel, numero_habitacion, piso_habitacion, ubicacion_habitacion, id_tipo_habitacion)
+    SELECT DISTINCT id_hotel, numero_habitacion, piso_habitacion, ubicacion_habitacion, id_tipo_habitacion
+    FROM #master
+    
+    -- Seteamos el id_habitacion para seguir el procesamiento
+    UPDATE #master
+    SET id_habitacion = h.id_habitacion
+    FROM #master temp
+    JOIN [EL_MONSTRUO_DEL_LAGO_MASER].[habitaciones] h
+    ON  h.id_hotel = temp.id_hotel
+    AND h.numero_habitacion = temp.numero_habitacion
+    AND h.piso_habitacion = temp.piso_habitacion
+    AND h.ubicacion_habitacion = temp.ubicacion_habitacion
+    AND h.id_tipo_habitacion = temp.id_tipo_habitacion
+    
+    -- Insertamos a la relación muchos a muchos entre reservas y habitaciones
+    INSERT INTO [EL_MONSTRUO_DEL_LAGO_MASER].[reservasXhabitaciones]
+        (id_reserva, id_habitacion)
+    SELECT DISTINCT id_reserva, id_habitacion
+    FROM #master
+    
+    -- Limpiamos las columnas que no necesitamos más
+    ALTER TABLE #master
+    DROP COLUMN numero_habitacion, piso_habitacion, ubicacion_habitacion, id_tipo_habitacion
+    ---------------------------------------------- HABITACIONES ---------------------------------------------
+    ----------------------------------------------- REGIMENES -----------------------------------------------
+    INSERT INTO [EL_MONSTRUO_DEL_LAGO_MASER].[regimenes]
+        (descripcion_regimen, precio_base_regimen)
+    SELECT DISTINCT descripcion_regimen, precio_base_regimen
+    FROM #master
+    
+    -- Seteamos el id_regimen para seguir el procesamiento
+    UPDATE #master
+    SET id_regimen = r.id_regimen
+    FROM #master temp
+    JOIN [EL_MONSTRUO_DEL_LAGO_MASER].[regimenes] r
+    ON  r.descripcion_regimen = temp.descripcion_regimen
+    AND r.precio_base_regimen = temp.precio_base_regimen
+    
+    -- Insertamos a la relación muchos a muchos entre hoteles y regimenes
+    INSERT INTO [EL_MONSTRUO_DEL_LAGO_MASER].[hotelesXregimenes]
+        (id_hotel, id_regimen)
+    SELECT DISTINCT id_hotel, id_regimen
+    FROM #master
+    
+    -- Updateamos en reservas el regimen usado
+    UPDATE [EL_MONSTRUO_DEL_LAGO_MASER].[reservas]
+        SET id_regimen = temp.id_regimen
+    FROM [EL_MONSTRUO_DEL_LAGO_MASER].[reservas] r
+    JOIN #master temp
+        ON r.id_reserva = temp.id_reserva
+    
+    -- Limpiamos las columnas que no necesitamos más
+    ALTER TABLE #master
+    DROP COLUMN descripcion_regimen, precio_base_regimen, id_hotel, id_regimen
+    ----------------------------------------------- REGIMENES -----------------------------------------------
+    -----------------------------------------------  ESTADIAS -----------------------------------------------
+    INSERT INTO [EL_MONSTRUO_DEL_LAGO_MASER].[estadias]
+        (id_reserva, id_usuario_ingreso, id_usuario_egreso, fecha_ingreso_estadia, fecha_egreso_estadia)
+    SELECT DISTINCT id_reserva, 1, 1, fecha_ingreso_estadia, fecha_egreso_estadia
+    FROM #master
+    WHERE fecha_ingreso_estadia IS NOT NULL
+    
+    -- Seteamos el id_estadia para seguir el procesamiento
+    UPDATE #master
+    SET id_estadia = e.id_estadia
+    FROM #master temp
+    JOIN [EL_MONSTRUO_DEL_LAGO_MASER].[estadias] e
+    ON  e.id_reserva = temp.id_reserva
+    AND e.fecha_ingreso_estadia = temp.fecha_ingreso_estadia
+    AND e.fecha_egreso_estadia = temp.fecha_egreso_estadia
+    
+    -- Updateamos en facturas la estadía
+    UPDATE [EL_MONSTRUO_DEL_LAGO_MASER].[facturas]
+        SET id_estadia = temp.id_estadia
+    FROM [EL_MONSTRUO_DEL_LAGO_MASER].[facturas] f
+    JOIN #master temp
+        ON f.id_factura = temp.id_factura
+    
+    -- Limpiamos las columnas que no necesitamos más
+    ALTER TABLE #master
+    DROP COLUMN fecha_ingreso_estadia, fecha_egreso_estadia
+    -----------------------------------------------  ESTADIAS -----------------------------------------------
+    -----------------------------------------------  CONSUMOS -----------------------------------------------
+    INSERT INTO [EL_MONSTRUO_DEL_LAGO_MASER].[consumos]
+        (id_consumible, id_estadia, id_habitacion, cantidad_consumo)
+    SELECT id_consumible, id_estadia, id_habitacion, cantidad_item_factura 
+    FROM #master
+    WHERE id_consumo IS NOT NULL
+    ORDER BY id_consumo
+    
+    -- Limpiamos las columnas que no necesitamos más
+    ALTER TABLE #master
+    DROP COLUMN id_consumible, id_habitacion
+    -----------------------------------------------  CONSUMOS -----------------------------------------------
+    ---------------------------------------------  ITEMS FACTURA --------------------------------------------
+    INSERT INTO [EL_MONSTRUO_DEL_LAGO_MASER].[items_factura]
+        (id_factura, id_consumo, precio_unitario_item_factura, cantidad_item_factura)
+    SELECT id_factura, id_consumo, precio_unitario_item_factura, cantidad_item_factura
+    FROM #master
+    WHERE id_item_factura IS NOT NULL
+    
+    -- Limpiamos las columnas que no necesitamos más
+    ALTER TABLE #master
+    DROP COLUMN id_consumo, id_item_factura, cantidad_item_factura, precio_unitario_item_factura, id_factura
+    ---------------------------------------------  ITEMS FACTURA --------------------------------------------
+    -----------------------------------------------  CLIENTES -----------------------------------------------
+    CREATE TABLE #clientes_premigracion (
+        nombre_cliente NVARCHAR(255),
+        apellido_cliente NVARCHAR(255),
+        numero_documento_cliente NUMERIC(18, 0),
+        correo_cliente NVARCHAR(255),
+        domicilio_calle_cliente NVARCHAR(255),
+        domicilio_numero_cliente NUMERIC(18, 0),
+        domicilio_piso_cliente NUMERIC(18, 0),
+        domicilio_departamento_cliente NVARCHAR(50),
+        nacionalidad_cliente NVARCHAR(20),
+        fecha_nacimiento_cliente DATETIME
+    )
+    
+    -- Creamos una tabla temporal con unique indexes que no exploten al hacer bulk insert
+    CREATE UNIQUE INDEX temp_clientes_numero_documento
+    ON #clientes_premigracion(numero_documento_cliente)
+    WITH IGNORE_DUP_KEY
+    
+    CREATE UNIQUE INDEX temp_clientes_correo
+    ON #clientes_premigracion(correo_cliente)
+    WITH IGNORE_DUP_KEY
+    
+    -- Poblamos la tabla
+    INSERT INTO #clientes_premigracion
+    SELECT DISTINCT nombre_cliente, apellido_cliente, numero_documento_cliente, correo_cliente, domicilio_calle_cliente,
+        domicilio_numero_cliente, domicilio_piso_cliente, domicilio_departamento_cliente, nacionalidad_cliente, fecha_nacimiento_cliente
+    FROM #master
+    
+    -- Insertamos los clientes
+    INSERT INTO [EL_MONSTRUO_DEL_LAGO_MASER].[clientes]
+        (nombre_cliente, apellido_cliente, numero_documento_cliente, correo_cliente, domicilio_calle_cliente,
+        domicilio_numero_cliente, domicilio_piso_cliente, domicilio_departamento_cliente, nacionalidad_cliente, fecha_nacimiento_cliente)
+    SELECT nombre_cliente, apellido_cliente, numero_documento_cliente, correo_cliente, domicilio_calle_cliente,
+        domicilio_numero_cliente, domicilio_piso_cliente, domicilio_departamento_cliente, nacionalidad_cliente, fecha_nacimiento_cliente 
+    FROM #clientes_premigracion
+    
+    -- Borramos la tabla temporal
+    DROP TABLE #clientes_premigracion
+    
+    -- Seteamos el id_cliente para seguir el procesamiento
+    UPDATE #master
+    SET id_cliente = c.id_cliente
+    FROM #master temp
+    JOIN [EL_MONSTRUO_DEL_LAGO_MASER].[clientes] c
+    ON  c.nombre_cliente = temp.nombre_cliente
+    AND c.apellido_cliente = temp.apellido_cliente 
+    AND c.numero_documento_cliente = temp.numero_documento_cliente
+    AND c.correo_cliente = temp.correo_cliente
+    AND c.domicilio_calle_cliente = temp.domicilio_calle_cliente
+    AND c.domicilio_numero_cliente = temp.domicilio_numero_cliente
+    AND c.domicilio_piso_cliente = temp.domicilio_piso_cliente
+    AND c.domicilio_departamento_cliente = temp.domicilio_departamento_cliente
+    AND c.nacionalidad_cliente = temp.nacionalidad_cliente
+    AND c.fecha_nacimiento_cliente = temp.fecha_nacimiento_cliente 
+    
+    -- Insertamos a la relación muchos a muchos entre clientes y estadias
+    INSERT INTO [EL_MONSTRUO_DEL_LAGO_MASER].[clientesXestadias]
+    SELECT DISTINCT id_cliente, id_estadia
+    FROM #master
+    WHERE id_estadia IS NOT NULL
+    AND   id_cliente IS NOT NULL
+    
+    -- Updateamos en reservas al cliente
+    UPDATE [EL_MONSTRUO_DEL_LAGO_MASER].[reservas]
+        SET id_cliente = temp.id_cliente
+    FROM [EL_MONSTRUO_DEL_LAGO_MASER].[reservas] r
+    JOIN #master temp
+        ON r.id_reserva = temp.id_reserva
+    WHERE temp.id_cliente IS NOT NULL
+    -----------------------------------------------  CLIENTES -----------------------------------------------
+    -- Preparamos la tabla de errores de migración con los datos restantes.
+    INSERT INTO [EL_MONSTRUO_DEL_LAGO_MASER].[migracion_errores]
+    SELECT *
+    FROM #master
+    WHERE id_cliente IS NULL
+    
+    DROP TABLE #master
 
-        OPEN maestra_cursor;
-        FETCH maestra_cursor INTO    @ciudad_hotel,
-                                    @domicilio_calle_hotel,
-                                    @domicilio_numero_hotel,
-                                    @cantidad_estrellas_hotel,
-                                    @recarga_por_estrellas_hotel,
-                                    @numero_habitacion,
-                                    @piso_habitacion,
-                                    @ubicacion_habitacion,
-                                    @id_tipo_habitacion,
-                                    @descripcion_tipo_habitacion,
-                                    @porcentual_tipo_habitacion,
-                                    @descripcion_regimen,
-                                    @precio_base_regimen,
-                                    @fecha_inicio_reserva,
-                                    @id_reserva,
-                                    @cant_noches_reserva,
-                                    @fecha_fin_reserva,
-                                    @fecha_ingreso_estadia,
-                                    @cant_dias_estadia,
-                                    @fecha_egreso_estadia,
-                                    @id_consumible,
-                                    @descripcion_consumible,
-                                    @precio_consumible,
-                                    @cantidad_item_factura,
-                                    @precio_unitario_item_factura,
-                                    @id_factura,
-                                    @fecha_factura,
-                                    @total_factura,
-                                    @numero_documento_cliente,
-                                    @apellido_cliente,
-                                    @nombre_cliente,
-                                    @fecha_nacimiento_cliente,
-                                    @correo_cliente,
-                                    @domicilio_calle_cliente,
-                                    @domicilio_numero_cliente,
-                                    @domicilio_piso_cliente,
-                                    @domicilio_departamento_cliente,
-                                    @nacionalidad_cliente;
-        
-        WHILE (@@FETCH_STATUS = 0)
-        BEGIN
-            
-            RAISERROR(N'Procesando row %d', 0, 1, @currentRow) WITH NOWAIT;
-
-            BEGIN TRY
-                ---------------------- HOTELES -------------------------------
-                SELECT @id_hotel = id_hotel
-                FROM [EL_MONSTRUO_DEL_LAGO_MASER].[hoteles]
-                WHERE ciudad_hotel = @ciudad_hotel
-                AND domicilio_calle_hotel = @domicilio_calle_hotel
-                AND domicilio_numero_hotel = @domicilio_numero_hotel
-                AND cantidad_estrellas_hotel = @cantidad_estrellas_hotel
-                AND recarga_por_estrellas_hotel = @recarga_por_estrellas_hotel
-            
-                IF @id_hotel IS NULL
-                BEGIN
-                    INSERT INTO [EL_MONSTRUO_DEL_LAGO_MASER].[hoteles]
-                        (ciudad_hotel, domicilio_calle_hotel, domicilio_numero_hotel, cantidad_estrellas_hotel, recarga_por_estrellas_hotel)
-                    VALUES (@ciudad_hotel, @domicilio_calle_hotel, @domicilio_numero_hotel, @cantidad_estrellas_hotel, @recarga_por_estrellas_hotel);
-                    SET @id_hotel = SCOPE_IDENTITY();
-                END
-                ---------------------- HOTELES -------------------------------
-                ---------------------- HABITACIONES --------------------------
-                SELECT @id_habitacion = id_habitacion
-                FROM [EL_MONSTRUO_DEL_LAGO_MASER].[habitaciones]
-                WHERE numero_habitacion = @numero_habitacion
-                AND piso_habitacion = @piso_habitacion
-                AND ubicacion_habitacion = @ubicacion_habitacion
-                AND id_tipo_habitacion = @id_tipo_habitacion
-
-                IF @id_habitacion IS NULL
-                BEGIN
-                    INSERT INTO [EL_MONSTRUO_DEL_LAGO_MASER].[habitaciones]
-                        (id_hotel, numero_habitacion, piso_habitacion, ubicacion_habitacion, id_tipo_habitacion)
-                    VALUES (@id_hotel, @numero_habitacion, @piso_habitacion, @ubicacion_habitacion, @id_tipo_habitacion);
-                    SET @id_habitacion = SCOPE_IDENTITY();
-                END
-
-                -- Populamos reservasXhabitaciones
-                IF (NOT EXISTS(SELECT *
-                               FROM [EL_MONSTRUO_DEL_LAGO_MASER].[reservasXhabitaciones]
-                               WHERE id_reserva = @id_reserva
-                               AND id_habitacion = @id_habitacion
-                              ))
-                BEGIN
-                    INSERT INTO [EL_MONSTRUO_DEL_LAGO_MASER].[reservasXhabitaciones]
-                    VALUES (@id_reserva, @id_habitacion);
-                END
-                ---------------------- HABITACIONES --------------------------
-                ---------------------- REGIMENES -----------------------------
-                SELECT @id_regimen = id_regimen
-                FROM [EL_MONSTRUO_DEL_LAGO_MASER].[regimenes]
-                WHERE descripcion_regimen = @descripcion_regimen
-                AND precio_base_regimen = @precio_base_regimen
-
-                IF @id_regimen IS NULL
-                BEGIN
-                    INSERT INTO [EL_MONSTRUO_DEL_LAGO_MASER].[regimenes]
-                        (descripcion_regimen, precio_base_regimen)
-                    VALUES (@descripcion_regimen, @precio_base_regimen);
-                    SET @id_regimen = SCOPE_IDENTITY();
-                END
-
-                -- Populamos hotelesXregimenes
-                IF (NOT EXISTS(SELECT *
-                               FROM [EL_MONSTRUO_DEL_LAGO_MASER].[hotelesXregimenes]
-                               WHERE id_hotel = @id_hotel
-                               AND id_regimen = @id_regimen
-                              ))
-                BEGIN
-                    INSERT INTO [EL_MONSTRUO_DEL_LAGO_MASER].[hotelesXregimenes]
-                    VALUES (@id_hotel, @id_regimen);
-                END
-
-                -- Updateamos en reservas el regimen usado..
-                UPDATE [EL_MONSTRUO_DEL_LAGO_MASER].[reservas]
-                SET id_regimen = @id_regimen
-                WHERE id_reserva = @id_reserva;
-                ---------------------- REGIMENES -----------------------------
-                ---------------------- ESTADIAS ------------------------------
-                IF (@fecha_ingreso_estadia IS NOT NULL
-                    AND @fecha_egreso_estadia IS NOT NULL)
-                BEGIN
-                    SELECT @id_estadia = id_estadia
-                    FROM [EL_MONSTRUO_DEL_LAGO_MASER].[estadias]
-                    WHERE fecha_ingreso_estadia = @fecha_ingreso_estadia
-                    AND fecha_egreso_estadia = @fecha_egreso_estadia
-                    AND id_reserva = @id_reserva
-
-                    IF @id_estadia IS NULL
-                    BEGIN
-                        INSERT INTO [EL_MONSTRUO_DEL_LAGO_MASER].[estadias]
-                            (id_reserva, id_usuario_ingreso, id_usuario_egreso, fecha_ingreso_estadia, fecha_egreso_estadia)
-                        VALUES (@id_reserva, 1, 1, @fecha_ingreso_estadia, @fecha_egreso_estadia);
-                        SET @id_estadia = SCOPE_IDENTITY();
-                    END
-
-                    -- Updateamos en facturas la estadía
-                    UPDATE [EL_MONSTRUO_DEL_LAGO_MASER].[facturas]
-                    SET id_estadia = @id_estadia
-                    WHERE id_factura = @id_factura;
-                END
-                ---------------------- ESTADIAS ------------------------------
-                ---------------------- CONSUMOS ------------------------------
-                IF (@id_consumible IS NOT NULL
-                    AND @id_estadia IS NOT NULL
-                    AND @cantidad_item_factura IS NOT NULL)
-                BEGIN
-                    INSERT INTO [EL_MONSTRUO_DEL_LAGO_MASER].[consumos]
-                        (id_consumible, id_estadia, id_habitacion, cantidad_consumo)
-                    VALUES (@id_consumible, @id_estadia, @id_habitacion, @cantidad_item_factura)
-                    SET @id_consumo = SCOPE_IDENTITY();
-                END
-                ---------------------- CONSUMOS ------------------------------
-                ---------------------- ITEMS FACTURA -------------------------
-                IF (@precio_unitario_item_factura IS NOT NULL
-                    AND @cantidad_item_factura IS NOT NULL
-                    AND @id_factura IS NOT NULL)
-                BEGIN
-                    INSERT INTO [EL_MONSTRUO_DEL_LAGO_MASER].[items_factura]
-                        (id_factura, id_consumo, precio_unitario_item_factura, cantidad_item_factura)
-                    VALUES (@id_factura, @id_consumo, @precio_unitario_item_factura, @cantidad_item_factura)
-                    SET @id_item_factura = SCOPE_IDENTITY();
-                END
-                ---------------------- ITEMS FACTURA -------------------------
-                ---------------------- CLIENTES ------------------------------
-                SELECT @id_cliente = id_cliente
-                FROM [EL_MONSTRUO_DEL_LAGO_MASER].[clientes]
-                WHERE numero_documento_cliente = @numero_documento_cliente
-                AND apellido_cliente = @apellido_cliente
-                AND nombre_cliente = @nombre_cliente
-                AND fecha_nacimiento_cliente = @fecha_nacimiento_cliente
-                AND correo_cliente = @correo_cliente
-                AND domicilio_calle_cliente = @domicilio_calle_cliente
-                AND domicilio_numero_cliente = @domicilio_numero_cliente
-                AND domicilio_piso_cliente = @domicilio_piso_cliente
-                AND domicilio_departamento_cliente = @domicilio_departamento_cliente
-                AND nacionalidad_cliente = @nacionalidad_cliente;
-            
-                IF @id_cliente IS NULL
-                BEGIN
-                    INSERT INTO [EL_MONSTRUO_DEL_LAGO_MASER].[clientes]
-                        (nombre_cliente, apellido_cliente, numero_documento_cliente, correo_cliente, domicilio_calle_cliente, domicilio_numero_cliente, domicilio_piso_cliente, domicilio_departamento_cliente, nacionalidad_cliente, fecha_nacimiento_cliente)
-                    VALUES (@nombre_cliente, @apellido_cliente, @numero_documento_cliente, @correo_cliente, @domicilio_calle_cliente, @domicilio_numero_cliente, @domicilio_piso_cliente, @domicilio_departamento_cliente, @nacionalidad_cliente, @fecha_nacimiento_cliente);
-                    SET @id_cliente = SCOPE_IDENTITY();
-                END
-
-                -- Populamos clientesXestadias
-                IF (@id_estadia IS NOT NULL)
-                BEGIN
-                    IF (NOT EXISTS(SELECT *
-                                   FROM [EL_MONSTRUO_DEL_LAGO_MASER].[clientesXestadias]
-                                   WHERE id_cliente = @id_cliente
-                                   AND id_estadia = @id_estadia
-                                  ))
-                    BEGIN
-                        INSERT INTO [EL_MONSTRUO_DEL_LAGO_MASER].[clientesXestadias]
-                        VALUES (@id_cliente, @id_estadia);
-                    END
-                END
-				
-				-- Updateamos en reservas el cliente
-                UPDATE [EL_MONSTRUO_DEL_LAGO_MASER].[reservas]
-                SET id_cliente = @id_cliente
-                WHERE id_reserva = @id_reserva;
-				
-                ---------------------- CLIENTES ------------------------------
-
-            END TRY
-            BEGIN CATCH
-                INSERT INTO [EL_MONSTRUO_DEL_LAGO_MASER].[migracion_errores]
-                VALUES (ERROR_MESSAGE(),
-                    @ciudad_hotel,
-                    @domicilio_calle_hotel,
-                    @domicilio_numero_hotel,
-                    @cantidad_estrellas_hotel,
-                    @recarga_por_estrellas_hotel,
-                    @numero_habitacion,
-                    @piso_habitacion,
-                    @ubicacion_habitacion,
-                    @id_tipo_habitacion,
-                    @descripcion_tipo_habitacion,
-                    @porcentual_tipo_habitacion,
-                    @descripcion_regimen,
-                    @precio_base_regimen,
-                    @fecha_inicio_reserva,
-                    @id_reserva,
-                    @cant_noches_reserva,
-                    @fecha_ingreso_estadia,
-                    @id_estadia,
-                    @cant_dias_estadia,
-                    @id_consumible,
-                    @descripcion_consumible,
-                    @precio_consumible,
-                    @cantidad_item_factura,
-                    @precio_unitario_item_factura,
-                    @id_factura,
-                    @fecha_factura,
-                    @total_factura,
-                    @numero_documento_cliente,
-                    @apellido_cliente,
-                    @nombre_cliente,
-                    @fecha_nacimiento_cliente,
-                    @correo_cliente,
-                    @domicilio_calle_cliente,
-                    @domicilio_numero_cliente,
-                    @domicilio_piso_cliente,
-                    @domicilio_departamento_cliente,
-                    @nacionalidad_cliente)
-            END CATCH
-
-            -- Y hago el fetch
-            FETCH maestra_cursor INTO    @ciudad_hotel,
-                                    @domicilio_calle_hotel,
-                                    @domicilio_numero_hotel,
-                                    @cantidad_estrellas_hotel,
-                                    @recarga_por_estrellas_hotel,
-                                    @numero_habitacion,
-                                    @piso_habitacion,
-                                    @ubicacion_habitacion,
-                                    @id_tipo_habitacion,
-                                    @descripcion_tipo_habitacion,
-                                    @porcentual_tipo_habitacion,
-                                    @descripcion_regimen,
-                                    @precio_base_regimen,
-                                    @fecha_inicio_reserva,
-                                    @id_reserva,
-                                    @cant_noches_reserva,
-                                    @fecha_fin_reserva,
-                                    @fecha_ingreso_estadia,
-                                    @cant_dias_estadia,
-                                    @fecha_egreso_estadia,
-                                    @id_consumible,
-                                    @descripcion_consumible,
-                                    @precio_consumible,
-                                    @cantidad_item_factura,
-                                    @precio_unitario_item_factura,
-                                    @id_factura,
-                                    @fecha_factura,
-                                    @total_factura,
-                                    @numero_documento_cliente,
-                                    @apellido_cliente,
-                                    @nombre_cliente,
-                                    @fecha_nacimiento_cliente,
-                                    @correo_cliente,
-                                    @domicilio_calle_cliente,
-                                    @domicilio_numero_cliente,
-                                    @domicilio_piso_cliente,
-                                    @domicilio_departamento_cliente,
-                                    @nacionalidad_cliente;
-
-        SET @currentRow = @currentRow + 1;
-        -- Finalmente defino nulo los IDs utilizados.
-        SET @id_hotel = NULL;
-        SET @id_habitacion = NULL;
-        SET @id_regimen = NULL;
-        SET @id_estadia = NULL;
-        SET @id_consumo = NULL;
-        SET @id_item_factura = NULL;
-        SET @id_cliente = NULL;
-
-        END
-
-        CLOSE maestra_cursor;
-        DEALLOCATE maestra_cursor;
 END
+
 GO
 
 EXEC [EL_MONSTRUO_DEL_LAGO_MASER].[MIGRAR_DATOS]

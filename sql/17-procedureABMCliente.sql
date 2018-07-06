@@ -126,16 +126,16 @@ BEGIN
         DECLARE @id_cliente INT
 
     DECLARE cursor_clientes_preexistentes CURSOR FOR
-        SELECT Estadia_Codigo, Reserva_Codigo
+        SELECT id_estadia, id_reserva
         FROM [EL_MONSTRUO_DEL_LAGO_MASER].[migracion_errores]
-        WHERE Cliente_Apellido = @apellido_cliente
-        AND Cliente_Depto = @domicilio_departamento_cliente
-        AND Cliente_Dom_Calle = @domicilio_calle_cliente
-        AND Cliente_Fecha_Nac = @fecha_nacimiento_cliente
-        AND Cliente_Nacionalidad = @nacionalidad_cliente
-        AND Cliente_Nombre = @nombre_cliente
-        AND Cliente_Nro_Calle = @domicilio_numero_cliente
-        AND Cliente_Piso = @domicilio_piso_cliente
+        WHERE apellido_cliente = @apellido_cliente
+        AND domicilio_departamento_cliente = @domicilio_departamento_cliente
+        AND domicilio_calle_cliente = @domicilio_calle_cliente
+        AND fecha_nacimiento_cliente = @fecha_nacimiento_cliente
+        AND nacionalidad_cliente = @nacionalidad_cliente
+        AND nombre_cliente = @nombre_cliente
+        AND domicilio_numero_cliente = @domicilio_numero_cliente
+        AND domicilio_piso_cliente = @domicilio_piso_cliente
 
     BEGIN TRY
             BEGIN TRANSACTION

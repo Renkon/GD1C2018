@@ -324,47 +324,21 @@ CREATE TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[generacion_modificacion_reservas] -- 
 );
 
 -------------------------------------------------------------------------------------------------------------------------------------------
-
-
-CREATE TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[migracion_errores](
-	[Error_Mensaje] [nvarchar](4000) NULL,
-	[Hotel_Ciudad] [nvarchar](255) NULL,
-	[Hotel_Calle] [nvarchar](255) NULL,
-	[Hotel_Nro_Calle] [numeric](18, 0) NULL,
-	[Hotel_CantEstrella] [numeric](18, 0) NULL,
-	[Hotel_Recarga_Estrella] [numeric](18, 0) NULL,
-	[Habitacion_Numero] [numeric](18, 0) NULL,
-	[Habitacion_Piso] [numeric](18, 0) NULL,
-	[Habitacion_Frente] [nvarchar](50) NULL,
-	[Habitacion_Tipo_Codigo] [numeric](18, 0) NULL,
-	[Habitacion_Tipo_Descripcion] [nvarchar](255) NULL,
-	[Habitacion_Tipo_Porcentual] [numeric](18, 2) NULL,
-	[Regimen_Descripcion] [nvarchar](255) NULL,
-	[Regimen_Precio] [numeric](18, 2) NULL,
-	[Reserva_Fecha_Inicio] [datetime] NULL,
-	[Reserva_Codigo] [numeric](18, 0) NULL,
-	[Reserva_Cant_Noches] [numeric](18, 0) NULL,
-	[Estadia_Fecha_Inicio] [datetime] NULL,
-	[Estadia_Codigo] [numeric](18, 0) NULL,
-        [Estadia_Cant_Noches] [numeric](18, 0) NULL,
-	[Consumible_Codigo] [numeric](18, 0) NULL,
-	[Consumible_Descripcion] [nvarchar](255) NULL,
-	[Consumible_Precio] [numeric](18, 2) NULL,
-	[Item_Factura_Cantidad] [numeric](18, 0) NULL,
-	[Item_Factura_Monto] [numeric](18, 2) NULL,
-	[Factura_Nro] [numeric](18, 0) NULL,
-	[Factura_Fecha] [datetime] NULL,
-	[Factura_Total] [numeric](18, 2) NULL,
-	[Cliente_Pasaporte_Nro] [numeric](18, 0) NULL,
-	[Cliente_Apellido] [nvarchar](255) NULL,
-	[Cliente_Nombre] [nvarchar](255) NULL,
-	[Cliente_Fecha_Nac] [datetime] NULL,
-	[Cliente_Mail] [nvarchar](255) NULL,
-	[Cliente_Dom_Calle] [nvarchar](255) NULL,
-	[Cliente_Nro_Calle] [numeric](18, 0) NULL,
-	[Cliente_Piso] [numeric](18, 0) NULL,
-	[Cliente_Depto] [nvarchar](50) NULL,
-	[Cliente_Nacionalidad] [nvarchar](255) NULL
+CREATE TABLE [EL_MONSTRUO_DEL_LAGO_MASER].[migracion_errores]
+(
+    id_reserva numeric(18, 0) NULL,
+    id_estadia int NULL,
+    id_cliente int NULL,
+    numero_documento_cliente numeric(18, 0) NULL,
+    apellido_cliente nvarchar(255) NULL,
+    nombre_cliente nvarchar(255) NULL,
+    fecha_nacimiento_cliente datetime NULL,
+    correo_cliente nvarchar(255) NULL,
+    domicilio_calle_cliente nvarchar(255) NULL,
+    domicilio_numero_cliente numeric(18, 0) NULL,
+    domicilio_piso_cliente numeric(18, 0) NULL,
+    domicilio_departamento_cliente nvarchar(50) NULL,
+    nacionalidad_cliente nvarchar(255) NULL
 );
 
 GO
