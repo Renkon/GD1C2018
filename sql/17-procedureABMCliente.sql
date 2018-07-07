@@ -108,6 +108,7 @@ BEGIN
     AND (@id_documento = -1 OR id_tipo_documento = @id_documento)
     AND (@numero_documento = 0 OR CAST (numero_documento_cliente AS VARCHAR) LIKE '%' + CAST (@numero_documento AS VARCHAR) + '%')
     AND id_cliente != 0
+    ORDER BY estado_cliente DESC, apellido_cliente, nombre_cliente
 END
 
 GO

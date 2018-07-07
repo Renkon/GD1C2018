@@ -129,7 +129,6 @@ AS
 		fecha_nacimiento_cliente,
 		0 estado_cliente
 	FROM [EL_MONSTRUO_DEL_LAGO_MASER].[migracion_errores]
-
 GO
 
 -- Este procedure valida que no haya un cliente con dado documento
